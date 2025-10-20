@@ -11,7 +11,7 @@
     <meta name="referrer" content="no-referrer">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/1.4.2/css/icons.min.css" rel="stylesheet">
+    <!-- FIX: Removed broken Phosphor Icons link. The app uses emojis, so this is not critical. -->
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1554,7 +1554,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         if(e.target.id === 'add-booking-btn') this.addItem('booking');
                         if(e.target.id === 'add-fixed-btn') this.addItem('fixed');
                         
-                        // **FIX**: Event delegation for remove buttons
                         if (e.target.closest('.remove-btn')) {
                             const btn = e.target.closest('.remove-btn');
                             const type = btn.dataset.removeType;
@@ -1646,7 +1645,10 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.renderCostTables(); this.renderAssumptions(); this.renderSummary(); this.renderPricingScenarios(); this.renderAccessLog();
                 },
                 renderCostTables() {
-                    // **FIX**: Removed inline onclick and added data attributes for event delegation
+                    // FIX: Added defensive checks to ensure elements exist before trying to modify their innerHTML.
+                    if (!this.elements.variableCostsTable || !this.elements.bookingCostsTable || !this.elements.fixedCostsTable) {
+                        return; // Elements not in DOM yet, exit function.
+                    }
                     this.elements.variableCostsTable.innerHTML = this.state.variableCosts.map((item, index) => `
                         <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
                             <span class="break-words">${item.name}</span>
@@ -1671,18 +1673,24 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         </div>`).join('');
                 },
                 renderAssumptions() {
+                    // FIX: Added defensive check.
+                    if (!this.elements.bookingsPerMonthInput) return;
                     const { bookingsPerMonth, avgLos, platformFee } = this.state.assumptions;
                     this.elements.bookingsPerMonthInput.value = bookingsPerMonth;
                     this.elements.avgLosInput.value = avgLos;
                     this.elements.platformFeeInput.value = platformFee;
                 },
                 renderSummary() {
+                    // FIX: Added defensive check.
+                    if (!this.elements.totalCostDisplay) return;
                     const { totalCostPerNight, breakEvenPrice } = this.state.calculations;
                     this.elements.totalCostDisplay.textContent = `₱${totalCostPerNight.toFixed(2)}`;
                     this.elements.breakEvenDisplay.textContent = `₱${breakEvenPrice.toFixed(2)}`;
                     this.calculateAndRenderTargetPrice();
                 },
                 renderPricingScenarios() {
+                    // FIX: Added defensive check.
+                    if (!this.elements.scenarioBreakeven) return;
                     const { totalCostPerNight, feeRate } = this.state.calculations;
                     const feeRateAlt = 0.03;
                     const calculatePrice = (profit, rate) => (totalCostPerNight + profit) / (1 - rate);
@@ -1703,6 +1711,8 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     }
                 },
                 renderAccessLog() {
+                    // FIX: Added defensive check.
+                    if (!this.elements.accessLogTable) return;
                     this.elements.accessLogTable.innerHTML = this.state.accessLog.map(entry => `
                         <div class="grid grid-cols-2 gap-4 py-1.5">
                             <span>${entry.name}</span>
@@ -1776,7 +1786,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     
                     const systemPrompt = "You are an expert short-term rental financial advisor, specializing in helping hosts maximize profitability. Your advice is famous for being both simple to understand and highly actionable. You always use clear frameworks to structure your answers, ensuring hosts know exactly what to do. Use Markdown for clear formatting (bolding, headers as `###`, and unordered lists with `*`).";
                     
-                    // **SECURITY FIX**: The API key has been removed. This call must be proxied through a secure backend.
                     // This frontend code should call your own server endpoint (e.g., /api/get-advice).
                     // Your server will then securely make the call to the Google AI API.
                     const apiUrl = `/api/get-advice`; // This is a placeholder for your backend endpoint.
