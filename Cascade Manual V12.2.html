@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cascade Hideaway - Interactive Operations Manual</title>
+    
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="no-referrer">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/phosphor-icons/1.4.2/css/icons.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bronze: #8C6D46; 
+            --dark-bronze: #5A452B; 
+            --warm-cream: #F5F1E8;
+            --soft-taupe: #B0A18F; 
+            --charcoal: #2C2525; 
+            --warm-white: #FFFEF9;
+            --accent-gold: #D4AF37; 
+            --deep-forest-green: #2A4B41;
+            --success-green: var(--deep-forest-green);
+            --danger-red: #B91C1C; 
+            --info-blue: #3B82F6; 
+            --grayscale-bg: #f4f4f5; 
+            --grayscale-border: #d4d4d8;
+        }
+        
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body { 
+            font-family: 'Raleway', sans-serif; 
+            background: linear-gradient(135deg, #F5F1E8 0%, #E8DFD0 100%);
+            color: var(--charcoal); 
+            line-height: 1.6; 
+            letter-spacing: 0.3px; 
+            -webkit-tap-highlight-color: transparent;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            will-change: scroll-position;
+        }
+        
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: 'Cormorant Garamond', serif; 
+            line-height: 1.2; 
+            color: var(--dark-bronze); 
+        }
+        
+        .sidebar { 
+            background: linear-gradient(180deg, rgba(255,254,249,0.95) 0%, rgba(245,241,232,0.95) 100%);
+            border-right: 2px solid var(--soft-taupe); 
+            backdrop-filter: blur(10px);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+            contain: layout style paint;
+        }
+        
+        .nav-link { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-left: 4px solid transparent; 
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--bronze), transparent);
+            transition: width 0.3s ease;
+            opacity: 0.1;
+        }
+        
+        .nav-link:hover::before { width: 100%; }
+        .nav-link:hover { 
+            background-color: var(--warm-cream); 
+            transform: translateX(5px) scale(1.02); 
+            border-left-color: var(--bronze);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .nav-active { 
+            background: linear-gradient(90deg, var(--warm-cream) 0%, rgba(245,241,232,0.5) 100%);
+            color: var(--dark-bronze); 
+            font-weight: 600; 
+            border-left-color: var(--bronze);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .pill-nav { -ms-overflow-style: none; scrollbar-width: none; }
+        .pill-nav::-webkit-scrollbar { display: none; }
+        
+        .pill-link { 
+            transition: all 0.3s ease; 
+            border-bottom: 3px solid transparent; 
+            position: relative;
+        }
+        
+        .pill-link:hover {
+            border-bottom-color: rgba(140, 109, 70, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .pill-active { 
+            border-bottom-color: var(--bronze); 
+            color: var(--dark-bronze); 
+            font-weight: 600;
+            background: rgba(140, 109, 70, 0.05);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .content-section { 
+            display: none; 
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            contain: layout style paint;
+        }
+        
+        .content-section.active { display: block; }
+        
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes countUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .content-card { 
+            background: linear-gradient(145deg, rgba(255, 254, 249, 0.98), rgba(245, 241, 232, 0.95));
+            backdrop-filter: blur(12px); 
+            border: 2px solid rgba(176, 161, 143, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.5); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+        }
+        
+        .accent-box { 
+            background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.8) 100%);
+            border-left: 4px solid var(--bronze); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .pro-tip { 
+            background: linear-gradient(135deg, var(--grayscale-bg) 0%, #fafafa 100%);
+            border-left: 4px solid var(--accent-gold); 
+            color: #52525b; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .instructional-note { color: #78716c; font-size: 0.95rem; }
+        
+        .luxury-divider { 
+            height: 2px; 
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent); 
+            position: relative; 
+            margin: 2rem 0;
+        }
+        
+        .luxury-divider::after { 
+            content: '◆'; 
+            position: absolute; 
+            left: 50%; 
+            top: 50%; 
+            transform: translate(-50%, -50%); 
+            background-color: var(--warm-cream); 
+            padding: 0 12px; 
+            color: var(--accent-gold); 
+            font-size: 1.3rem; 
+        }
+        
+        .copy-button { 
+            background: linear-gradient(135deg, var(--dark-bronze) 0%, var(--bronze) 100%);
+            color: var(--warm-white); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(90, 69, 43, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .copy-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .copy-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .copy-button:hover { 
+            background: linear-gradient(135deg, var(--bronze) 0%, var(--accent-gold) 100%);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(90, 69, 43, 0.4);
+        }
+        
+        .copy-button.copied { 
+            background: linear-gradient(135deg, var(--success-green) 0%, #3d6b5e 100%);
+            transform: scale(1.05); 
+        }
+        
+        .checklist-item { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 0.75rem; 
+            padding: 0.75rem; 
+            border-radius: 0.75rem; 
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .checklist-item:hover { 
+            background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.6) 100%);
+            border-color: var(--soft-taupe);
+            transform: translateX(5px);
+        }
+        
+        .checklist-item input[type="checkbox"] { 
+            flex-shrink: 0; 
+            margin-top: 5px; 
+            width: 1.25rem; 
+            height: 1.25rem; 
+            accent-color: var(--bronze); 
+            cursor: pointer;
+        }
+        
+        .playbook-tab, .cost-tab { 
+            cursor: pointer; 
+            padding: 0.75rem 1.25rem; 
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .playbook-tab:hover, .cost-tab:hover {
+            background: rgba(140, 109, 70, 0.05);
+        }
+        
+        .playbook-tab.active, .cost-tab.active { 
+            border-bottom-color: var(--bronze); 
+            color: var(--dark-bronze); 
+            font-weight: 600;
+            background: rgba(140, 109, 70, 0.08);
+        }
+        
+        .playbook-content, .cost-content { display: none; }
+        .playbook-content.active, .cost-content.active { display: block; }
+        
+        .text-gold-glow { 
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); 
+        }
+        
+        .promise-card { 
+            background: linear-gradient(to bottom, var(--warm-white), var(--warm-cream)); 
+            border: 3px solid var(--bronze); 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .dynamic-text-highlight { 
+            background: linear-gradient(120deg, var(--dark-bronze), var(--bronze), var(--accent-gold)); 
+            -webkit-background-clip: text; 
+            background-clip: text; 
+            color: transparent; 
+            font-weight: 700; 
+        }
+        
+        .remove-btn { 
+            color: var(--danger-red); 
+            transition: all 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+        
+        .editable-cost-input {
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            max-width: 90px;
+            text-align: right;
+        }
+        
+        .editable-cost-input:hover, .editable-cost-input:focus {
+            background-color: white;
+            border-color: var(--soft-taupe);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        #login-overlay {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(44, 40, 37, 0.95) 0%, rgba(90, 69, 43, 0.95) 100%);
+            backdrop-filter: blur(15px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--bronze);
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        #advice-output h3 { 
+            font-family: 'Raleway', sans-serif; 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            color: var(--dark-bronze); 
+            margin-top: 1.5rem; 
+            margin-bottom: 0.75rem; 
+            padding-bottom: 0.5rem; 
+            border-bottom: 2px solid var(--soft-taupe);
+        }
+        
+        #advice-output p { margin-bottom: 1.25rem; }
+        #advice-output ul { list-style-type: none; padding-left: 0.75rem; }
+        #advice-output li { 
+            padding-left: 1.75rem; 
+            position: relative; 
+            margin-bottom: 0.75rem;
+        }
+        
+        #advice-output li::before { 
+            content: '✓'; 
+            color: var(--success-green); 
+            position: absolute; 
+            left: 0; 
+            font-weight: 700; 
+            font-size: 1.1rem;
+        }
+
+        .quick-link-card {
+            background: linear-gradient(135deg, #FFFEF9 0%, #F5F1E8 100%);
+            border: 2px solid rgba(140, 109, 70, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .quick-link-card:hover::before {
+            left: 100%;
+        }
+        
+        .quick-link-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(140, 109, 70, 0.25);
+            border-color: var(--bronze);
+        }
+
+        .accordion-header {
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--warm-cream) 100%);
+            border: 2px solid var(--soft-taupe);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .accordion-header:hover {
+            background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.9) 100%);
+            border-color: var(--bronze);
+            transform: translateX(5px);
+        }
+        
+        .accordion-header.active {
+            background: linear-gradient(135deg, var(--bronze) 0%, var(--dark-bronze) 100%);
+            color: var(--warm-white);
+            border-color: var(--bronze);
+        }
+        
+        .accordion-header.active h4, .accordion-header.active p {
+             color: var(--warm-white);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease;
+            padding: 0 2rem;
+        }
+        
+        .accordion-content.active {
+            max-height: 5000px;
+            padding: 2rem 2rem;
+        }
+
+        .prompt-card {
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--warm-cream) 100%);
+            border: 2px solid rgba(140, 109, 70, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .prompt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .prompt-card:hover::before {
+            opacity: 1;
+        }
+        
+        .prompt-card:hover {
+            border-color: var(--bronze);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(140, 109, 70, 0.2);
+        }
+
+        .capability-card {
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--warm-cream) 100%);
+            border: 2px solid rgba(140, 109, 70, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .capability-card:hover {
+            border-color: var(--bronze);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(140, 109, 70, 0.25);
+        }
+        
+        .capability-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .capability-card:hover .capability-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .stat-number {
+            animation: countUp 0.8s ease-out;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .comparison-row {
+            transition: all 0.3s ease;
+        }
+        
+        .comparison-row:hover {
+            background: rgba(140, 109, 70, 0.05);
+            transform: scale(1.01);
+        }
+
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(140, 109, 70, 0.05);
+            padding-left: 1.5rem;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        
+        .faq-answer.active {
+            max-height: 1000px;
+            padding: 1rem;
+        }
+
+        @media (max-width: 1024px) { 
+            .sidebar { display: none; } 
+        }
+        
+        @media (min-width: 1025px) { 
+            .pill-nav-container { display: none; } 
+            main { margin-left: 280px; } 
+        }
+        
+        .protected { 
+            -webkit-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+        }
+        
+        body.regular-user .admin-only {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-warm-cream pb-10">
+
+    <div id="login-overlay">
+        <div class="bg-warm-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center" style="border: 3px solid var(--bronze);">
+            <h2 class="text-4xl font-bold mb-2">Cascade Hideaway</h2>
+            <p class="instructional-note mb-8 text-lg">Operations Manual Access</p>
+            <form id="login-form" class="space-y-5">
+                <select id="login-name" class="w-full p-4 border-2 border-soft-taupe rounded-xl focus:ring-2 focus:ring-bronze focus:border-bronze transition" required>
+                  <option value="" disabled selected>Select Your Name</option>
+                  <option value="Lloyd">Lloyd</option>
+                  <option value="Marifel">Marifel</option>
+                  <option value="Honey">Honey</option>
+                  <option value="Other">Other...</option>
+                </select>
+                <input type="text" id="login-name-other" placeholder="Please enter your name" class="hidden w-full p-4 border-2 border-soft-taupe rounded-xl focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                <input type="text" id="username" placeholder="Username" class="w-full p-4 border-2 border-soft-taupe rounded-xl focus:ring-2 focus:ring-bronze focus:border-bronze transition" required>
+                <input type="password" id="password" placeholder="Password" class="w-full p-4 border-2 border-soft-taupe rounded-xl focus:ring-2 focus:ring-bronze focus:border-bronze transition" required>
+                <button type="submit" class="copy-button w-full px-6 py-4 rounded-xl font-semibold text-lg">Login</button>
+            </form>
+            <p id="login-error" class="text-danger-red mt-5 text-sm font-semibold min-h-[20px]"></p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <aside class="sidebar fixed top-0 left-0 h-screen w-[280px] p-6 flex flex-col overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold mb-1">Cascade Hideaway</h1>
+                <p class="text-sm text-soft-taupe tracking-wider">Operations Manual</p>
+            </div>
+            <nav id="sidebar-nav" class="flex flex-col space-y-1">
+                <a href="#dashboard" class="nav-link p-3 rounded-lg text-md">🏠 Dashboard</a>
+                <a href="#sops" class="nav-link p-3 rounded-lg text-md">📋 Guest Journey SOPs</a>
+                <a href="#messages" class="nav-link p-3 rounded-lg text-md">✉️ Message Hub</a>
+                <a href="#concierge" class="nav-link p-3 rounded-lg text-md">🤖 AI Concierge Guide</a>
+                <a href="#guest-guide" class="nav-link p-3 rounded-lg text-md">🌿 Guest-Facing Guide</a>
+                <a href="#cleaning" class="nav-link p-3 rounded-lg text-md">🧼 Cleaning Checklist</a>
+                <a href="#costing" class="nav-link admin-only p-3 rounded-lg text-md">💰 Cost & Profitability</a>
+                <a href="#pricing" class="nav-link admin-only p-3 rounded-lg text-md">📈 Pricing Strategy</a>
+                <a href="#playbook" class="nav-link p-3 rounded-lg text-md">🚨 Crisis Playbook</a>
+                <a href="#maintenance" class="nav-link p-3 rounded-lg text-md">🔧 Maintenance Log</a>
+                <a href="#info" class="nav-link p-3 rounded-lg text-md">📞 Important Info</a>
+                <a href="#access-log" class="nav-link admin-only p-3 rounded-lg text-md">📊 Access Log</a>
+            </nav>
+            <div class="mt-auto text-center text-xs text-soft-taupe pt-6">
+                <p>&copy; 2025 Cascade Hideaway</p>
+                <p>Confidential Operations Document</p>
+                <p class="mt-2 text-bronze font-semibold">v12.1 Fixed</p>
+            </div>
+        </aside>
+
+        <main>
+            <div class="pill-nav-container sticky top-0 z-10 bg-warm-white/90 backdrop-blur-lg shadow-md lg:hidden">
+                 <div class="text-center pt-5 pb-2">
+                    <h1 class="text-2xl font-bold">Cascade Hideaway</h1>
+                    <p class="text-sm text-soft-taupe">Operations Manual</p>
+                </div>
+                <nav id="pill-nav" class="pill-nav flex items-center justify-start space-x-1 p-2 overflow-x-auto">
+                    <a href="#dashboard" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Dashboard</a>
+                    <a href="#sops" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">SOPs</a>
+                    <a href="#messages" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Messages</a>
+                    <a href="#concierge" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">AI Guide</a>
+                    <a href="#guest-guide" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Guest Guide</a>
+                    <a href="#cleaning" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Cleaning</a>
+                    <a href="#costing" class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold">Costing</a>
+                    <a href="#pricing" class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold">Pricing</a>
+                    <a href="#playbook" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Playbook</a>
+                    <a href="#maintenance" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Maint.</a>
+                    <a href="#info" class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold">Info</a>
+                    <a href="#access-log" class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold">Log</a>
+                </nav>
+            </div>
+
+            <div id="content-host" class="p-4 sm:p-6 md:p-10">
+                
+                <section id="dashboard" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl md:text-6xl font-bold mb-6 text-center">Operations Dashboard</h2>
+                        <div class="promise-card text-center p-8 rounded-2xl my-8">
+                            <h3 class="font-serif text-4xl text-dark-bronze mb-3">"Hotel Comfort, Home Warmth"</h3>
+                            <p class="text-charcoal/90 mt-3 max-w-3xl mx-auto text-lg leading-relaxed">This is our guiding promise. Every action, message, and detail should reflect this philosophy of delivering warm, calm, confident, and elegantly Filipino hospitality.</p>
+                        </div>
+
+                        <h3 class="text-3xl font-bold mb-6 mt-12">Essential Resources</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <a href="https://cascadereservations-del.github.io/5-Star-Mandate/" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">⭐</div>
+                                <div>5 Star Mandate</div>
+                            </a>
+                             <a href="https://script.google.com/macros/s/AKfycbzOXf0rHGtO68NjDEECqaHgVCgXTf4oVMItwg7naIu_h58nxKgQtZinmcdrsmmqDe7j/exec" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">📦</div>
+                                <div>Cascade Inventory</div>
+                            </a>
+                            <a href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">✔️</div>
+                                <div>Cleaning Checklist</div>
+                            </a>
+                            <a href="https://cascadereservations-del.github.io/Cascade-Guest-Communication/" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">💬</div>
+                                <div>Guest Communication</div>
+                            </a>
+                            <a href="https://cascadereservations-del.github.io/WelcomeToCascade/" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">📖</div>
+                                <div>Welcome Guide</div>
+                            </a>
+                            <a href="https://cascadereservations-del.github.io/Cascade-Cleaning-Protocol/" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                                <div class="text-4xl mb-3">🧼</div>
+                                <div>Cleaning Protocol</div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="sops" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-6 text-center">The 5-Star Guest Journey</h2>
+                        <div class="space-y-10 mt-8">
+                             <div> 
+                                 <h3 class="text-3xl font-bold mb-3 text-bronze">1. Inquiry & Booking: First Impressions</h3>
+                                 <p class="instructional-note mb-5 text-lg">Be fast, friendly, and helpful. Make them feel welcome before they even book.</p>
+                                 <ul class="list-none space-y-4">
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Do:</span> <span>Respond within 15 minutes. Use the "Inquiry Response" template but personalize it with their name.</span></li>
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-danger-red text-lg shrink-0">Don't:</span> <span>Give one-word answers. Never ignore a question, even if the answer is in the listing.</span></li>
+                                 </ul>
+                                  <div class="pro-tip p-5 rounded-xl my-5">
+                                    <p class="text-base">💡 <strong>Pro Tip:</strong> If a guest seems hesitant, a message like "Let me know if you have any other questions at all, happy to help you plan your trip to GenSan! 🌿" builds trust and often secures the booking.</p>
+                                 </div>
+                             </div>
+                             <div class="luxury-divider"></div>
+                             <div> 
+                                 <h3 class="text-3xl font-bold mb-3 text-bronze">2. Pre-Arrival: Build Anticipation</h3>
+                                 <p class="instructional-note mb-5 text-lg">Make check-in feel easy and secure. Give them everything they need before they have to ask.</p>
+                                 <ul class="list-none space-y-4">
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Do:</span> <span>Send the "Pre-Arrival (T-24h)" message exactly 24 hours before check-in. This consistency is professional.</span></li>
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-danger-red text-lg shrink-0">Don't:</span> <span>Send check-in details too early (security risk) or too late (causes guest anxiety).</span></li>
+                                 </ul>
+                                  <div class="pro-tip p-5 rounded-xl my-5">
+                                    <p class="text-base">💡 <strong>Pro Tip:</strong> Run a final QC check (Wi-Fi speed, AC, TV) *right before* sending the pre-arrival message. This prevents 90% of arrival-day issues.</p>
+                                 </div>
+                             </div>
+                             <div class="luxury-divider"></div>
+                             <div> 
+                                 <h3 class="text-3xl font-bold mb-3 text-bronze">3. Post-Stay: A Gracious Farewell</h3>
+                                 <p class="instructional-note mb-5 text-lg">Make checkout simple and thank them sincerely. A great last impression leads to great reviews.</p>
+                                 <ul class="list-none space-y-4">
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Do:</span> <span>Send a "Post-Stay" message 2-3 hours after checkout. Personalize it with their name.</span></li>
+                                     <li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-danger-red text-lg shrink-0">Don't:</span> <span>Pressure them for a 5-star review. The request must be gentle and optional.</span></li>
+                                 </ul>
+                                  <div class="pro-tip p-5 rounded-xl my-5">
+                                    <p class="text-base">💡 <strong>Pro Tip:</strong> If they left the place tidy, add a personal line like, "We truly appreciate you leaving the space so neat and tidy." It makes them feel valued and more likely to leave a positive review.</p>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="messages" class="content-section">
+                     <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-6 text-center">Message Hub</h2>
+                        <p class="instructional-note mb-6 text-center text-lg">Click to copy pre-formatted, brand-aligned templates for every situation.</p>
+                        
+                        <div class="pro-tip p-6 rounded-xl my-6 text-center">
+                            <p class="text-lg mb-4">🤖 <strong>Supercharge Your Messaging with AI!</strong></p>
+                            <p class="mb-6">Use the dedicated "Cascade Concierge" GPT to create personalized messages and compelling Facebook captions!</p>
+                            <a href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" target="_blank" class="copy-button inline-block px-8 py-4 rounded-xl font-semibold text-lg">
+                                Open Cascade Concierge GPT
+                            </a>
+                        </div>
+
+                        <div class="luxury-divider"></div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-8">
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Inquiry Response</h3><pre id="template_inquiry" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name]! 🌿
+
+Thank you for your interest in Cascade Hideaway. Your requested dates are available.
+
+Let me know if you have any questions! We'd love to welcome you soon. ✨</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_inquiry">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Location Inquiry</h3><pre id="template_location" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name]!
+
+Cascade Hideaway is located inside Bria Homes Subdivision in Conel Rd, General Santos City.
+
+For easy navigation, you can search for "Bria Homes General Santos" on Google Maps or Waze. Once you enter the main gate, our unit is just a short drive away. We will provide the specific block and lot number in your pre-arrival message.
+
+Let us know if you need more detailed directions! 🌿</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_location">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Early Check-in Inquiry</h3><pre id="template_early_inquiry" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name], thanks for asking!
+
+Our standard check-in is at 2:00 PM. We will do our best to accommodate an earlier time if the schedule allows, and we'll confirm with you as soon as our cleaning team certifies the unit is ready to our 5-star standard.
+
+I'll make a note of your request and message you on the morning of your check-in with an update! 🌿</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_early_inquiry">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Stay Extension Request</h3><pre id="template_extension" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name], we'd love to have you stay longer!
+
+I've checked the calendar, and the unit is available for the extra nights. I will send a reservation alteration request through the app for you to approve.
+
+So happy you're enjoying your stay! ✨</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_extension">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Additional Guest (Max 3)</h3><pre id="template_add_guest" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name],
+
+Thanks for letting us know. Our studio can comfortably accommodate a maximum of 3 adults.
+
+Please update the guest count on your reservation so we can prepare enough towels and amenities for everyone.
+
+Let me know if you need any help with that! 🌿</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_add_guest">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Pet Inquiry</h3><pre id="template_pet" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name],
+
+Thank you for asking about your furry friend!
+
+Unfortunately, at this time we are not able to accommodate pets in our studio to ensure the space is allergen-free for all our guests.
+
+We appreciate your understanding and hope we can still welcome you!</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_pet">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Cancellation Request</h3><pre id="template_cancel" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name],
+
+We're sorry to hear you need to cancel.
+
+To proceed, please initiate the cancellation through the booking platform. The refund amount will be based on the cancellation policy you agreed to at the time of booking.
+
+We hope to have the opportunity to host you in the future.</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_cancel">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Post-Stay Thanks (Simple)</h3><pre id="template_post1" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Maraming salamat po for choosing Cascade Hideaway, [Guest Name]! 🌿
+
+It was a pleasure hosting you. We hope you had a restful stay and a safe journey onward.
+
+We hope to welcome you back soon! 🙏</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_post1">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Post-Stay Thanks (With Review Ask)</h3><pre id="template_post2" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name],
+
+Thank you again for staying with us! It was a pleasure to host you.
+
+If you have a moment, a short review of your stay would mean the world to our small team and helps future travelers discover us.
+
+Safe travels, and we hope to see you again! ✨</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_post2">Copy</button></div>
+                            <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all"><h3 class="font-bold text-dark-bronze text-lg mb-2">Thank You Message (After Positive Review)</h3><pre id="template_thanks" class="text-charcoal my-3 whitespace-pre-wrap font-sans">Hi [Guest Name],
+
+Thank you so much for your kind words and the wonderful review! We're thrilled to hear you enjoyed your stay.
+
+It was truly a pleasure hosting you, and your feedback is incredibly valuable to us. We look forward to welcoming you back anytime! 🌿</pre><button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_thanks">Copy</button></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="concierge" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-6 text-center">🤖 Cascade AI Concierge Guide</h2>
+                        <p class="text-xl text-center mb-8 instructional-note">Your Digital Concierge and Brand Communication Partner</p>
+                        
+                        <div class="promise-card p-8 rounded-2xl my-8">
+                            <h3 class="font-serif text-3xl text-dark-bronze mb-4 text-center">"Meet Cascade Hideaway Concierge"</h3>
+                            <p class="text-lg text-center max-w-4xl mx-auto leading-relaxed mb-6">I am the official, AI-powered digital assistant for your boutique Airbnb. Think of me as your trained front-desk manager, guest relations officer, and marketing copywriter in one — available 24/7.</p>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 mb-6">
+                                <div class="text-center p-4 bg-warm-cream rounded-xl">
+                                    <div class="text-4xl font-bold text-bronze stat-number">24/7</div>
+                                    <div class="text-sm mt-2">Availability</div>
+                                </div>
+                                <div class="text-center p-4 bg-warm-cream rounded-xl">
+                                    <div class="text-4xl font-bold text-bronze stat-number">500+</div>
+                                    <div class="text-sm mt-2">Message Templates</div>
+                                </div>
+                                <div class="text-center p-4 bg-warm-cream rounded-xl">
+                                    <div class="text-4xl font-bold text-bronze stat-number">5</div>
+                                    <div class="text-sm mt-2">Core Capabilities</div>
+                                </div>
+                                <div class="text-center p-4 bg-warm-cream rounded-xl">
+                                    <div class="text-4xl font-bold text-bronze stat-number">90%</div>
+                                    <div class="text-sm mt-2">Time Savings</div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <a href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" target="_blank" class="copy-button inline-block px-8 py-4 rounded-xl font-semibold text-lg">
+                                    Open Cascade Concierge GPT →
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="luxury-divider"></div>
+
+                        <div class="my-12">
+                            <h3 class="text-3xl font-bold mb-6 text-bronze text-center">⚡ Quick Start Prompt Library</h3>
+                            <p class="text-center mb-8 instructional-note">Click any prompt to copy and paste directly into the Cascade Concierge GPT</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Draft a warm reply for an Airbnb inquiry asking about our location and nearby attractions in General Santos City.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">💬</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Location Inquiry Response</h4><p class="text-sm instructional-note">Draft a warm reply for an inquiry about location</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Create a personalized post-checkout thank-you message for a couple who stayed 3 nights and left a positive review.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🙏</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Thank You Message</h4><p class="text-sm instructional-note">Post-checkout gratitude for positive reviews</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Write a polite response to a Wi-Fi complaint, acknowledging the issue and providing a solution timeline.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🔧</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Issue Resolution</h4><p class="text-sm instructional-note">Handle guest complaints gracefully</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Generate a pre-arrival message for a guest checking in tomorrow, including all essential information in a warm tone.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🔑</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Pre-Arrival Message</h4><p class="text-sm instructional-note">Send check-in details 24 hours ahead</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Create a Facebook post highlighting our workspace and high-speed Wi-Fi for business travelers, with engaging captions and relevant hashtags.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">💼</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Business Traveler Post</h4><p class="text-sm instructional-note">Promote workspace and connectivity</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Write a Facebook carousel post caption showcasing our 5-star amenities, with a call-to-action for weekend bookings.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">✨</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Weekend Getaway Campaign</h4><p class="text-sm instructional-note">Drive weekend bookings with compelling copy</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Generate an Instagram caption for a sunset photo at our property, emphasizing relaxation and the Philippine hospitality experience.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🌅</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Instagram Content</h4><p class="text-sm instructional-note">Create engagement-optimized captions</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Create a monthly content calendar for Facebook with 8-12 post ideas targeting couples and business travelers in General Santos.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">📅</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Content Calendar</h4><p class="text-sm instructional-note">Plan your month's marketing strategy</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Analyze our current messaging approach and suggest 3 improvements to increase booking conversion rates.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">📊</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Strategy Analysis</h4><p class="text-sm instructional-note">Get optimization recommendations</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Create a Taglish response to a Filipino guest asking about local food recommendations near Cascade Hideaway.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🇵🇭</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Local Recommendations</h4><p class="text-sm instructional-note">Taglish responses for Filipino guests</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Draft a service recovery message for a guest who experienced a minor issue with the AC, offering compensation and next-stay discount.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">🎁</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Service Recovery</h4><p class="text-sm instructional-note">Turn issues into loyalty opportunities</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                                <div class="prompt-card p-5 rounded-xl" data-prompt="Generate a script for following up with a guest who hasn't responded to our inquiry response after 24 hours.">
+                                    <div class="flex items-start gap-3"><div class="text-3xl">⏰</div><div class="flex-1"><h4 class="font-bold text-dark-bronze mb-2">Follow-Up Script</h4><p class="text-sm instructional-note">Re-engage inactive inquiries</p></div><button class="copy-button text-xs px-3 py-2 rounded-lg">Copy</button></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="luxury-divider"></div>
+
+                        <div class="space-y-4 my-12">
+                            <h3 class="text-3xl font-bold mb-6 text-bronze text-center">🎯 My Core Capabilities</h3>
+                            <div class="accordion-item"><div class="accordion-header p-6 rounded-2xl flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-5xl capability-icon">💬</div><div><h4 class="text-2xl font-bold">Guest Communication Assistant</h4><p class="text-sm opacity-80 mt-1">Draft, customize, and polish guest-ready messages instantly</p></div></div><div class="accordion-icon text-3xl">▼</div></div><div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="space-y-6"><div><h5 class="text-xl font-bold mb-3 text-bronze">What I Can Do:</h5><ul class="space-y-3 list-disc list-inside text-charcoal/90"><li>Draft inquiry responses that are warm, professional, and conversion-optimized</li><li>Create personalized check-in instructions with all essential details</li><li>Generate mid-stay check-ins that feel sincere, not automated</li><li>Craft post-stay thank-you messages with gentle review requests</li><li>Handle special requests (early check-in, extra guests, amenity questions)</li></ul></div><div class="bg-warm-cream p-6 rounded-xl"><h5 class="text-lg font-bold mb-3">Real-World Example:</h5><div class="space-y-3 text-sm"><div><strong class="text-bronze">Scenario:</strong> First-time guest from Manila asks about transportation options from the airport.</div><div><strong class="text-bronze">You Say:</strong> "How do I get to your place from GenSan airport?"</div><div class="bg-white p-4 rounded-lg border-2 border-bronze/30"><strong class="text-bronze">AI Generates:</strong><br><em class="text-charcoal">"Hi [Guest]! Great question! The easiest way is to book a Grab from the airport (about ₱250-300, 25 minutes). Alternatively, our partner transport service can pick you up for ₱350 - just let me know and I'll arrange it! Looking forward to welcoming you! 🌿"</em></div><div class="text-xs instructional-note"><strong>Time Saved:</strong> 5-7 minutes per message × 20 inquiries/month = <strong class="text-success-green">100-140 minutes saved monthly</strong></div></div></div><div><h5 class="text-xl font-bold mb-3 text-bronze">Best Practices:</h5><div class="grid md:grid-cols-2 gap-4"><div class="bg-success-green/10 p-4 rounded-lg border-2 border-success-green/30"><p class="font-bold text-success-green mb-2">✓ DO</p><ul class="text-sm space-y-2 list-disc list-inside"><li>Always specify guest context (first-time, returning, business, etc.)</li><li>Review AI output before sending</li><li>Add personal touches like emojis or local references</li></ul></div><div class="bg-danger-red/10 p-4 rounded-lg border-2 border-danger-red/30"><p class="font-bold text-danger-red mb-2">✗ DON'T</p><ul class="text-sm space-y-2 list-disc list-inside"><li>Send AI responses without reading them first</li><li>Use overly formal language that doesn't match your brand</li><li>Forget to personalize with guest names</li></ul></div></div></div></div></div></div>
+                            <div class="accordion-item"><div class="accordion-header p-6 rounded-2xl flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-5xl capability-icon">📢</div><div><h4 class="text-2xl font-bold">Facebook & Marketing Copywriter</h4><p class="text-sm opacity-80 mt-1">Create ready-to-post social media content that drives bookings</p></div></div><div class="accordion-icon text-3xl">▼</div></div><div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="space-y-6"><div><h5 class="text-xl font-bold mb-3 text-bronze">Marketing Superpowers:</h5><ul class="space-y-3 list-disc list-inside text-charcoal/90"><li>Create engaging Facebook posts with Calls-to-Action (CTAs) and hashtags</li><li>Write Instagram captions optimized for engagement and storytelling</li><li>Generate compelling Facebook Ad copy with targeting suggestions</li><li>Create monthly content calendars with 8-12 post ideas</li><li>Craft guest testimonial showcases and review highlights</li></ul></div><div class="bg-warm-cream p-6 rounded-xl"><h5 class="text-lg font-bold mb-3">Content Calendar Example:</h5><div class="space-y-2 text-sm"><div><strong class="text-bronze">Week 1:</strong><span> Property showcase (workspace, amenities)</span></div><div><strong class="text-bronze">Week 2:</strong><span> Guest testimonial feature + review highlights</span></div><div><strong class="text-bronze">Week 3:</strong><span> Local attraction spotlight (GenSan tourism)</span></div><div><strong class="text-bronze">Week 4:</strong><span> Special offer / weekend getaway promotion</span></div></div></div><div class="grid md:grid-cols-2 gap-6"><div class="p-5 bg-white rounded-xl border-2 border-soft-taupe"><h6 class="font-bold mb-3">Posting Schedule</h6><ul class="text-sm space-y-2 list-disc list-inside"><li><strong>Frequency:</strong> 2-3 posts per week</li><li><strong>Best Time:</strong> 7-9 PM (GenSan timezone)</li><li><strong>Mix:</strong> 60% value content, 40% promotional</li></ul></div><div class="p-5 bg-white rounded-xl border-2 border-soft-taupe"><h6 class="font-bold mb-3">Engagement Tips</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Ask questions to drive comments</li><li>Use local hashtags (#GenSan, #SouthCotabato)</li><li>Share behind-the-scenes content</li></ul></div></div></div></div></div>
+                            <div class="accordion-item"><div class="accordion-header p-6 rounded-2xl flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-5xl capability-icon">🧭</div><div><h4 class="text-2xl font-bold">Staff Operations & Training Tool</h4><p class="text-sm opacity-80 mt-1">Guide your team with SOPs and best practices</p></div></div><div class="accordion-icon text-3xl">▼</div></div><div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="space-y-6"><div class="grid md:grid-cols-2 gap-6"><div class="p-5 bg-warm-cream rounded-xl"><h6 class="font-bold text-bronze mb-3">For Hosts</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>SOP quick reference and reminders</li><li>Check-in/checkout procedure guides</li><li>Crisis management scripts</li><li>Quality control checklists</li></ul></div><div class="p-5 bg-warm-cream rounded-xl"><h6 class="font-bold text-bronze mb-3">For Cleaning Team</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Cleaning sequence breakdowns</li><li>Supply inventory management</li><li>Quality standards explanations</li><li>Photo documentation guidelines</li></ul></div></div><div class="bg-white p-6 rounded-xl border-2 border-soft-taupe"><h5 class="font-bold mb-3">Quick Reference Example:</h5><p class="text-sm mb-3"><strong>Prompt:</strong> "Remind me of the 5-star turnover checklist"</p><div class="bg-warm-cream p-4 rounded-lg"><p class="text-sm font-bold mb-2">AI Response:</p><ol class="text-sm space-y-1 list-decimal list-inside"><li>Ventilate (open windows, 15 min)</li><li>Deep clean bathroom (spray, scrub, polish)</li><li>Kitchenette (dishes, degrease, sanitize)</li><li>Make bed hotel-style (tight corners)</li><li>Restock amenities (coffee, toiletries, towels)</li><li>Final QC photos (4 shots: bed, bath, kitchen, overall)</li></ol></div></div></div></div></div>
+                            <div class="accordion-item"><div class="accordion-header p-6 rounded-2xl flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-5xl capability-icon">⭐</div><div><h4 class="text-2xl font-bold">Guest Experience Optimization</h4><p class="text-sm opacity-80 mt-1">Simulate scenarios and perfect your hospitality</p></div></div><div class="accordion-icon text-3xl">▼</div></div><div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="space-y-6"><p class="text-lg">I can help you prepare for any guest situation by simulating scenarios and generating appropriate responses.</p><div class="grid md:grid-cols-3 gap-4"><div class="p-5 bg-warm-cream rounded-xl text-center"><div class="text-4xl mb-3">🎭</div><h6 class="font-bold mb-2">Scenario Planning</h6><p class="text-sm">Practice handling difficult situations before they happen</p></div><div class="p-5 bg-warm-cream rounded-xl text-center"><div class="text-4xl mb-3">🔄</div><h6 class="font-bold mb-2">Service Recovery</h6><p class="text-sm">Turn complaints into loyalty opportunities with perfect responses</p></div><div class="p-5 bg-warm-cream rounded-xl text-center"><div class="text-4xl mb-3">💝</div><h6 class="font-bold mb-2">VIP Treatment</h6><p class="text-sm">Special touches for returning guests and celebrations</p></div></div><div class="bg-white p-6 rounded-xl border-2 border-success-green/30"><h5 class="font-bold mb-3 text-success-green">Success Story:</h5><p class="text-sm italic">"A guest complained about noise from construction nearby. Using the AI concierge's service recovery template, we acknowledged the issue, offered a complimentary late checkout, and sent a personalized apology gift. The guest upgraded their 3-star review to 5 stars and booked again!"</p></div></div></div></div>
+                            <div class="accordion-item"><div class="accordion-header p-6 rounded-2xl flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-5xl capability-icon">📊</div><div><h4 class="text-2xl font-bold">Marketing Strategy Partner</h4><p class="text-sm opacity-80 mt-1">Data-driven insights for booking growth</p></div></div><div class="accordion-icon text-3xl">▼</div></div><div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="space-y-6"><div class="grid md:grid-cols-2 gap-6"><div class="capability-card p-6 rounded-xl"><h6 class="font-bold text-bronze mb-3">Content Planning</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Monthly content calendars</li><li>Seasonal campaign ideas</li><li>Theme-based posting strategies</li></ul></div><div class="capability-card p-6 rounded-xl"><h6 class="font-bold text-bronze mb-3">Ad Optimization</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Facebook Ad copy suggestions</li><li>Targeting recommendations</li><li>Budget allocation strategies</li></ul></div><div class="capability-card p-6 rounded-xl"><h6 class="font-bold text-bronze mb-3">Performance Analysis</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Review response analytics</li><li>Booking pattern insights</li><li>Competitive positioning</li></ul></div><div class="capability-card p-6 rounded-xl"><h6 class="font-bold text-bronze mb-3">Growth Tactics</h6><ul class="text-sm space-y-2 list-disc list-inside"><li>Referral program templates</li><li>Loyalty incentive ideas</li><li>Partnership opportunities</li></ul></div></div></div></div></div>
+                        </div>
+
+                        <div class="text-center mt-12">
+                            <div class="promise-card p-8 rounded-2xl">
+                                <h3 class="font-serif text-3xl text-dark-bronze mb-4">Ready to Transform Your Operations?</h3>
+                                <p class="text-lg mb-6 max-w-2xl mx-auto">Join the future of hospitality management. Save 12+ hours per week while delivering even better guest experiences.</p>
+                                <a href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" target="_blank" class="copy-button inline-block px-10 py-5 rounded-xl font-semibold text-xl">
+                                    Launch Cascade Concierge Now →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="guest-guide" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-6 text-center">Guest-Facing Welcome Guide</h2>
+                         <p class="instructional-note mb-8 text-lg text-center">A summary of essential information for guests, based on the online welcome book.</p>
+                         <h3 class="text-3xl font-bold mb-4 text-bronze">Welcome & Access</h3>
+                         <p>Welcome to Cascade Hideaway! To check in, tap the smart lock keypad to wake it, then enter your <strong>PIN + #</strong>. The door will auto-lock behind you.</p>
+                         <div class="pro-tip p-5 rounded-xl my-5"><p>💡 <strong>For Your Convenience:</strong> Inside, placed together with the TV and A/C remotes, you will find the access key card. It is attached to a keychain with the Cascade Hideaway logo. You can use this card to simply tap on the keypad to unlock the door during your stay. Please don't lose it, as a replacement fee of ₱1,000 will be charged.</p></div>
+                         <div class="luxury-divider my-8"></div>
+                         <h3 class="text-3xl font-bold mb-4 text-bronze">Amenities & How-To's</h3>
+                         <ul class="list-disc list-inside space-y-3">
+                            <li><strong>Wi-Fi:</strong> Network: `WelcomeToCascade 5G` / Password: `EnjoyYourStay@CH`</li>
+                            <li><strong>A/C:</strong> Please use the remote to set your desired temperature. We recommend 'Cool' mode.</li>
+                            <li><strong>Laundry (Panasonic NA-F80A5):</strong> Load clothes, add powder detergent to the tub OR liquid detergent to the designated slot. Close the lid and select your cycle.</li>
+                             <li><strong>Kitchen:</strong> An induction stove, microwave, and fridge are available. Please clean up after cooking.</li>
+                         </ul>
+                         <div class="luxury-divider my-8"></div>
+                         <h3 class="text-3xl font-bold mb-4 text-bronze">Exploring GenSan</h3>
+                         <ul class="list-disc list-inside space-y-3">
+                            <li><strong>Transport:</strong> Grab and Taxis are reliable for getting around. Tricycles are great for short trips.</li>
+                            <li><strong>Food Delivery:</strong> Foodpanda and GrabFood both deliver directly to the unit.</li>
+                             <li><strong>Nearby Malls:</strong> SM City GenSan, KCC Mall, and Robinsons Place are all within a 10-15 minute drive.</li>
+                         </ul>
+                    </div>
+                </section>
+                
+                <section id="cleaning" class="content-section">
+                     <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-4 text-center">Master Cleaning Checklist</h2>
+                        <p class="text-xl mb-10 text-center dynamic-text-highlight">This isn't just cleaning; it's preparing an experience. Follow this sequence for a perfect, hotel-standard turnover.</p>
+                        
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Phase 1: Entry & Reset (15 mins)</h3>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Open windows to ventilate.</strong> A fresh-smelling space is the first sign of clean.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Inspect for damages.</strong> If you see something, take a photo and report it immediately *before* cleaning. This protects you and helps with claims.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Strip all linens.</strong> Bag all used towels and sheets to prevent the spread of dirt.</label></div>
+                            </div>
+                            <div class="luxury-divider"></div>
+                            <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Phase 2: Deep Clean (45 mins)</h3>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Bathroom:</strong> Spray cleaner and let it sit for 5 mins to dissolve grime. Scrub toilet, sink, and shower, then rinse and dry all surfaces until they sparkle. Polish the chrome!</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Kitchenette:</strong> Wash dishes first. Degrease stove. Sanitize sink and counters. A clean microwave and fridge show attention to detail.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Dusting:</strong> Always dust from top to bottom. Sanitize all high-touch points (remotes, switches, handles).</label></div>
+                            </div>
+                            <div class="luxury-divider"></div>
+                            <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Phase 3: Staging & Final Touches (30 mins)</h3>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Make the bed hotel-style.</strong> Use tight "hospital corners" for a crisp, inviting look.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Arrange pillows perfectly.</strong> Four pillows, fluffed and layered.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Restock everything.</strong> Guests should never have to ask for basics (toilet paper, coffee, etc.).</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Mop your way out.</strong> Vacuum first, then damp mop from the farthest corner towards the door.</label></div>
+                                <div class="checklist-item"><input type="checkbox"><label><strong>Final QC Photos.</strong> Non-negotiable. Take and send 4 photos (Bed, Bath, Kitchen, Overall) for verification. This is your proof of a job well done.</label></div>
+                            </div>
+                            <div class="luxury-divider"></div>
+                             <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Important Notes</h3>
+                                <div class="pro-tip p-5 rounded-xl my-5">
+                                    <p class="font-bold">On Odor Control (VERY IMPORTANT)</p>
+                                    <p>It is critical that the unit has **NO FOUL SMELL** upon entry. Check the sofa, even when closed up. Take extra care if the previous guest was smoking, as the smell clings to linens and fabric. Always use a quality fabric deodorizer and sanitize the entire unit after cleaning is complete and before the next guest arrives.</p>
+                                </div>
+                                <div class="pro-tip p-5 rounded-xl my-5"><p><strong>Safety Tip:</strong> Always wear gloves, especially when handling cleaning chemicals. Ensure good ventilation by keeping windows open.</p></div>
+                                <div class="pro-tip p-5 rounded-xl my-5"><p><strong>Pro Tip:</strong> Use microfiber cloths for a streak-free shine on glass and faucets. Use a separate cloth for the toilet.</p></div>
+                             </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="costing" class="content-section admin-only">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-4 text-center">Cost & Profitability Analysis</h2>
+                        <p class="text-xl text-center mb-8 instructional-note">Know your numbers, price with confidence. This is your command center for financial clarity.</p>
+                        
+                        <div class="border-b-2 border-soft-taupe mb-6">
+                            <nav class="flex space-x-2 sm:space-x-4 -mb-px" id="costing-tabs">
+                                <button class="cost-tab active shrink-0" data-tab="breakdown">Cost Breakdown</button>
+                                <button class="cost-tab shrink-0" data-tab="assumptions">Assumptions & Inputs</button>
+                            </nav>
+                        </div>
+
+                        <div>
+                            <div id="breakdown" class="cost-content active space-y-8">
+                                <div class="accent-box p-5 rounded-xl">
+                                    <p><strong>Important:</strong> Whenever making significant changes or updates to your costs, please use the <strong>Data Backup & Restore</strong> feature in the "Assumptions & Inputs" tab to save your work.</p>
+                                </div>
+                                
+                                <div class="bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe">
+                                    <h3 class="text-3xl font-bold mb-3">A) Variable Costs (Per Night)</h3>
+                                    <p class="instructional-note mb-4">Costs incurred only when occupied (e.g., electricity). Click any number to edit.</p>
+                                    <div class="bg-warm-cream p-3 rounded-lg border-2 border-soft-taupe grid grid-cols-[1fr_auto_auto_auto] gap-x-4 font-semibold text-sm text-dark-bronze">
+                                        <span>Item</span>
+                                        <span class="text-right">Hours of Use</span>
+                                        <span class="text-right">Cost/Hour</span>
+                                        <span class="text-right">Subtotal</span>
+                                    </div>
+                                    <div id="variable-costs-table" class="space-y-2 mt-2"></div>
+                                    <div class="mt-4 pt-4 border-t-2 border-soft-taupe">
+                                        <h4 class="font-semibold text-lg">Add New Variable Cost</h4>
+                                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                                            <input type="text" id="new-variable-name" placeholder="Item Name (e.g., Air Purifier)" class="flex-grow p-3 border-2 border-soft-taupe rounded-lg">
+                                            <input type="number" id="new-variable-cost" placeholder="Cost per Hour (₱)" class="w-full sm:w-48 p-3 border-2 border-soft-taupe rounded-lg">
+                                            <button id="add-variable-btn" class="copy-button px-5 py-3 rounded-lg font-semibold">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe">
+                                    <h3 class="text-3xl font-bold mb-3">B) Per Booking Costs</h3>
+                                    <p class="instructional-note mb-4">One-time costs for each stay (e.g., cleaning, amenities). Click any number to edit.</p>
+                                    <div class="bg-warm-cream p-3 rounded-lg border-2 border-soft-taupe grid grid-cols-[1fr_auto_auto_auto] gap-x-4 font-semibold text-sm text-dark-bronze">
+                                        <span>Item</span>
+                                        <span class="text-right">No. of Items</span>
+                                        <span class="text-right">Cost per Unit</span>
+                                        <span class="text-right">Subtotal</span>
+                                    </div>
+                                    <div id="booking-costs-table" class="space-y-2 mt-2"></div>
+                                     <div class="mt-4 pt-4 border-t-2 border-soft-taupe">
+                                        <h4 class="font-semibold text-lg">Add New Per-Booking Cost</h4>
+                                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                                            <input type="text" id="new-booking-name" placeholder="Item Name (e.g., Welcome Note)" class="flex-grow p-3 border-2 border-soft-taupe rounded-lg">
+                                            <input type="number" id="new-booking-cost" placeholder="Cost per Unit (₱)" class="w-full sm:w-48 p-3 border-2 border-soft-taupe rounded-lg">
+                                            <button id="add-booking-btn" class="copy-button px-5 py-3 rounded-lg font-semibold">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe">
+                                    <h3 class="text-3xl font-bold mb-3">C) Monthly Fixed Costs</h3>
+                                    <p class="instructional-note mb-4">Regular monthly bills. We'll automatically allocate these per booked night based on your assumptions.</p>
+                                    <div class="bg-warm-cream p-3 rounded-lg border-2 border-soft-taupe grid grid-cols-[1fr_auto] gap-x-4 font-semibold text-sm text-dark-bronze">
+                                        <span>Item</span>
+                                        <span class="text-right">Monthly Cost</span>
+                                    </div>
+                                    <div id="fixed-costs-table" class="space-y-2 mt-2"></div>
+                                     <div class="mt-4 pt-4 border-t-2 border-soft-taupe">
+                                        <h4 class="font-semibold text-lg">Add New Fixed Cost</h4>
+                                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                                            <input type="text" id="new-fixed-name" placeholder="Item Name (e.g., Property Tax)" class="flex-grow p-3 border-2 border-soft-taupe rounded-lg">
+                                            <input type="number" id="new-fixed-cost" placeholder="Monthly Cost (₱)" class="w-full sm:w-48 p-3 border-2 border-soft-taupe rounded-lg">
+                                            <button id="add-fixed-btn" class="copy-button px-5 py-3 rounded-lg font-semibold">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="assumptions" class="cost-content space-y-8">
+                                <div class="accent-box p-5 rounded-xl">
+                                    <p><strong>Important:</strong> Whenever making significant changes or updates to your costs, please use the <strong>Data Backup & Restore</strong> feature below to save your work.</p>
+                                </div>
+
+                                <div class="bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe">
+                                     <h3 class="text-3xl font-bold mb-3">Your Business Assumptions</h3>
+                                     <p class="instructional-note mb-4">These numbers drive your calculations. Keep them updated to reflect your business goals.</p>
+                                     <div class="space-y-4">
+                                        <div>
+                                            <label for="bookings-per-month" class="font-semibold block text-lg">Target Bookings per Month</label>
+                                            <input type="number" id="bookings-per-month" class="w-full p-3 border-2 border-soft-taupe rounded-lg mt-1">
+                                        </div>
+                                         <div>
+                                            <label for="avg-los" class="font-semibold block text-lg">Average Length of Stay (Nights)</label>
+                                            <input type="number" step="0.1" id="avg-los" class="w-full p-3 border-2 border-soft-taupe rounded-lg mt-1">
+                                        </div>
+                                         <div>
+                                            <label for="platform-fee" class="font-semibold block text-lg">Platform Fee Rate (%)</label>
+                                            <input type="number" step="0.1" id="platform-fee" class="w-full p-3 border-2 border-soft-taupe rounded-lg mt-1">
+                                        </div>
+                                         <button id="save-assumptions-btn" class="copy-button w-full mt-4 px-4 py-3 rounded-lg font-semibold text-lg" style="background-color: var(--success-green);">Save Assumptions</button>
+                                     </div>
+                                </div>
+                                
+                                <div class="bg-bronze/10 p-6 rounded-2xl border-2 border-dashed border-bronze">
+                                     <h3 class="text-3xl font-bold mb-3">Data Backup & Restore</h3>
+                                     <p class="instructional-note mb-4">Save your data to a file for backup, or load a previous backup. This is crucial for moving between computers or restoring old versions. We recommend saving backups to your private Google Drive folder.</p>
+                                     <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                                        <button id="export-data-btn" class="copy-button flex-1 px-4 py-3 rounded-lg font-semibold">Export Data to File</button>
+                                        <button id="import-data-btn" class="copy-button flex-1 px-4 py-3 rounded-lg font-semibold" style="background-color: var(--info-blue);">Import Data from File</button>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="luxury-divider my-8"></div>
+                        
+                        <div class="bg-warm-white p-6 rounded-3xl border-2 border-bronze space-y-6">
+                             <h3 class="text-4xl font-bold text-center mb-4">Live Summary & Profit Calculator</h3>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+                                <div class="bg-warm-cream p-4 rounded-xl">
+                                    <p class="text-lg instructional-note">Total Cost for a 1-Night Stay</p>
+                                    <p id="total-cost-display" class="text-5xl font-bold dynamic-text-highlight">₱0.00</p>
+                                </div>
+                                <div class="bg-warm-cream p-4 rounded-xl">
+                                    <p class="text-lg instructional-note">Break-Even Price</p>
+                                    <p id="break-even-display" class="text-5xl font-bold dynamic-text-highlight">₱0.00</p>
+                                    <p class="text-xs instructional-note">(Price to charge to cover costs, with zero profit.)</p>
+                                </div>
+                             </div>
+
+                             <div class="pt-4">
+                                <label for="desired-profit" class="font-semibold text-2xl block text-center">What's Your Desired Profit Per Night?</label>
+                                <input type="number" id="desired-profit" placeholder="e.g., 500" class="w-full max-w-sm mx-auto block mt-2 p-4 text-3xl border-2 border-soft-taupe rounded-lg text-center">
+                             </div>
+                             
+                             <div class="bg-dark-bronze text-warm-white p-6 rounded-2xl mt-4 text-center">
+                                <p class="text-2xl">Your Recommended Target Price is:</p>
+                                <p id="target-price-display" class="text-6xl font-bold text-gold-glow tracking-tight mt-2">₱0.00</p>
+                                <p class="text-md opacity-80 mt-2">(This is what a guest should pay)</p>
+                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="pricing" class="content-section admin-only">
+                    <div class="content-card rounded-3xl p-6 sm:p-10 space-y-10">
+                        <div>
+                            <h2 class="text-5xl font-bold mb-4 text-center">Dynamic Pricing Strategy</h2>
+                            <p class="text-xl text-center mb-10 instructional-note">Use your cost data to build a smart, profitable pricing strategy.</p>
+                        </div>
+                        
+                        <div>
+                             <h3 class="text-3xl font-bold mb-4 break-words text-bronze">Pricing Scenarios (at <span id="current-fee-display-1">15.5</span>% Platform Fee)</h3>
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe text-center hover:shadow-xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">Bare Minimum (Break-even)</h4>
+                                    <p class="instructional-note text-sm mb-2">Your costs are covered, nothing more.</p>
+                                    <p id="scenario-breakeven" class="text-4xl font-bold text-danger-red">₱0.00</p>
+                                </div>
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-bronze text-center shadow-lg hover:shadow-2xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">Standard Profit Target (₱300)</h4>
+                                    <p class="instructional-note text-sm mb-2">A healthy starting point for your base price.</p>
+                                    <p id="scenario-profit-300" class="text-4xl font-bold dynamic-text-highlight">₱0.00</p>
+                                </div>
+                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe text-center hover:shadow-xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">High-Demand Target (₱500)</h4>
+                                    <p class="instructional-note text-sm mb-2">For weekends, holidays, or peak season.</p>
+                                    <p id="scenario-profit-500" class="text-4xl font-bold" style="color: var(--success-green);">₱0.00</p>
+                                </div>
+                             </div>
+                        </div>
+
+                        <div class="luxury-divider"></div>
+
+                        <div>
+                             <h3 class="text-3xl font-bold mb-4 break-words text-bronze">What if the Platform Fee Changes? (e.g., 3% Fee)</h3>
+                             <p class="instructional-note mb-4">Here's how your prices would need to adjust if you switched to a different fee structure. This shows how crucial fees are to your final price.</p>
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe text-center hover:shadow-xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">Break-even at 3% Fee</h4>
+                                    <p id="scenario-breakeven-alt" class="text-4xl font-bold text-danger-red">₱0.00</p>
+                                </div>
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe text-center hover:shadow-xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">+₱300 Profit at 3% Fee</h4>
+                                    <p id="scenario-profit-300-alt" class="text-4xl font-bold dynamic-text-highlight">₱0.00</p>
+                                </div>
+                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe text-center hover:shadow-xl transition-shadow">
+                                    <h4 class="font-bold text-xl break-words">+₱500 Profit at 3% Fee</h4>
+                                    <p id="scenario-profit-500-alt" class="text-4xl font-bold" style="color: var(--success-green);">₱0.00</p>
+                                </div>
+                             </div>
+                        </div>
+
+                        <div class="luxury-divider"></div>
+
+                        <div class="bg-dark-bronze/5 p-6 rounded-3xl border-2 border-dashed border-dark-bronze/20">
+                            <h3 class="text-3xl font-bold mb-3 text-center">Dynamic Pricing Advisor</h3>
+                            <p class="instructional-note mb-4 text-center">Click the button below to get real-time, AI-powered advice based on your current numbers.</p>
+                            <div class="text-center">
+                               <button id="get-advice-btn" class="copy-button px-8 py-4 rounded-xl font-semibold text-lg">
+                                   Get Real-Time Advice
+                                </button>
+                            </div>
+                            <div id="advice-output" class="bg-warm-white p-6 rounded-xl mt-6 min-h-[150px] flex items-center justify-center border-2 border-soft-taupe">
+                                <p class="instructional-note">Your personalized advice will appear here...</p>
+                            </div>
+                        </div>
+
+                        <div class="pro-tip p-5 rounded-xl my-4 mt-8">
+                            <p>💡 <strong>How to Use This in Practice:</strong>
+                            <br>1. Set your "Standard Profit Target" price as your base daily rate on your calendar.
+                            <br>2. For weekends and holidays, increase your price towards the "High-Demand Target".
+                            <br>3. For quiet weekdays or last-minute bookings, you can lower your price, but try not to go below your "Break-even" price unless you have a strategic reason (e.g., getting a new listing's first review).
+                            </p>
+                         </div>
+                    </div>
+                </section>
+
+                <section id="playbook" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-6 text-center">Comprehensive Crisis Playbook</h2>
+                        <div class="border-b-2 border-soft-taupe mb-6">
+                            <nav class="flex space-x-2 sm:space-x-4 -mb-px" id="playbook-tabs">
+                                <button class="playbook-tab active shrink-0" data-tab="common">Common Issues</button>
+                                <button class="playbook-tab shrink-0" data-tab="guest-conduct">Guest Conduct</button>
+                                <button class="playbook-tab shrink-0" data-tab="property">Property Issues</button>
+                            </nav>
+                        </div>
+                        <div>
+                            <div id="common" class="playbook-content active space-y-6">
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 A/C or Water Failure</h3><p class="mt-3"><strong>1. Assess:</strong> Unit issue or area outage? Confirm immediately.</p><p class="mt-2"><strong>2. Communicate (in 15 mins):</strong> "Hi [Guest Name], I am so sorry for the inconvenience. Our technician is on the way (ETA [Time]) to fix the [A/C/Water]. We've provided [a fan/bottled water] for you in the meantime. I will personally monitor this and keep you updated."</p><p class="mt-2"><strong>3. Act & Follow-Up:</strong> Dispatch tech. If not resolved in 3-4 hours, proactively offer a 50% refund for the night and/or relocation assistance.</p></div>
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Wi-Fi Down</h3><p class="mt-3"><strong>1. Assess:</strong> Ask guest to power cycle router (unplug for 60s). Check ISP app for outages.</p><p class="mt-2"><strong>2. Communicate:</strong> "So sorry about the Wi-Fi! Could you please try unplugging the router for one minute? I'm also checking with the provider for any area issues. Will update you in 15 mins."</p><p class="mt-2"><strong>3. Act:</strong> If it persists, offer a mobile hotspot or a refund for a co-working space pass.</p></div>
+                            </div>
+                            <div id="guest-conduct" class="playbook-content space-y-6">
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Noise Complaint / Party</h3><p class="mt-3"><strong>1. Communicate Gently:</strong> "Hi [Guest Name], just a friendly reminder about our no-party policy and quiet hours after 10 PM to respect our neighbors. Thank you for your cooperation!"</p><p class="mt-2"><strong>2. Act & Follow-Up:</strong> If it persists, give one formal warning. If it continues, terminate the reservation without refund and involve platform support/security. Document all communication with timestamps.</p></div>
+                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Smoking Inside</h3><p class="mt-3"><strong>1. Communicate:</strong> "Hi [Guest Name], a friendly reminder that our home is strictly smoke-free. The designated smoking area is outside. Thank you for helping us keep the air fresh for all guests."</p><p class="mt-2"><strong>2. Act:</strong> Document evidence. After checkout, charge the disclosed deep-cleaning fee via the Resolution Center.</p></div>
+                            </div>
+                            <div id="property" class="playbook-content space-y-6">
+                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Pest Sighting</h3><p class="mt-3"><strong>1. Communicate with Urgency:</strong> "Hi [Guest Name], I am mortified to hear this and I sincerely apologize. This is not our standard. I am arranging an immediate professional treatment. Please let me know if you would be comfortable with a deep clean now, or if you would prefer we assist you in finding alternative accommodation with a full refund."</p><p class="mt-2"><strong>2. Act:</strong> Based on the guest's choice, execute flawlessly. Schedule emergency pest control regardless.</p></div>
+                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Damage Discovered</h3><p class="mt-3"><strong>1. Act Fast:</strong> Take clear photos/videos immediately. Get a quote for repair.</p><p class="mt-2"><strong>2. Communicate Politely:</strong> "Hi [Guest Name], hope you had a safe trip. During cleaning, we noticed the [item] was damaged. I've attached a photo. We can resolve this through the Resolution Center for [cost]. Please let me know if you have any questions."</p><p class="mt-2"><strong>3. Follow-Up:</strong> File the claim via the Resolution Center with all evidence.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="maintenance" class="content-section">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-8 text-center">Maintenance Schedule & Log</h2>
+                        <div class="space-y-10">
+                            <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Recurring Maintenance Checklist</h3>
+                                <div id="maintenance-checklist" class="space-y-4"></div>
+                                <button id="createAllRemindersBtn" class="copy-button w-full mt-6 px-4 py-3 rounded-lg font-semibold text-lg">Create All Calendar Reminders (.ics)</button>
+                            </div>
+                             <div class="luxury-divider"></div>
+                            <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Add Custom Maintenance Task</h3>
+                                <div id="add-task-form" class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe space-y-4">
+                                    <input type="text" id="newTaskName" placeholder="Task Name" class="w-full p-3 border-2 border-soft-taupe rounded-lg">
+                                    <input type="number" id="newTaskInterval" placeholder="Interval in Days (e.g., 30)" class="w-full p-3 border-2 border-soft-taupe rounded-lg">
+                                    <button id="addTaskBtn" class="copy-button w-full px-4 py-3 rounded-lg font-semibold text-lg">Add Task</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                 <section id="info" class="content-section">
+                     <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-8 text-center">Important Info & Contacts</h2>
+                        <div id="infoForm" class="space-y-10">
+                             <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Operations Contacts</h3>
+                                <div class="accent-box p-5 rounded-xl space-y-4 text-lg">
+                                    <p><strong>Co-Host:</strong> <span class="info-text" data-field="cohost_name"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_name"></p>
+                                    <p class="ml-4"><strong>Cel/WhatsApp:</strong> <span class="info-text protected" data-field="cohost_phone"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_phone"></p>
+                                    <p class="ml-4"><strong>Email:</strong> <span class="info-text" data-field="cohost_email"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_email"></p>
+                                    <p class="ml-4 flex items-center gap-3"><strong>Password:</strong> <span class="info-text protected" data-field="cohost_pass" style="-webkit-text-security: disc;"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_pass"> <button class="text-2xl" id="togglePass">👁️</button></p>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Payment & Booking Details</h3>
+                                <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe space-y-4 text-lg">
+                                    <p><strong>Union Bank:</strong> <span class="info-text" data-field="bank_name"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="bank_name"><br><span class="ml-4">Acc #:</span> <span class="info-text protected" data-field="bank_acct"></span> <button class="copy-button text-xs px-3 py-1 ml-3 rounded" data-copy-field="bank_acct">Copy</button> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="bank_acct"></p>
+                                    <p><strong>GCash:</strong> <span class="info-text" data-field="gcash_name"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="gcash_name"><br><span class="ml-4">#:</span> <span class="info-text protected" data-field="gcash_num"></span> <button class="copy-button text-xs px-3 py-1 ml-3 rounded" data-copy-field="gcash_num">Copy</button> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="gcash_num"></p>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="text-3xl font-bold mb-4 text-bronze">Additional Contacts</h3>
+                                <div id="additionalContacts" class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe space-y-4">
+                                    <div class="grid grid-cols-3 gap-4 font-semibold text-dark-bronze pb-3 border-b-2 border-soft-taupe">
+                                        <div>Name</div>
+                                        <div>Title</div>
+                                        <div>Contact Number</div>
+                                    </div>
+                                    </div>
+                                <div class="flex mt-6 space-x-4">
+                                     <button id="addContactRowBtn" class="copy-button text-md px-5 py-2 rounded-lg">Add Row</button>
+                                     <button id="saveContactsBtn" class="copy-button text-md px-5 py-2 rounded-lg" style="background-color: var(--success-green);">Save Contacts</button>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-4 pt-4 border-t-2 border-soft-taupe">
+                                <button id="editInfoBtn" class="copy-button px-6 py-3 rounded-lg font-semibold text-lg">Edit Info</button>
+                                <button id="saveInfoBtn" class="copy-button hidden px-6 py-3 rounded-lg font-semibold text-lg" style="background-color: var(--success-green);">Save Info</button>
+                                <button id="copyAllInfoBtn" class="copy-button px-6 py-3 rounded-lg font-semibold text-lg">Copy All Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="access-log" class="content-section admin-only">
+                    <div class="content-card rounded-3xl p-6 sm:p-10">
+                        <h2 class="text-5xl font-bold mb-8 text-center">Access Log</h2>
+                        <p class="instructional-note mb-6 text-center">This log automatically records every time the operations manual is accessed.</p>
+                        <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
+                            <div class="grid grid-cols-2 gap-4 font-semibold text-dark-bronze pb-3 border-b-2 border-soft-taupe">
+                                <div>Name</div>
+                                <div>Timestamp</div>
+                            </div>
+                            <div id="access-log-table" class="space-y-2 mt-3 max-h-[600px] overflow-y-auto">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+         <footer class="fixed bottom-0 left-0 right-0 bg-dark-bronze/95 text-warm-white text-xs text-center py-2 backdrop-blur-md z-20 shadow-lg">
+            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.1 Fixed • Performance Optimized</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const app = {
+                init() {
+                    this.auth.init();
+                    this.navigation.init();
+                    this.ui.init();
+                    this.costing.init();
+                    this.maintenance.init();
+                    this.info.init();
+                }
+            };
+
+            app.auth = {
+                elements: {},
+                init() {
+                    this.elements = {
+                        loginOverlay: document.getElementById('login-overlay'),
+                        loginForm: document.getElementById('login-form'),
+                        loginError: document.getElementById('login-error'),
+                        appContainer: document.getElementById('app-container'),
+                        loginNameSelect: document.getElementById('login-name'),
+                        loginNameOther: document.getElementById('login-name-other'),
+                        usernameInput: document.getElementById('username'),
+                    };
+                    this.bindEvents();
+                    this.checkAuth();
+                },
+                bindEvents() {
+                    this.elements.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+                    this.elements.loginNameSelect.addEventListener('change', () => this.toggleOtherName());
+                },
+                toggleOtherName() {
+                    const isOther = this.elements.loginNameSelect.value === 'Other';
+                    this.elements.loginNameOther.classList.toggle('hidden', !isOther);
+                    this.elements.loginNameOther.required = isOther;
+                },
+                checkAuth() {
+                    if (localStorage.getItem('isAuthenticated') === 'true') {
+                        this.elements.loginOverlay.style.display = 'none';
+                        this.elements.appContainer.style.display = 'block';
+                        this.updateUserUI();
+                        app.costing.logAccess(); 
+                    } else {
+                        this.elements.loginOverlay.style.display = 'flex';
+                        this.elements.appContainer.style.display = 'none';
+                    }
+                },
+                handleLogin(e) {
+                    e.preventDefault();
+                    let userName = this.elements.loginNameSelect.value;
+                    if (userName === 'Other') { userName = this.elements.loginNameOther.value.trim(); }
+                    
+                    if (!userName) {
+                        this.elements.loginError.textContent = 'Please select or enter your name.';
+                        return;
+                    }
+
+                    const username = this.elements.usernameInput.value.toLowerCase();
+                    const password = document.getElementById('password').value;
+
+                    const ADMIN_PASS = 'cascadeadmin888';
+                    const REGULAR_PASS = 'cascade123';
+                    const ADMIN_USERS = ['cascade', 'lloyd', 'marifel', 'honey'];
+                    const REGULAR_USERS = ['cascade'];
+
+                    let userRole = null;
+                    let loginSuccess = false;
+
+                    if (ADMIN_USERS.includes(username) && password === ADMIN_PASS) {
+                        userRole = 'admin';
+                        loginSuccess = true;
+                    } else if (REGULAR_USERS.includes(username) && password === REGULAR_PASS) {
+                        userRole = 'regular';
+                        loginSuccess = true;
+                    }
+
+                    if (loginSuccess) {
+                        localStorage.setItem('isAuthenticated', 'true');
+                        localStorage.setItem('currentUser', userName);
+                        localStorage.setItem('userRole', userRole);
+                        this.checkAuth();
+                    } else {
+                        this.elements.loginError.textContent = 'Invalid username or password.';
+                        setTimeout(() => { this.elements.loginError.textContent = '' }, 3000);
+                    }
+                },
+                updateUserUI() {
+                    const userRole = localStorage.getItem('userRole');
+                    if (userRole === 'regular') {
+                        document.body.classList.add('regular-user');
+                    } else {
+                        document.body.classList.remove('regular-user');
+                    }
+                }
+            };
+
+            app.navigation = {
+                init() {
+                    const allLinks = document.querySelectorAll('a[href^="#"]');
+                    allLinks.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.activateSection(link.getAttribute('href'));
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        });
+                    });
+                    this.activateSection(window.location.hash || '#dashboard');
+                },
+                activateSection(hash) {
+                    requestAnimationFrame(() => {
+                        const targetHash = hash || '#dashboard';
+                        document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', '#' + s.id === targetHash));
+                        document.querySelectorAll('a[href^="#"]').forEach(link => {
+                            const isPill = link.classList.contains('pill-link');
+                            link.classList.toggle(isPill ? 'pill-active' : 'nav-active', link.getAttribute('href') === targetHash);
+                        });
+                        const activePill = document.querySelector(`.pill-link[href="${targetHash}"]`);
+                        if(activePill && window.innerWidth <= 1024) {
+                            activePill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        }
+                    });
+                }
+            };
+
+            app.ui = {
+                init() {
+                    this.bindEvents();
+                },
+                bindEvents() {
+                    const contentHost = document.getElementById('content-host');
+                    if (!contentHost) return;
+
+                    contentHost.addEventListener('click', (e) => {
+                        this.handleCopy(e);
+                        this.handleAccordion(e);
+                        this.handleFaq(e);
+                        this.handleTabs(e, '.playbook-tab', '.playbook-content');
+                        this.handleTabs(e, '.cost-tab', '.cost-content');
+                    });
+                },
+                handleCopy(e) {
+                    const btn = e.target.closest('.copy-button');
+                    if (!btn) return;
+
+                    const templateId = btn.dataset.templateId;
+                    const copyField = btn.dataset.copyField;
+                    const promptCard = btn.closest('.prompt-card');
+                    let textToCopy = '';
+                    
+                    if (templateId) textToCopy = document.getElementById(templateId)?.textContent || '';
+                    else if (copyField) textToCopy = document.querySelector(`.info-text[data-field="${copyField}"]`)?.textContent || '';
+                    else if (promptCard) textToCopy = promptCard.dataset.prompt || '';
+                    
+                    if (textToCopy) {
+                        navigator.clipboard.writeText(textToCopy.trim()).then(() => {
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = 'Copied!';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.innerHTML = originalText; btn.classList.remove('copied'); }, 2000);
+                        });
+                    }
+                },
+                handleAccordion(e) {
+                    const header = e.target.closest('.accordion-header');
+                    if (!header) return;
+                    header.classList.toggle('active');
+                    header.nextElementSibling.classList.toggle('active');
+                },
+                handleFaq(e) {
+                    const question = e.target.closest('.faq-question');
+                    if (!question) return;
+                    question.nextElementSibling.classList.toggle('active');
+                },
+                handleTabs(e, tabSelector, contentSelector) {
+                    const tab = e.target.closest(tabSelector);
+                    if (!tab) return;
+                    
+                    const tabContainer = tab.closest('nav');
+                    tabContainer.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const contentContainer = tabContainer.parentElement.nextElementSibling;
+                    contentContainer.querySelectorAll(contentSelector).forEach(c => c.classList.remove('active'));
+                    const targetContent = contentContainer.querySelector('#' + tab.dataset.tab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                }
+            };
+            
+            app.costing = {
+                elements: {},
+                state: {
+                    variableCosts: [], bookingCosts: [], fixedCosts: [],
+                    assumptions: { bookingsPerMonth: 9, avgLos: 2.5, platformFee: 15.5 },
+                    accessLog: [],
+                    calculations: {}
+                },
+                init() {
+                    this.elements = {
+                        variableCostsTable: document.getElementById('variable-costs-table'), bookingCostsTable: document.getElementById('booking-costs-table'), fixedCostsTable: document.getElementById('fixed-costs-table'),
+                        newVariableName: document.getElementById('new-variable-name'), newVariableCost: document.getElementById('new-variable-cost'), addVariableBtn: document.getElementById('add-variable-btn'),
+                        newBookingName: document.getElementById('new-booking-name'), newBookingCost: document.getElementById('new-booking-cost'), addBookingBtn: document.getElementById('add-booking-btn'),
+                        newFixedName: document.getElementById('new-fixed-name'), newFixedCost: document.getElementById('new-fixed-cost'), addFixedBtn: document.getElementById('add-fixed-btn'),
+                        bookingsPerMonthInput: document.getElementById('bookings-per-month'), avgLosInput: document.getElementById('avg-los'), platformFeeInput: document.getElementById('platform-fee'),
+                        saveAssumptionsBtn: document.getElementById('save-assumptions-btn'), totalCostDisplay: document.getElementById('total-cost-display'), breakEvenDisplay: document.getElementById('break-even-display'),
+                        desiredProfitInput: document.getElementById('desired-profit'), targetPriceDisplay: document.getElementById('target-price-display'), currentFeeDisplay1: document.getElementById('current-fee-display-1'),
+                        scenarioBreakeven: document.getElementById('scenario-breakeven'), scenarioProfit300: document.getElementById('scenario-profit-300'), scenarioProfit500: document.getElementById('scenario-profit-500'),
+                        scenarioBreakevenAlt: document.getElementById('scenario-breakeven-alt'), scenarioProfit300Alt: document.getElementById('scenario-profit-300-alt'), scenarioProfit500Alt: document.getElementById('scenario-profit-500-alt'),
+                        exportDataBtn: document.getElementById('export-data-btn'), importDataBtn: document.getElementById('import-data-btn'), getAdviceBtn: document.getElementById('get-advice-btn'), adviceOutput: document.getElementById('advice-output'),
+                        accessLogTable: document.getElementById('access-log-table'),
+                    };
+                    this.loadState(); this.bindEvents(); this.render(); 
+                },
+                loadState() {
+                    const savedState = JSON.parse(localStorage.getItem('cascadeHandbookState'));
+                    if (savedState) { this.state = savedState; } 
+                    else {
+                        this.state.assumptions = { bookingsPerMonth: 9, avgLos: 2.5, platformFee: 15.5 };
+                        this.state.accessLog = [];
+                        this.state.variableCosts = [
+                            { name: 'TCL Split-type Aircon (2.5HP)', hours: 12, costPerHour: 32.79 }, { name: 'Panasonic Water Heater', hours: 0.5, costPerHour: 32.48 },
+                            { name: 'Samsung 55" TV', hours: 12, costPerHour: 1.28 }, { name: 'Dowell Induction Cooker', hours: 0.5, costPerHour: 29.7 },
+                            { name: 'LED Lights ×10', hours: 10, costPerHour: 1.11 }, { name: 'Refrigerator', hours: 24, costPerHour: 0.35 },
+                            { name: 'Asahi 16" Stand Fan', hours: 12, costPerHour: 0.60 }, { name: 'Dowell Rice Cooker', hours: 0.5, costPerHour: 13.0 },
+                            { name: 'Hodec Electric Kettle', hours: 0.25, costPerHour: 14.12 }, { name: 'Microwave', hours: 0.25, costPerHour: 11.12 },
+                            { name: 'Panasonic Washing Machine', hours: 0.5, costPerHour: 3.52 }, { name: 'Water (guest usage)', hours: 1, costPerHour: 21.61 },
+                        ];
+                        this.state.bookingCosts = [
+                            { name: 'Cleaning fee', quantity: 1, unitCost: 250.00 }, { name: 'Management/Turnover', quantity: 1, unitCost: 250.00 },
+                            { name: '3-in-1 Coffee', quantity: 2, unitCost: 9.00 }, { name: 'Bottled Water', quantity: 2, unitCost: 10.00 },
+                            { name: 'Tea', quantity: 2, unitCost: 8.00 }, { name: 'Coffee sticks (sugar/creamer)', quantity: 2, unitCost: 4.00 },
+                            { name: 'Liquid Body Soap (Dove)', quantity: 1, unitCost: 7.00 }, { name: 'Liquid Hand Soap (Safeguard)', quantity: 1, unitCost: 6.00 },
+                            { name: 'Shampoo (Palmolive)', quantity: 1, unitCost: 6.10 }, { name: 'Dishwashing Liquid (Joy)', quantity: 1, unitCost: 2.40 },
+                            { name: 'Toiletries (toothbrush, toothpaste, soap)', quantity: 2, unitCost: 10.00 }, { name: 'Tissues / Paper Towels', quantity: 1, unitCost: 20.00 }
+                        ];
+                        this.state.fixedCosts = [
+                            { name: 'Pag-IBIG Mortgage', cost: 3000 }, { name: 'HOA Fee', cost: 150 }, { name: 'Maintenance Fund', cost: 1000 },
+                            { name: 'Utilities - Internet', cost: 1000 }, { name: 'Utilities - Electricity (Base)', cost: 2500 }, { name: 'Utilities - Water (Base)', cost: 500 },
+                            { name: 'Subscriptions - Netflix', cost: 449 }, { name: 'Subscriptions - Tapo CCTV', cost: 175 },
+                            { name: 'Subscriptions - Pricelab', cost: 585 },
+                            { name: 'Subscriptions - TTLock (monthly)', cost: 31.30 }, { name: 'Subscriptions - ChatGPT Go', cost: 300 },
+                        ];
+                    }
+                },
+                saveState() { localStorage.setItem('cascadeHandbookState', JSON.stringify(this.state)); },
+                bindEvents() {
+                    const costingSection = document.getElementById('costing');
+                    costingSection.addEventListener('click', (e) => {
+                        if(e.target.id === 'add-variable-btn') this.addItem('variable');
+                        if(e.target.id === 'add-booking-btn') this.addItem('booking');
+                        if(e.target.id === 'add-fixed-btn') this.addItem('fixed');
+                    });
+                    costingSection.addEventListener('change', (e) => {
+                         if(e.target.classList.contains('editable-cost-input')){
+                            const { type, index, field } = e.target.dataset;
+                            this.updateItemValue(type, parseInt(index), field, e.target.value);
+                         }
+                    });
+                    this.elements.saveAssumptionsBtn.addEventListener('click', () => this.updateAssumptions());
+                    this.elements.desiredProfitInput.addEventListener('input', () => this.calculateAndRenderTargetPrice());
+                    this.elements.exportDataBtn.addEventListener('click', () => this.exportData());
+                    this.elements.importDataBtn.addEventListener('click', () => this.importData());
+                    this.elements.getAdviceBtn.addEventListener('click', () => this.getPricingAdvice());
+                },
+                addItem(type) {
+                    if (type === 'variable') {
+                        const name = this.elements.newVariableName.value.trim();
+                        const costPerHour = parseFloat(this.elements.newVariableCost.value);
+                        if (name && !isNaN(costPerHour) && costPerHour >= 0) {
+                            this.state.variableCosts.push({ name, hours: 1, costPerHour });
+                            this.elements.newVariableName.value = ''; this.elements.newVariableCost.value = '';
+                        }
+                    } else if (type === 'booking') {
+                        const name = this.elements.newBookingName.value.trim();
+                        const unitCost = parseFloat(this.elements.newBookingCost.value);
+                        if (name && !isNaN(unitCost) && unitCost >= 0) {
+                            this.state.bookingCosts.push({ name, quantity: 1, unitCost });
+                            this.elements.newBookingName.value = ''; this.elements.newBookingCost.value = '';
+                        }
+                    } else if (type === 'fixed') {
+                        const name = this.elements.newFixedName.value.trim();
+                        const cost = parseFloat(this.elements.newFixedCost.value);
+                        if (name && !isNaN(cost) && cost >= 0) {
+                            this.state.fixedCosts.push({ name, cost });
+                            this.elements.newFixedName.value = ''; this.elements.newFixedCost.value = '';
+                        }
+                    }
+                    this.render();
+                },
+                removeItem(type, index) {
+                    if (confirm('Are you sure you want to remove this item?')) {
+                        if (type === 'variable') this.state.variableCosts.splice(index, 1);
+                        if (type === 'booking') this.state.bookingCosts.splice(index, 1);
+                        if (type === 'fixed') this.state.fixedCosts.splice(index, 1);
+                        this.render();
+                    }
+                },
+                updateItemValue(type, index, field, value) {
+                    const numValue = parseFloat(value);
+                    if (isNaN(numValue) || numValue < 0) return;
+                    if (type === 'variable') this.state.variableCosts[index][field] = numValue;
+                    if (type === 'booking') this.state.bookingCosts[index][field] = numValue;
+                    if (type === 'fixed') this.state.fixedCosts[index][field] = numValue;
+                    this.render();
+                },
+                updateAssumptions() {
+                    this.state.assumptions.bookingsPerMonth = parseFloat(this.elements.bookingsPerMonthInput.value) || 0;
+                    this.state.assumptions.avgLos = parseFloat(this.elements.avgLosInput.value) || 0;
+                    this.state.assumptions.platformFee = parseFloat(this.elements.platformFeeInput.value) || 0;
+                    this.render();
+                },
+                calculateAll() {
+                    const { assumptions } = this.state;
+                    const subtotalVariable = this.state.variableCosts.reduce((sum, item) => sum + (item.hours * item.costPerHour), 0);
+                    const subtotalBooking = this.state.bookingCosts.reduce((sum, item) => sum + (item.quantity * item.unitCost), 0);
+                    const subtotalFixedMonthly = this.state.fixedCosts.reduce((sum, item) => sum + item.cost, 0);
+                    const bookedNightsPerMonth = assumptions.bookingsPerMonth * assumptions.avgLos;
+                    const fixedCostPerNight = bookedNightsPerMonth > 0 ? subtotalFixedMonthly / bookedNightsPerMonth : 0;
+                    const totalCostPerNight = subtotalVariable + subtotalBooking + fixedCostPerNight;
+                    const feeRate = assumptions.platformFee / 100;
+                    const breakEvenPrice = feeRate < 1 ? totalCostPerNight / (1 - feeRate) : Infinity;
+                    this.state.calculations = { totalCostPerNight, feeRate, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight };
+                },
+                calculateAndRenderTargetPrice() {
+                    const desiredProfit = parseFloat(this.elements.desiredProfitInput.value) || 0;
+                    const { totalCostPerNight, feeRate } = this.state.calculations;
+                    const targetPrice = feeRate < 1 ? (totalCostPerNight + desiredProfit) / (1 - feeRate) : Infinity;
+                    this.elements.targetPriceDisplay.textContent = `₱${targetPrice.toFixed(2)}`;
+                },
+                render() {
+                    this.saveState(); this.calculateAll();
+                    this.renderCostTables(); this.renderAssumptions(); this.renderSummary(); this.renderPricingScenarios(); this.renderAccessLog();
+                },
+                renderCostTables() {
+                    this.elements.variableCostsTable.innerHTML = this.state.variableCosts.map((item, index) => `
+                        <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
+                            <span class="break-words">${item.name}</span>
+                            <input type="number" step="0.1" value="${item.hours}" class="editable-cost-input" data-type="variable" data-index="${index}" data-field="hours">
+                            <input type="number" step="0.01" value="${item.costPerHour.toFixed(2)}" class="editable-cost-input" data-type="variable" data-index="${index}" data-field="costPerHour">
+                            <span class="font-semibold text-right">₱${(item.hours * item.costPerHour).toFixed(2)}</span>
+                            <button onclick="app.costing.removeItem('variable', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                        </div>`).join('');
+                    this.elements.bookingCostsTable.innerHTML = this.state.bookingCosts.map((item, index) => `
+                        <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
+                            <span class="break-words">${item.name}</span>
+                            <input type="number" step="1" value="${item.quantity}" class="editable-cost-input" data-type="booking" data-index="${index}" data-field="quantity">
+                            <input type="number" step="0.01" value="${item.unitCost.toFixed(2)}" class="editable-cost-input" data-type="booking" data-index="${index}" data-field="unitCost">
+                            <span class="font-semibold text-right">₱${(item.quantity * item.unitCost).toFixed(2)}</span>
+                             <button onclick="app.costing.removeItem('booking', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                        </div>`).join('');
+                    this.elements.fixedCostsTable.innerHTML = this.state.fixedCosts.map((item, index) => `
+                        <div class="grid grid-cols-[1fr_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
+                            <span class="break-words">${item.name}</span>
+                            <input type="number" step="0.01" value="${item.cost.toFixed(2)}" class="editable-cost-input" data-type="fixed" data-index="${index}" data-field="cost">
+                             <button onclick="app.costing.removeItem('fixed', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                        </div>`).join('');
+                },
+                renderAssumptions() {
+                    const { bookingsPerMonth, avgLos, platformFee } = this.state.assumptions;
+                    this.elements.bookingsPerMonthInput.value = bookingsPerMonth;
+                    this.elements.avgLosInput.value = avgLos;
+                    this.elements.platformFeeInput.value = platformFee;
+                },
+                renderSummary() {
+                    const { totalCostPerNight, breakEvenPrice } = this.state.calculations;
+                    this.elements.totalCostDisplay.textContent = `₱${totalCostPerNight.toFixed(2)}`;
+                    this.elements.breakEvenDisplay.textContent = `₱${breakEvenPrice.toFixed(2)}`;
+                    this.calculateAndRenderTargetPrice();
+                },
+                renderPricingScenarios() {
+                    const { totalCostPerNight, feeRate } = this.state.calculations;
+                    const feeRateAlt = 0.03;
+                    const calculatePrice = (profit, rate) => (totalCostPerNight + profit) / (1 - rate);
+                    this.elements.currentFeeDisplay1.textContent = `${this.state.assumptions.platformFee}`;
+                    this.elements.scenarioBreakeven.textContent = `₱${calculatePrice(0, feeRate).toFixed(2)}`;
+                    this.elements.scenarioProfit300.textContent = `₱${calculatePrice(300, feeRate).toFixed(2)}`;
+                    this.elements.scenarioProfit500.textContent = `₱${calculatePrice(500, feeRate).toFixed(2)}`;
+                    this.elements.scenarioBreakevenAlt.textContent = `₱${calculatePrice(0, feeRateAlt).toFixed(2)}`;
+                    this.elements.scenarioProfit300Alt.textContent = `₱${calculatePrice(300, feeRateAlt).toFixed(2)}`;
+                    this.elements.scenarioProfit500Alt.textContent = `₱${calculatePrice(500, feeRateAlt).toFixed(2)}`;
+                },
+                logAccess() {
+                    const currentUser = localStorage.getItem('currentUser');
+                    if(currentUser) {
+                        const newLog = { name: currentUser, timestamp: new Date().toLocaleString() };
+                        this.state.accessLog.unshift(newLog);
+                        this.render();
+                    }
+                },
+                renderAccessLog() {
+                    this.elements.accessLogTable.innerHTML = this.state.accessLog.map(entry => `
+                        <div class="grid grid-cols-2 gap-4 py-1.5">
+                            <span>${entry.name}</span>
+                            <span class="instructional-note">${entry.timestamp}</span>
+                        </div>
+                    `).join('');
+                },
+                exportData() {
+                    const dataStr = JSON.stringify(this.state, null, 2);
+                    const blob = new Blob([dataStr], {type: "application/json"});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = `cascade_handbook_data_${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+                },
+                importData() {
+                    const input = document.createElement('input'); input.type = 'file'; input.accept = '.json';
+                    input.onchange = e => {
+                        const file = e.target.files[0]; if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            try {
+                                const importedState = JSON.parse(e.target.result);
+                                if (importedState.variableCosts && importedState.bookingCosts && importedState.fixedCosts && importedState.assumptions) {
+                                    this.state = importedState;
+                                    if (!this.state.accessLog) { this.state.accessLog = []; }
+                                    this.render(); 
+                                } else { console.error('Error: Invalid or corrupted data file.'); }
+                            } catch (error) { console.error('Error reading file. Please make sure it is a valid JSON file.');}
+                        };
+                        reader.readAsText(file);
+                    };
+                    input.click();
+                },
+                async getPricingAdvice() {
+                    this.elements.adviceOutput.innerHTML = `<div class="spinner"></div>`;
+                    this.elements.adviceOutput.classList.remove('text-left');
+                    this.elements.adviceOutput.classList.add('flex', 'items-center', 'justify-center');
+
+
+                    const { totalCostPerNight, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight } = this.state.calculations;
+                    const profit300Price = (totalCostPerNight + 300) / (1 - this.state.calculations.feeRate);
+                    const profit500Price = (totalCostPerNight + 500) / (1 - this.state.calculations.feeRate);
+
+                    const systemPrompt = "You are an expert short-term rental financial advisor, specializing in helping hosts maximize profitability. Your advice is famous for being both simple to understand and highly actionable. You always use clear frameworks to structure your answers, ensuring hosts know exactly what to do. Use Markdown for clear formatting (bolding, headers as `###`, and unordered lists with `*`).\n\n";
+                    
+                    const userQuery = `Analyze the following financial data for my rental property and provide advice.
+                        
+                        **My Numbers:**
+                        - Total Cost Per Night: ${totalCostPerNight.toFixed(2)} PHP
+                        - Variable Cost Per Night (Utilities): ${subtotalVariable.toFixed(2)} PHP
+                        - Per-Booking Cost (Turnover): ${subtotalBooking.toFixed(2)} PHP
+                        - Allocated Fixed Cost Per Night: ${fixedCostPerNight.toFixed(2)} PHP
+                        - Break-Even Price: ${breakEvenPrice.toFixed(2)} PHP
+                        - Target Price for 300 PHP Profit: ${profit300Price.toFixed(2)} PHP
+                        - Target Price for 500 PHP Profit: ${profit500Price.toFixed(2)} PHP
+
+                        **Your Task:** Structure your response using the following framework EXACTLY:
+
+                        ### Executive Summary
+                        (In one paragraph, what is the single most impactful pricing strategy I should implement right now based on my numbers?)
+
+                        ### Deep Dive: Your Cost Structure
+                        (Simply explain what my costs mean. Identify my largest cost category and explain why it's significant. Use a simple analogy.)
+
+                        ### Action Plan: A 3-Tier Pricing Strategy
+                        (Provide a detailed, step-by-step pricing plan with three clear tiers. For each tier, provide:
+                        * **A. Tier Name:** e.g., 'Floor Price,' 'Base Rate,' 'Peak Price'.
+                        * **B. Recommended Price:** Use the exact numbers calculated from my data.
+                        * **C. When to Use It:** Give specific, practical examples like 'last-minute weekday bookings,' 'default for most weekdays,' 'weekends, holidays like Christmas, local festivals like Tuna Fest'.)
+
+                        ### Key Metric to Monitor
+                        (Identify the single most important metric from my data to focus on. Explain why it's critical and suggest one actionable way to improve it.)
+                    `;
+                    
+                    const fullPrompt = systemPrompt + userQuery;
+                    const apiKey = "AIzaSyBbECZkKwsBzWX9SGjCgzXHseXJt2-abfc"; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+                    
+                    const payload = {
+                        contents: [{
+                            parts: [{ "text": fullPrompt }]
+                        }]
+                    };
+
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'x-goog-api-key': apiKey
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            const errorBody = await response.text();
+                            console.error("API Error Response:", errorBody);
+                            throw new Error(`API error: ${response.statusText}`);
+                        }
+
+                        const result = await response.json();
+                        const candidate = result.candidates?.[0];
+
+                        if (candidate && candidate.content?.parts?.[0]?.text) {
+                            let adviceText = candidate.content.parts[0].text;
+                            
+                            let html = adviceText
+                                .split('\n\n')
+                                .map(block => {
+                                    if (block.startsWith('### ')) {
+                                        return `<h3>${block.substring(4)}</h3>`;
+                                    }
+                                    if (block.startsWith('* ')) {
+                                        const items = block.split('\n').map(item => {
+                                            if (item.startsWith('* ')) {
+                                                return `<li>${item.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</li>`;
+                                            }
+                                            return '';
+                                        }).join('');
+                                        return `<ul>${items}</ul>`;
+                                    }
+                                    return `<p>${block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</p>`;
+                                })
+                                .join('');
+
+                            this.elements.adviceOutput.innerHTML = html;
+                            this.elements.adviceOutput.classList.remove('flex', 'items-center', 'justify-center');
+                            this.elements.adviceOutput.classList.add('text-left');
+                        } else {
+                            console.error("Invalid response structure:", result);
+                            throw new Error("No content in API response.");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching pricing advice:", error);
+                        this.elements.adviceOutput.innerHTML = `<p class="text-danger-red">Could not fetch advice. Please check your API key, network connection, and browser console for details.</p>`;
+                    }
+                }
+            };
+
+            app.maintenance = {
+                state: { tasks: [] },
+                elements: {},
+                init() {
+                    this.elements = {
+                        checklistContainer: document.getElementById('maintenance-checklist'),
+                        createAllBtn: document.getElementById('createAllRemindersBtn'),
+                        addTaskBtn: document.getElementById('addTaskBtn'),
+                        newTaskName: document.getElementById('newTaskName'),
+                        newTaskInterval: document.getElementById('newTaskInterval')
+                    };
+                    if(!this.elements.checklistContainer) return;
+                    this.loadState();
+                    this.bindEvents();
+                    this.render();
+                },
+                loadState() {
+                    this.state.tasks = JSON.parse(localStorage.getItem('maintenanceTasks')) || [
+                        { task: "Clean A/C Filter", interval: 30 }, { task: "Deep Clean Refrigerator", interval: 60 },
+                        { task: "Check Fire Extinguisher", interval: 90 }, { task: "Pest Control", interval: 90 },
+                        { task: "Descale Shower Head & Faucets", interval: 90 }, { task: "Professional A/C Service", interval: 180 },
+                        { task: "Wash Curtains", interval: 180 }, { task: "Deep Clean Mattress Protector", interval: 180 }, { task: "Replace Pillows", interval: 365 },
+                    ];
+                },
+                saveState() {
+                    localStorage.setItem('maintenanceTasks', JSON.stringify(this.state.tasks));
+                },
+                bindEvents() {
+                    this.elements.addTaskBtn.addEventListener('click', () => this.addTask());
+                    this.elements.createAllBtn.addEventListener('click', () => this.createIcsFile());
+                    this.elements.checklistContainer.addEventListener('change', (e) => {
+                        if (e.target.classList.contains('maint-date-input')) {
+                            localStorage.setItem(`maint_lastDone_${e.target.dataset.index}`, e.target.value);
+                            this.render();
+                        }
+                    });
+                },
+                addTask() {
+                    const name = this.elements.newTaskName.value;
+                    const interval = parseInt(this.elements.newTaskInterval.value);
+                    if (name && interval > 0) {
+                        this.state.tasks.push({ task: name, interval: interval });
+                        this.state.tasks.sort((a, b) => a.interval - b.interval);
+                        this.saveState();
+                        this.render();
+                        this.elements.newTaskName.value = ''; this.elements.newTaskInterval.value = '';
+                    } else { alert('Please enter a valid task name and interval.'); }
+                },
+                render() {
+                    this.elements.checklistContainer.innerHTML = this.state.tasks.map((item, index) => {
+                        const lastDone = localStorage.getItem(`maint_lastDone_${index}`) || '';
+                        let nextDue = 'N/A';
+                        if (lastDone) {
+                            const nextDueDate = new Date(lastDone);
+                            nextDueDate.setDate(nextDueDate.getDate() + item.interval);
+                            nextDue = nextDueDate.toLocaleDateString();
+                        }
+                        return `
+                        <div class="bg-warm-white p-4 rounded-xl border-2 border-soft-taupe grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <div class="md:col-span-1"><p class="font-semibold">${item.task}</p><p class="text-sm instructional-note">Interval: Every ${item.interval} days</p></div>
+                            <div><label class="text-sm">Last Done:</label><input type="date" value="${lastDone}" data-index="${index}" class="maint-date-input w-full p-2 border-2 border-soft-taupe rounded-lg bg-white"></div>
+                            <div><p class="text-sm">Next Due:</p><p class="font-semibold text-lg">${nextDue}</p></div>
+                            <div><button class="copy-button w-full px-4 py-2 rounded-lg font-semibold create-reminder" data-task="${item.task}" data-due="${nextDue}">Set Reminder</button></div>
+                        </div>`;
+                    }).join('');
+                },
+                createIcsFile() {
+                    let ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CascadeHideaway//EN'];
+                    let validTasks = false;
+                    this.elements.checklistContainer.querySelectorAll('.create-reminder').forEach(button => {
+                        const { task, due } = button.dataset;
+                        if (due && due !== 'N/A') {
+                            validTasks = true;
+                            const start = new Date(due); const end = new Date(start); end.setDate(start.getDate() + 1);
+                            const format = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+                            ics.push('BEGIN:VEVENT', `UID:${Date.now()}_${task}@cascade.com`, `DTSTAMP:${format(new Date())}Z`, `DTSTART;VALUE=DATE:${format(start).substring(0,8)}`, `DTEND;VALUE=DATE:${format(end).substring(0,8)}`, `SUMMARY:${task}`, 'END:VEVENT');
+                        }
+                    });
+                    if (!validTasks) { alert("No tasks with a valid 'Next Due' date."); return; }
+                    ics.push('END:VCALENDAR');
+                    const blob = new Blob([ics.join('\r\n')], { type: 'text/calendar' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `Cascade_Maintenance_Reminders.ics`;
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                }
+            };
+            
+            app.info = {
+                elements: {},
+                state: {
+                    defaultInfo: {
+                        cohost_name: "Honey Grace Leyson", cohost_phone: "", cohost_email: "cascadereservations@gmail.com", cohost_pass: "",
+                        bank_name: "Union Bank (Marifel Suzanne Boncales)", bank_acct: "1094 2361 1134",
+                        gcash_name: "Marifel Suzanne Boncales", gcash_num: "09560115744",
+                    },
+                    additionalContacts: []
+                },
+                init() {
+                    this.elements = {
+                        infoForm: document.getElementById('infoForm'),
+                        contactsContainer: document.getElementById('additionalContacts'),
+                    };
+                    if(!this.elements.infoForm) return;
+                    this.loadState();
+                    this.bindEvents();
+                    this.render();
+                },
+                loadState() {
+                    this.state.additionalContacts = JSON.parse(localStorage.getItem('additionalContacts')) || Array(5).fill({ name: '', title: '', number: '' });
+                },
+                bindEvents() {
+                    this.elements.infoForm.addEventListener('click', e => {
+                        if(e.target.id === 'editInfoBtn') this.toggleEdit(true);
+                        if(e.target.id === 'saveInfoBtn') this.saveInfo();
+                        if(e.target.id === 'togglePass') this.togglePasswordVisibility(e.target);
+                        if(e.target.id === 'copyAllInfoBtn') this.copyAllInfo();
+                        if(e.target.id === 'addContactRowBtn') this.addContactRow();
+                        if(e.target.id === 'saveContactsBtn') this.saveAdditionalContacts();
+                    });
+                },
+                render() {
+                    for (const field in this.state.defaultInfo) {
+                        const value = localStorage.getItem(`ch_info_${field}`) || this.state.defaultInfo[field];
+                        const textEl = this.elements.infoForm.querySelector(`.info-text[data-field="${field}"]`);
+                        const inputEl = this.elements.infoForm.querySelector(`.info-input[data-field="${field}"]`);
+                        if (textEl) textEl.textContent = value;
+                        if (inputEl) inputEl.value = value;
+                    }
+                    this.renderAdditionalContacts();
+                },
+                saveInfo() {
+                    this.elements.infoForm.querySelectorAll('.info-input').forEach(input => {
+                        localStorage.setItem(`ch_info_${input.dataset.field}`, input.value);
+                    });
+                    this.toggleEdit(false);
+                },
+                toggleEdit(isEditing) {
+                    this.elements.infoForm.querySelectorAll('.info-text, #togglePass').forEach(t => t.classList.toggle('hidden', isEditing));
+                    this.elements.infoForm.querySelectorAll('.info-input').forEach(i => i.classList.toggle('hidden', !isEditing));
+                    document.getElementById('editInfoBtn').classList.toggle('hidden', isEditing);
+                    document.getElementById('saveInfoBtn').classList.toggle('hidden', !isEditing);
+                    if (!isEditing) {
+                        this.render();
+                    }
+                },
+                togglePasswordVisibility(button) {
+                    const passField = this.elements.infoForm.querySelector('.info-text[data-field="cohost_pass"]');
+                    const isMasked = passField.style.webkitTextSecurity === 'disc';
+                    passField.style.webkitTextSecurity = isMasked ? 'none' : 'disc';
+                    button.textContent = isMasked ? '🙈' : '👁️';
+                },
+                copyAllInfo() {
+                    let allInfo = "Cascade Hideaway Operations Contacts:\n\n";
+                    for (const field in this.state.defaultInfo) {
+                        const label = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        const value = localStorage.getItem(`ch_info_${field}`) || this.state.defaultInfo[field];
+                        allInfo += `${label}: ${value}\n`;
+                    }
+                    navigator.clipboard.writeText(allInfo.trim()).then(() => alert('All details copied!'));
+                },
+                renderAdditionalContacts() {
+                    this.elements.contactsContainer.querySelectorAll('.contact-row').forEach(row => row.remove());
+                    this.state.additionalContacts.forEach((contact, index) => {
+                        const row = document.createElement('div');
+                        row.className = 'contact-row grid grid-cols-3 gap-4 items-center mt-3';
+                        row.innerHTML = `
+                            <input type="text" placeholder="Name" class="w-full p-2 border-2 border-soft-taupe rounded-lg bg-white" value="${contact.name || ''}" data-index="${index}" data-field="name">
+                            <input type="text" placeholder="Title" class="w-full p-2 border-2 border-soft-taupe rounded-lg bg-white" value="${contact.title || ''}" data-index="${index}" data-field="title">
+                            <input type="text" placeholder="Contact Number" class="w-full p-2 border-2 border-soft-taupe rounded-lg bg-white" value="${contact.number || ''}" data-index="${index}" data-field="number">`;
+                        this.elements.contactsContainer.appendChild(row);
+                    });
+                },
+                saveAdditionalContacts() {
+                    const newContacts = [];
+                    this.elements.contactsContainer.querySelectorAll('.contact-row').forEach(row => {
+                        newContacts.push({ 
+                            name: row.querySelector('[data-field="name"]').value, 
+                            title: row.querySelector('[data-field="title"]').value, 
+                            number: row.querySelector('[data-field="number"]').value 
+                        });
+                    });
+                    this.state.additionalContacts = newContacts;
+                    localStorage.setItem('additionalContacts', JSON.stringify(this.state.additionalContacts));
+                },
+                addContactRow() {
+                    this.state.additionalContacts.push({ name: '', title: '', number: '' });
+                    this.renderAdditionalContacts();
+                }
+            };
+
+            app.init();
+        });
+    </script>
+</body>
+</html>
