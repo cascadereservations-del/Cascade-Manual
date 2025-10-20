@@ -294,6 +294,7 @@
         .remove-btn { 
             color: var(--danger-red); 
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .remove-btn:hover {
@@ -608,7 +609,7 @@
             <div class="mt-auto text-center text-xs text-soft-taupe pt-6">
                 <p>&copy; 2025 Cascade Hideaway</p>
                 <p>Confidential Operations Document</p>
-                <p class="mt-2 text-bronze font-semibold">v12.2 Fixed</p>
+                <p class="mt-2 text-bronze font-semibold">v12.3 Corrected</p>
             </div>
         </aside>
 
@@ -1295,7 +1296,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
             </div>
         </main>
          <footer class="fixed bottom-0 left-0 right-0 bg-dark-bronze/95 text-warm-white text-xs text-center py-2 backdrop-blur-md z-20 shadow-lg">
-            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.2 Fixed • Performance Optimized</p>
+            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.3 Corrected • Performance Optimized</p>
         </footer>
     </div>
 
@@ -1552,6 +1553,16 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         if(e.target.id === 'add-variable-btn') this.addItem('variable');
                         if(e.target.id === 'add-booking-btn') this.addItem('booking');
                         if(e.target.id === 'add-fixed-btn') this.addItem('fixed');
+                        
+                        // **FIX**: Event delegation for remove buttons
+                        if (e.target.closest('.remove-btn')) {
+                            const btn = e.target.closest('.remove-btn');
+                            const type = btn.dataset.removeType;
+                            const index = parseInt(btn.dataset.removeIndex);
+                            if (type && !isNaN(index)) {
+                                this.removeItem(type, index);
+                            }
+                        }
                     });
                     costingSection.addEventListener('change', (e) => {
                          if(e.target.classList.contains('editable-cost-input')){
@@ -1635,13 +1646,14 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.renderCostTables(); this.renderAssumptions(); this.renderSummary(); this.renderPricingScenarios(); this.renderAccessLog();
                 },
                 renderCostTables() {
+                    // **FIX**: Removed inline onclick and added data attributes for event delegation
                     this.elements.variableCostsTable.innerHTML = this.state.variableCosts.map((item, index) => `
                         <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
                             <span class="break-words">${item.name}</span>
                             <input type="number" step="0.1" value="${item.hours}" class="editable-cost-input" data-type="variable" data-index="${index}" data-field="hours">
                             <input type="number" step="0.01" value="${item.costPerHour.toFixed(2)}" class="editable-cost-input" data-type="variable" data-index="${index}" data-field="costPerHour">
                             <span class="font-semibold text-right">₱${(item.hours * item.costPerHour).toFixed(2)}</span>
-                            <button onclick="app.costing.removeItem('variable', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                            <span class="remove-btn text-xl hover:text-red-400" data-remove-type="variable" data-remove-index="${index}">&times;</span>
                         </div>`).join('');
                     this.elements.bookingCostsTable.innerHTML = this.state.bookingCosts.map((item, index) => `
                         <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
@@ -1649,13 +1661,13 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                             <input type="number" step="1" value="${item.quantity}" class="editable-cost-input" data-type="booking" data-index="${index}" data-field="quantity">
                             <input type="number" step="0.01" value="${item.unitCost.toFixed(2)}" class="editable-cost-input" data-type="booking" data-index="${index}" data-field="unitCost">
                             <span class="font-semibold text-right">₱${(item.quantity * item.unitCost).toFixed(2)}</span>
-                             <button onclick="app.costing.removeItem('booking', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                            <span class="remove-btn text-xl hover:text-red-400" data-remove-type="booking" data-remove-index="${index}">&times;</span>
                         </div>`).join('');
                     this.elements.fixedCostsTable.innerHTML = this.state.fixedCosts.map((item, index) => `
                         <div class="grid grid-cols-[1fr_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
                             <span class="break-words">${item.name}</span>
                             <input type="number" step="0.01" value="${item.cost.toFixed(2)}" class="editable-cost-input" data-type="fixed" data-index="${index}" data-field="cost">
-                             <button onclick="app.costing.removeItem('fixed', ${index})" class="remove-btn text-xl hover:text-red-400">&times;</button>
+                            <span class="remove-btn text-xl hover:text-red-400" data-remove-type="fixed" data-remove-index="${index}">&times;</span>
                         </div>`).join('');
                 },
                 renderAssumptions() {
@@ -1729,13 +1741,10 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.elements.adviceOutput.classList.remove('text-left');
                     this.elements.adviceOutput.classList.add('flex', 'items-center', 'justify-center');
 
-
                     const { totalCostPerNight, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight } = this.state.calculations;
                     const profit300Price = (totalCostPerNight + 300) / (1 - this.state.calculations.feeRate);
                     const profit500Price = (totalCostPerNight + 500) / (1 - this.state.calculations.feeRate);
 
-                    const systemPrompt = "You are an expert short-term rental financial advisor, specializing in helping hosts maximize profitability. Your advice is famous for being both simple to understand and highly actionable. You always use clear frameworks to structure your answers, ensuring hosts know exactly what to do. Use Markdown for clear formatting (bolding, headers as `###`, and unordered lists with `*`).\n\n";
-                    
                     const userQuery = `Analyze the following financial data for my rental property and provide advice.
                         
                         **My Numbers:**
@@ -1765,30 +1774,28 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         (Identify the single most important metric from my data to focus on. Explain why it's critical and suggest one actionable way to improve it.)
                     `;
                     
-                    const fullPrompt = systemPrompt + userQuery;
-                    const apiKey = "AIzaSyBbECZkKwsBzWX9SGjCgzXHseXJt2-abfc"; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+                    const systemPrompt = "You are an expert short-term rental financial advisor, specializing in helping hosts maximize profitability. Your advice is famous for being both simple to understand and highly actionable. You always use clear frameworks to structure your answers, ensuring hosts know exactly what to do. Use Markdown for clear formatting (bolding, headers as `###`, and unordered lists with `*`).";
+                    
+                    // **SECURITY FIX**: The API key has been removed. This call must be proxied through a secure backend.
+                    // This frontend code should call your own server endpoint (e.g., /api/get-advice).
+                    // Your server will then securely make the call to the Google AI API.
+                    const apiUrl = `/api/get-advice`; // This is a placeholder for your backend endpoint.
                     
                     const payload = {
                         contents: [{
-                            parts: [{ "text": fullPrompt }]
+                            parts: [{ "text": systemPrompt + userQuery }]
                         }]
                     };
 
                     try {
                         const response = await fetch(apiUrl, {
                             method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'x-goog-api-key': apiKey
-                            },
+                            headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
 
                         if (!response.ok) {
-                            const errorBody = await response.text();
-                            console.error("API Error Response:", errorBody);
-                            throw new Error(`API error: ${response.statusText}`);
+                            throw new Error(`Network response was not ok: ${response.statusText}`);
                         }
 
                         const result = await response.json();
@@ -1820,12 +1827,11 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                             this.elements.adviceOutput.classList.remove('flex', 'items-center', 'justify-center');
                             this.elements.adviceOutput.classList.add('text-left');
                         } else {
-                            console.error("Invalid response structure:", result);
                             throw new Error("No content in API response.");
                         }
                     } catch (error) {
                         console.error("Error fetching pricing advice:", error);
-                        this.elements.adviceOutput.innerHTML = `<p class="text-danger-red">Could not fetch advice. Please check your API key, network connection, and browser console for details.</p>`;
+                        this.elements.adviceOutput.innerHTML = `<p class="text-danger-red">Could not fetch advice. This feature requires a backend to work securely. Please check your network connection and browser console for details.</p>`;
                     }
                 }
             };
