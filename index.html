@@ -608,7 +608,7 @@
             <div class="mt-auto text-center text-xs text-soft-taupe pt-6">
                 <p>&copy; 2025 Cascade Hideaway</p>
                 <p>Confidential Operations Document</p>
-                <p class="mt-2 text-bronze font-semibold">v12.1 Fixed</p>
+                <p class="mt-2 text-bronze font-semibold">v12.2 Fixed</p>
             </div>
         </aside>
 
@@ -1295,7 +1295,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
             </div>
         </main>
          <footer class="fixed bottom-0 left-0 right-0 bg-dark-bronze/95 text-warm-white text-xs text-center py-2 backdrop-blur-md z-20 shadow-lg">
-            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.1 Fixed • Performance Optimized</p>
+            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.2 Fixed • Performance Optimized</p>
         </footer>
     </div>
 
@@ -1922,9 +1922,14 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                 elements: {},
                 state: {
                     defaultInfo: {
-                        cohost_name: "Honey Grace Leyson", cohost_phone: "", cohost_email: "cascadereservations@gmail.com", cohost_pass: "",
-                        bank_name: "Union Bank (Marifel Suzanne Boncales)", bank_acct: "1094 2361 1134",
-                        gcash_name: "Marifel Suzanne Boncales", gcash_num: "09560115744",
+                        cohost_name: "Honey Grace Leyson", 
+                        cohost_phone: "0991 853 8269",
+                        cohost_email: "cascadereservations@gmail.com", 
+                        cohost_pass: "Cascades@Gensan25",
+                        bank_name: "Union Bank (Marifel Suzanne Boncales)", 
+                        bank_acct: "1094 2361 1134",
+                        gcash_name: "Marifel Suzanne Boncales", 
+                        gcash_num: "09560115744",
                     },
                     additionalContacts: []
                 },
@@ -1939,7 +1944,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.render();
                 },
                 loadState() {
-                    this.state.additionalContacts = JSON.parse(localStorage.getItem('additionalContacts')) || Array(5).fill({ name: '', title: '', number: '' });
+                    this.state.additionalContacts = JSON.parse(localStorage.getItem('additionalContacts')) || Array.from({ length: 5 }, () => ({ name: '', title: '', number: '' }));
                 },
                 bindEvents() {
                     this.elements.infoForm.addEventListener('click', e => {
@@ -1949,6 +1954,23 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         if(e.target.id === 'copyAllInfoBtn') this.copyAllInfo();
                         if(e.target.id === 'addContactRowBtn') this.addContactRow();
                         if(e.target.id === 'saveContactsBtn') this.saveAdditionalContacts();
+
+                        const copyBtn = e.target.closest('[data-copy-field]');
+                        if (copyBtn) {
+                            const field = copyBtn.dataset.copyField;
+                            const textToCopy = document.querySelector(`.info-text[data-field="${field}"]`)?.textContent;
+                            if (textToCopy) {
+                                navigator.clipboard.writeText(textToCopy.trim()).then(() => {
+                                    const originalText = copyBtn.textContent;
+                                    copyBtn.textContent = 'Copied!';
+                                    copyBtn.classList.add('copied');
+                                    setTimeout(() => { 
+                                        copyBtn.textContent = originalText; 
+                                        copyBtn.classList.remove('copied');
+                                    }, 2000);
+                                });
+                            }
+                        }
                     });
                 },
                 render() {
@@ -1966,6 +1988,10 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         localStorage.setItem(`ch_info_${input.dataset.field}`, input.value);
                     });
                     this.toggleEdit(false);
+                    const saveBtn = document.getElementById('saveInfoBtn');
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = 'Saved! ✔';
+                    setTimeout(() => { saveBtn.textContent = originalText; }, 2000);
                 },
                 toggleEdit(isEditing) {
                     this.elements.infoForm.querySelectorAll('.info-text, #togglePass').forEach(t => t.classList.toggle('hidden', isEditing));
@@ -2007,13 +2033,20 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     const newContacts = [];
                     this.elements.contactsContainer.querySelectorAll('.contact-row').forEach(row => {
                         newContacts.push({ 
-                            name: row.querySelector('[data-field="name"]').value, 
-                            title: row.querySelector('[data-field="title"]').value, 
-                            number: row.querySelector('[data-field="number"]').value 
+                            name: row.querySelector('[data-field="name"]')?.value || '', 
+                            title: row.querySelector('[data-field="title"]')?.value || '', 
+                            number: row.querySelector('[data-field="number"]')?.value || ''
                         });
                     });
                     this.state.additionalContacts = newContacts;
                     localStorage.setItem('additionalContacts', JSON.stringify(this.state.additionalContacts));
+                    
+                    const saveBtn = document.getElementById('saveContactsBtn');
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = 'Contacts Saved! ✔';
+                    setTimeout(() => { 
+                        saveBtn.textContent = originalText;
+                    }, 2000);
                 },
                 addContactRow() {
                     this.state.additionalContacts.push({ name: '', title: '', number: '' });
