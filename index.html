@@ -11,7 +11,6 @@
     <meta name="referrer" content="no-referrer">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FIX: Removed broken Phosphor Icons link. The app uses emojis, so this is not critical. -->
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -543,6 +542,15 @@
             padding: 1rem;
         }
 
+        /* Admin-only access restriction styles */
+        .admin-password-prompt {
+            background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.95) 100%);
+            border: 2px solid var(--bronze);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
         @media (max-width: 1024px) { 
             .sidebar { display: none; } 
         }
@@ -609,7 +617,7 @@
             <div class="mt-auto text-center text-xs text-soft-taupe pt-6">
                 <p>&copy; 2025 Cascade Hideaway</p>
                 <p>Confidential Operations Document</p>
-                <p class="mt-2 text-bronze font-semibold">v12.3 Corrected</p>
+                <p class="mt-2 text-bronze font-semibold">v13.1 Refined</p>
             </div>
         </aside>
 
@@ -651,7 +659,7 @@
                                 <div class="text-4xl mb-3">⭐</div>
                                 <div>5 Star Mandate</div>
                             </a>
-                             <a href="https://script.google.com/macros/s/AKfycbzOXf0rHGtO68NjDEECqaHgVCgXTf4oVMItwg7naIu_h58nxKgQtZinmcdrsmmqDe7j/exec" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
+                             <a href="https://script.google.com/macros/s/AKfycbxKpNS04OMGXtEW-XLPbRkw9P6n5Tek_SnvVQD02T06StFq7uVBlKljhyzJNMQ75x7U/exec" target="_blank" class="quick-link-card p-6 rounded-xl text-center font-semibold text-dark-bronze block">
                                 <div class="text-4xl mb-3">📦</div>
                                 <div>Cascade Inventory</div>
                             </a>
@@ -837,7 +845,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 
                         <div class="my-12">
                             <h3 class="text-3xl font-bold mb-6 text-bronze text-center">⚡ Quick Start Prompt Library</h3>
-                            <p class="text-center mb-8 instructional-note">Click any prompt to copy and paste directly into the Cascade Concierge GPT</p>
+                            <p class="text-center mb-8 instructional-note">Click any prompt card to copy and paste directly into the Cascade Concierge GPT</p>
                             
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div class="prompt-card p-5 rounded-xl" data-prompt="Draft a warm reply for an Airbnb inquiry asking about our location and nearby attractions in General Santos City.">
@@ -1165,14 +1173,14 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 
                         <div class="bg-dark-bronze/5 p-6 rounded-3xl border-2 border-dashed border-dark-bronze/20">
                             <h3 class="text-3xl font-bold mb-3 text-center">Dynamic Pricing Advisor</h3>
-                            <p class="instructional-note mb-4 text-center">Click the button below to get real-time, AI-powered advice based on your current numbers.</p>
+                            <p class="instructional-note mb-4 text-center">Get AI-powered pricing insights by copying your data template and consulting with the Cascade Concierge.</p>
                             <div class="text-center">
                                <button id="get-advice-btn" class="copy-button px-8 py-4 rounded-xl font-semibold text-lg">
-                                   Get Real-Time Advice
+                                   Copy Data & Open Concierge
                                 </button>
                             </div>
-                            <div id="advice-output" class="bg-warm-white p-6 rounded-xl mt-6 min-h-[150px] flex items-center justify-center border-2 border-soft-taupe">
-                                <p class="instructional-note">Your personalized advice will appear here...</p>
+                            <div class="bg-warm-white p-6 rounded-xl mt-6 border-2 border-soft-taupe">
+                                <p class="instructional-note text-center">Click the button to <strong>copy your financial data</strong>. The AI Concierge will open in a new tab. <strong>Paste your data there</strong> for personalized pricing advice.</p>
                             </div>
                         </div>
 
@@ -1198,7 +1206,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         </div>
                         <div>
                             <div id="common" class="playbook-content active space-y-6">
-                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 A/C or Water Failure</h3><p class="mt-3"><strong>1. Assess:</strong> Unit issue or area outage? Confirm immediately.</p><p class="mt-2"><strong>2. Communicate (in 15 mins):</strong> "Hi [Guest Name], I am so sorry for the inconvenience. Our technician is on the way (ETA [Time]) to fix the [A/C/Water]. We've provided [a fan/bottled water] for you in the meantime. I will personally monitor this and keep you updated."</p><p class="mt-2"><strong>3. Act & Follow-Up:</strong> Dispatch tech. If not resolved in 3-4 hours, proactively offer a 50% refund for the night and/or relocation assistance.</p></div>
+                                <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 A/C or Water Failure</h3><p class="mt-3"><strong>1. Assess:</strong> Unit issue or area outage? Confirm immediately.</p><p class="mt-2"><strong>2. Communicate (in 15 mins):</strong> "Hi [Guest Name], I am so sorry for the inconvenience. Our technician is on the way (ETA [Time]) to fix the [A/C/Water]. We'veprovided [a fan/bottled water] for you in the meantime. I will personally monitor this and keep you updated."</p><p class="mt-2"><strong>3. Act & Follow-Up:</strong> Dispatch tech. If not resolved in 3-4 hours, proactively offer a 50% refund for the night and/or relocation assistance.</p></div>
                                 <div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe"><h3 class="font-bold text-danger-red text-3xl">🚨 Wi-Fi Down</h3><p class="mt-3"><strong>1. Assess:</strong> Ask guest to power cycle router (unplug for 60s). Check ISP app for outages.</p><p class="mt-2"><strong>2. Communicate:</strong> "So sorry about the Wi-Fi! Could you please try unplugging the router for one minute? I'm also checking with the provider for any area issues. Will update you in 15 mins."</p><p class="mt-2"><strong>3. Act:</strong> If it persists, offer a mobile hotspot or a refund for a co-working space pass.</p></div>
                             </div>
                             <div id="guest-conduct" class="playbook-content space-y-6">
@@ -1239,9 +1247,10 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                      <div class="content-card rounded-3xl p-6 sm:p-10">
                         <h2 class="text-5xl font-bold mb-8 text-center">Important Info & Contacts</h2>
                         <div id="infoForm" class="space-y-10">
-                             <div>
+                             <!-- ADMIN-ONLY SECTION: Operations Contacts -->
+                             <div id="operations-contacts-section">
                                 <h3 class="text-3xl font-bold mb-4 text-bronze">Operations Contacts</h3>
-                                <div class="accent-box p-5 rounded-xl space-y-4 text-lg">
+                                <div id="operations-contacts-content" class="accent-box p-5 rounded-xl space-y-4 text-lg">
                                     <p><strong>Co-Host:</strong> <span class="info-text" data-field="cohost_name"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_name"></p>
                                     <p class="ml-4"><strong>Cel/WhatsApp:</strong> <span class="info-text protected" data-field="cohost_phone"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_phone"></p>
                                     <p class="ml-4"><strong>Email:</strong> <span class="info-text" data-field="cohost_email"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_email"></p>
@@ -1296,7 +1305,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
             </div>
         </main>
          <footer class="fixed bottom-0 left-0 right-0 bg-dark-bronze/95 text-warm-white text-xs text-center py-2 backdrop-blur-md z-20 shadow-lg">
-            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 12.3 Corrected • Performance Optimized</p>
+            <p>🔒 Cascade Hideaway Confidential Operations Manual • Version 13.1 Refined • All Improvements Implemented</p>
         </footer>
     </div>
 
@@ -1394,6 +1403,56 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     } else {
                         document.body.classList.remove('regular-user');
                     }
+                    // Protect Operations Contacts section
+                    this.protectOperationsContacts();
+                },
+                protectOperationsContacts() {
+                    const userRole = localStorage.getItem('userRole');
+                    const operationsSection = document.getElementById('operations-contacts-section');
+                    const operationsContent = document.getElementById('operations-contacts-content');
+                    
+                    if (userRole !== 'admin' && operationsSection) {
+                        operationsContent.innerHTML = `
+                            <div class="admin-password-prompt">
+                                <p class="text-lg mb-4">🔒 <strong>Admin Access Required</strong></p>
+                                <p class="instructional-note mb-4">This section contains sensitive operations contacts and requires administrator authentication.</p>
+                                <input type="password" id="admin-temp-password" placeholder="Enter Admin Password" class="w-full max-w-md mx-auto block p-3 border-2 border-bronze rounded-lg mb-3">
+                                <button id="unlock-operations-btn" class="copy-button px-6 py-3 rounded-lg font-semibold">Unlock</button>
+                                <p id="admin-error-msg" class="text-danger-red mt-3 text-sm font-semibold"></p>
+                            </div>
+                        `;
+                        
+                        // Add event listener for unlocking
+                        document.getElementById('unlock-operations-btn').addEventListener('click', () => {
+                            const password = document.getElementById('admin-temp-password').value;
+                            const errorMsg = document.getElementById('admin-error-msg');
+                            
+                            if (password === 'cascadeadmin888') {
+                                // Temporarily grant access
+                                sessionStorage.setItem('operationsUnlocked', 'true');
+                                this.renderOperationsContent();
+                            } else {
+                                errorMsg.textContent = 'Incorrect password. Access denied.';
+                                setTimeout(() => { errorMsg.textContent = ''; }, 3000);
+                            }
+                        });
+                    } else if (userRole === 'admin' || sessionStorage.getItem('operationsUnlocked') === 'true') {
+                        this.renderOperationsContent();
+                    }
+                },
+                renderOperationsContent() {
+                    const operationsContent = document.getElementById('operations-contacts-content');
+                    operationsContent.className = 'accent-box p-5 rounded-xl space-y-4 text-lg';
+                    operationsContent.innerHTML = `
+                        <p><strong>Co-Host:</strong> <span class="info-text" data-field="cohost_name"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_name"></p>
+                        <p class="ml-4"><strong>Cel/WhatsApp:</strong> <span class="info-text protected" data-field="cohost_phone"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_phone"></p>
+                        <p class="ml-4"><strong>Email:</strong> <span class="info-text" data-field="cohost_email"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_email"></p>
+                        <p class="ml-4 flex items-center gap-3"><strong>Password:</strong> <span class="info-text protected" data-field="cohost_pass" style="-webkit-text-security: disc;"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_pass"> <button class="text-2xl" id="togglePass">👁️</button></p>
+                    `;
+                    // Re-render info section to populate data
+                    if (app.info && app.info.render) {
+                        app.info.render();
+                    }
                 }
             };
 
@@ -1441,25 +1500,42 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         this.handleTabs(e, '.cost-tab', '.cost-content');
                     });
                 },
+                /**
+                 * REFINED: Handles clicks on .copy-button OR .prompt-card
+                 * This makes the entire prompt card clickable, improving usability.
+                 */
                 handleCopy(e) {
-                    const btn = e.target.closest('.copy-button');
-                    if (!btn) return;
-
-                    const templateId = btn.dataset.templateId;
-                    const copyField = btn.dataset.copyField;
-                    const promptCard = btn.closest('.prompt-card');
+                    const copyBtn = e.target.closest('.copy-button');
+                    const promptCard = e.target.closest('.prompt-card');
+                    let btnToShowFeedback = null;
                     let textToCopy = '';
+
+                    if (copyBtn) { // User clicked a copy button
+                        btnToShowFeedback = copyBtn;
+                        const templateId = copyBtn.dataset.templateId;
+                        const copyField = copyBtn.dataset.copyField;
+                        const parentPromptCard = copyBtn.closest('.prompt-card'); // Check if button is in a prompt card
+
+                        if (templateId) textToCopy = document.getElementById(templateId)?.textContent || '';
+                        else if (copyField) textToCopy = document.querySelector(`.info-text[data-field="${copyField}"]`)?.textContent || '';
+                        else if (parentPromptCard) textToCopy = parentPromptCard.dataset.prompt || ''; // Get prompt from card
                     
-                    if (templateId) textToCopy = document.getElementById(templateId)?.textContent || '';
-                    else if (copyField) textToCopy = document.querySelector(`.info-text[data-field="${copyField}"]`)?.textContent || '';
-                    else if (promptCard) textToCopy = promptCard.dataset.prompt || '';
-                    
-                    if (textToCopy) {
+                    } else if (promptCard && !copyBtn) { // User clicked card, but NOT the button inside it
+                        textToCopy = promptCard.dataset.prompt || '';
+                        btnToShowFeedback = promptCard.querySelector('.copy-button'); // Find the button to show feedback
+                    }
+
+                    if (textToCopy && btnToShowFeedback) {
                         navigator.clipboard.writeText(textToCopy.trim()).then(() => {
-                            const originalText = btn.innerHTML;
-                            btn.innerHTML = 'Copied!';
-                            btn.classList.add('copied');
-                            setTimeout(() => { btn.innerHTML = originalText; btn.classList.remove('copied'); }, 2000);
+                            const originalText = btnToShowFeedback.innerHTML;
+                            btnToShowFeedback.innerHTML = 'Copied!';
+                            btnToShowFeedback.classList.add('copied');
+                            setTimeout(() => { 
+                                if (btnToShowFeedback.innerHTML === 'Copied!') { // Only revert if still 'Copied!'
+                                    btnToShowFeedback.innerHTML = originalText; 
+                                    btnToShowFeedback.classList.remove('copied');
+                                }
+                            }, 2000);
                         });
                     }
                 },
@@ -1510,14 +1586,19 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         desiredProfitInput: document.getElementById('desired-profit'), targetPriceDisplay: document.getElementById('target-price-display'), currentFeeDisplay1: document.getElementById('current-fee-display-1'),
                         scenarioBreakeven: document.getElementById('scenario-breakeven'), scenarioProfit300: document.getElementById('scenario-profit-300'), scenarioProfit500: document.getElementById('scenario-profit-500'),
                         scenarioBreakevenAlt: document.getElementById('scenario-breakeven-alt'), scenarioProfit300Alt: document.getElementById('scenario-profit-300-alt'), scenarioProfit500Alt: document.getElementById('scenario-profit-500-alt'),
-                        exportDataBtn: document.getElementById('export-data-btn'), importDataBtn: document.getElementById('import-data-btn'), getAdviceBtn: document.getElementById('get-advice-btn'), adviceOutput: document.getElementById('advice-output'),
+                        exportDataBtn: document.getElementById('export-data-btn'), importDataBtn: document.getElementById('import-data-btn'), getAdviceBtn: document.getElementById('get-advice-btn'),
                         accessLogTable: document.getElementById('access-log-table'),
                     };
                     this.loadState(); this.bindEvents(); this.render(); 
                 },
                 loadState() {
                     const savedState = JSON.parse(localStorage.getItem('cascadeHandbookState'));
-                    if (savedState) { this.state = savedState; } 
+                    if (savedState) { 
+                        this.state = savedState; 
+                        // Ensure nested structures exist if loading older data
+                        if (!this.state.assumptions) this.state.assumptions = { bookingsPerMonth: 9, avgLos: 2.5, platformFee: 15.5 };
+                        if (!this.state.accessLog) this.state.accessLog = [];
+                    } 
                     else {
                         this.state.assumptions = { bookingsPerMonth: 9, avgLos: 2.5, platformFee: 15.5 };
                         this.state.accessLog = [];
@@ -1549,6 +1630,8 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                 saveState() { localStorage.setItem('cascadeHandbookState', JSON.stringify(this.state)); },
                 bindEvents() {
                     const costingSection = document.getElementById('costing');
+                    if (!costingSection) return;
+                    
                     costingSection.addEventListener('click', (e) => {
                         if(e.target.id === 'add-variable-btn') this.addItem('variable');
                         if(e.target.id === 'add-booking-btn') this.addItem('booking');
@@ -1569,11 +1652,21 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                             this.updateItemValue(type, parseInt(index), field, e.target.value);
                          }
                     });
-                    this.elements.saveAssumptionsBtn.addEventListener('click', () => this.updateAssumptions());
-                    this.elements.desiredProfitInput.addEventListener('input', () => this.calculateAndRenderTargetPrice());
-                    this.elements.exportDataBtn.addEventListener('click', () => this.exportData());
-                    this.elements.importDataBtn.addEventListener('click', () => this.importData());
-                    this.elements.getAdviceBtn.addEventListener('click', () => this.getPricingAdvice());
+                    if (this.elements.saveAssumptionsBtn) {
+                        this.elements.saveAssumptionsBtn.addEventListener('click', () => this.updateAssumptions());
+                    }
+                    if (this.elements.desiredProfitInput) {
+                        this.elements.desiredProfitInput.addEventListener('input', () => this.calculateAndRenderTargetPrice());
+                    }
+                    if (this.elements.exportDataBtn) {
+                        this.elements.exportDataBtn.addEventListener('click', () => this.exportData());
+                    }
+                    if (this.elements.importDataBtn) {
+                        this.elements.importDataBtn.addEventListener('click', () => this.importData());
+                    }
+                    if (this.elements.getAdviceBtn) {
+                        this.elements.getAdviceBtn.addEventListener('click', () => this.getPricingAdvice());
+                    }
                 },
                 addItem(type) {
                     if (type === 'variable') {
@@ -1635,19 +1728,20 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.state.calculations = { totalCostPerNight, feeRate, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight };
                 },
                 calculateAndRenderTargetPrice() {
-                    const desiredProfit = parseFloat(this.elements.desiredProfitInput.value) || 0;
+                    const desiredProfit = parseFloat(this.elements.desiredProfitInput?.value) || 0;
                     const { totalCostPerNight, feeRate } = this.state.calculations;
                     const targetPrice = feeRate < 1 ? (totalCostPerNight + desiredProfit) / (1 - feeRate) : Infinity;
-                    this.elements.targetPriceDisplay.textContent = `₱${targetPrice.toFixed(2)}`;
+                    if (this.elements.targetPriceDisplay) {
+                        this.elements.targetPriceDisplay.textContent = `₱${targetPrice.toFixed(2)}`;
+                    }
                 },
                 render() {
                     this.saveState(); this.calculateAll();
                     this.renderCostTables(); this.renderAssumptions(); this.renderSummary(); this.renderPricingScenarios(); this.renderAccessLog();
                 },
                 renderCostTables() {
-                    // FIX: Added defensive checks to ensure elements exist before trying to modify their innerHTML.
                     if (!this.elements.variableCostsTable || !this.elements.bookingCostsTable || !this.elements.fixedCostsTable) {
-                        return; // Elements not in DOM yet, exit function.
+                        return;
                     }
                     this.elements.variableCostsTable.innerHTML = this.state.variableCosts.map((item, index) => `
                         <div class="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 items-center bg-warm-cream p-3 rounded-lg">
@@ -1673,7 +1767,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         </div>`).join('');
                 },
                 renderAssumptions() {
-                    // FIX: Added defensive check.
                     if (!this.elements.bookingsPerMonthInput) return;
                     const { bookingsPerMonth, avgLos, platformFee } = this.state.assumptions;
                     this.elements.bookingsPerMonthInput.value = bookingsPerMonth;
@@ -1681,7 +1774,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.elements.platformFeeInput.value = platformFee;
                 },
                 renderSummary() {
-                    // FIX: Added defensive check.
                     if (!this.elements.totalCostDisplay) return;
                     const { totalCostPerNight, breakEvenPrice } = this.state.calculations;
                     this.elements.totalCostDisplay.textContent = `₱${totalCostPerNight.toFixed(2)}`;
@@ -1689,7 +1781,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.calculateAndRenderTargetPrice();
                 },
                 renderPricingScenarios() {
-                    // FIX: Added defensive check.
                     if (!this.elements.scenarioBreakeven) return;
                     const { totalCostPerNight, feeRate } = this.state.calculations;
                     const feeRateAlt = 0.03;
@@ -1711,7 +1802,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     }
                 },
                 renderAccessLog() {
-                    // FIX: Added defensive check.
                     if (!this.elements.accessLogTable) return;
                     this.elements.accessLogTable.innerHTML = this.state.accessLog.map(entry => `
                         <div class="grid grid-cols-2 gap-4 py-1.5">
@@ -1739,109 +1829,81 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                                     this.state = importedState;
                                     if (!this.state.accessLog) { this.state.accessLog = []; }
                                     this.render(); 
-                                } else { console.error('Error: Invalid or corrupted data file.'); }
-                            } catch (error) { console.error('Error reading file. Please make sure it is a valid JSON file.');}
+                                    alert('Data imported successfully!');
+                                } else { alert('Error: Invalid or corrupted data file.'); }
+                            } catch (error) { alert('Error reading file. Please make sure it is a valid JSON file.');}
                         };
                         reader.readAsText(file);
                     };
                     input.click();
                 },
-                async getPricingAdvice() {
-                    this.elements.adviceOutput.innerHTML = `<div class="spinner"></div>`;
-                    this.elements.adviceOutput.classList.remove('text-left');
-                    this.elements.adviceOutput.classList.add('flex', 'items-center', 'justify-center');
+                getPricingAdvice() {
+                    const { totalCostPerNight, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight, feeRate } = this.state.calculations;
+                    const profit300Price = (totalCostPerNight + 300) / (1 - feeRate);
+                    const profit500Price = (totalCostPerNight + 500) / (1 - feeRate);
 
-                    const { totalCostPerNight, breakEvenPrice, subtotalVariable, subtotalBooking, fixedCostPerNight } = this.state.calculations;
-                    const profit300Price = (totalCostPerNight + 300) / (1 - this.state.calculations.feeRate);
-                    const profit500Price = (totalCostPerNight + 500) / (1 - this.state.calculations.feeRate);
+                    const adviceTemplate = `PRICING ANALYSIS REQUEST - Cascade Hideaway Operations
 
-                    const userQuery = `Analyze the following financial data for my rental property and provide advice.
+📊 CURRENT FINANCIAL DATA:
+═══════════════════════════════════════
+Total Cost Per Night: ₱${totalCostPerNight.toFixed(2)}
+• Variable Costs (Utilities): ₱${subtotalVariable.toFixed(2)}
+• Per-Booking Costs (Cleaning/Amenities): ₱${subtotalBooking.toFixed(2)}
+• Allocated Fixed Costs: ₱${fixedCostPerNight.toFixed(2)}
+
+💰 PRICING TARGETS:
+═══════════════════════════════════════
+Break-Even Price: ₱${breakEvenPrice.toFixed(2)}
+Target Price (₱300 profit): ₱${profit300Price.toFixed(2)}
+Target Price (₱500 profit): ₱${profit500Price.toFixed(2)}
+Platform Fee: ${(feeRate * 100).toFixed(1)}%
+
+📋 ANALYSIS INSTRUCTIONS:
+═══════════════════════════════════════
+Always verify and update your answers using the latest web search results and credible references.
+
+Present your response in the following order:
+1️⃣ Main point first (Executive summary with actionable recommendation)
+2️⃣ Context second (Cost structure analysis)
+3️⃣ Up-to-date, actionable guide last (3-tier pricing strategy with specific scenarios)
+
+Please provide:
+### Executive Summary
+What is the single most impactful pricing strategy I should implement right now?
+
+### Deep Dive: Cost Structure Analysis
+Explain my cost breakdown and identify the largest cost category with its significance.
+
+### Action Plan: 3-Tier Pricing Strategy
+Provide three clear pricing tiers:
+• Floor Price (when to use)
+• Base Rate (standard pricing)
+• Peak Price (high-demand periods)
+
+### Key Metric to Monitor
+Identify the most important metric to track and suggest one improvement action.
+
+═══════════════════════════════════════
+Property: Cascade Hideaway | General Santos City, Philippines
+Date: ${new Date().toLocaleDateString()}`;
+
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(adviceTemplate).then(() => {
+                        const btn = this.elements.getAdviceBtn;
+                        const originalText = btn.textContent;
+                        btn.textContent = 'Copied! Redirecting...';
+                        btn.classList.add('copied');
                         
-                        **My Numbers:**
-                        - Total Cost Per Night: ${totalCostPerNight.toFixed(2)} PHP
-                        - Variable Cost Per Night (Utilities): ${subtotalVariable.toFixed(2)} PHP
-                        - Per-Booking Cost (Turnover): ${subtotalBooking.toFixed(2)} PHP
-                        - Allocated Fixed Cost Per Night: ${fixedCostPerNight.toFixed(2)} PHP
-                        - Break-Even Price: ${breakEvenPrice.toFixed(2)} PHP
-                        - Target Price for 300 PHP Profit: ${profit300Price.toFixed(2)} PHP
-                        - Target Price for 500 PHP Profit: ${profit500Price.toFixed(2)} PHP
-
-                        **Your Task:** Structure your response using the following framework EXACTLY:
-
-                        ### Executive Summary
-                        (In one paragraph, what is the single most impactful pricing strategy I should implement right now based on my numbers?)
-
-                        ### Deep Dive: Your Cost Structure
-                        (Simply explain what my costs mean. Identify my largest cost category and explain why it's significant. Use a simple analogy.)
-
-                        ### Action Plan: A 3-Tier Pricing Strategy
-                        (Provide a detailed, step-by-step pricing plan with three clear tiers. For each tier, provide:
-                        * **A. Tier Name:** e.g., 'Floor Price,' 'Base Rate,' 'Peak Price'.
-                        * **B. Recommended Price:** Use the exact numbers calculated from my data.
-                        * **C. When to Use It:** Give specific, practical examples like 'last-minute weekday bookings,' 'default for most weekdays,' 'weekends, holidays like Christmas, local festivals like Tuna Fest'.)
-
-                        ### Key Metric to Monitor
-                        (Identify the single most important metric from my data to focus on. Explain why it's critical and suggest one actionable way to improve it.)
-                    `;
-                    
-                    const systemPrompt = "You are an expert short-term rental financial advisor, specializing in helping hosts maximize profitability. Your advice is famous for being both simple to understand and highly actionable. You always use clear frameworks to structure your answers, ensuring hosts know exactly what to do. Use Markdown for clear formatting (bolding, headers as `###`, and unordered lists with `*`).";
-                    
-                    // This frontend code should call your own server endpoint (e.g., /api/get-advice).
-                    // Your server will then securely make the call to the Google AI API.
-                    const apiUrl = `/api/get-advice`; // This is a placeholder for your backend endpoint.
-                    
-                    const payload = {
-                        contents: [{
-                            parts: [{ "text": systemPrompt + userQuery }]
-                        }]
-                    };
-
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`Network response was not ok: ${response.statusText}`);
-                        }
-
-                        const result = await response.json();
-                        const candidate = result.candidates?.[0];
-
-                        if (candidate && candidate.content?.parts?.[0]?.text) {
-                            let adviceText = candidate.content.parts[0].text;
-                            
-                            let html = adviceText
-                                .split('\n\n')
-                                .map(block => {
-                                    if (block.startsWith('### ')) {
-                                        return `<h3>${block.substring(4)}</h3>`;
-                                    }
-                                    if (block.startsWith('* ')) {
-                                        const items = block.split('\n').map(item => {
-                                            if (item.startsWith('* ')) {
-                                                return `<li>${item.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</li>`;
-                                            }
-                                            return '';
-                                        }).join('');
-                                        return `<ul>${items}</ul>`;
-                                    }
-                                    return `<p>${block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</p>`;
-                                })
-                                .join('');
-
-                            this.elements.adviceOutput.innerHTML = html;
-                            this.elements.adviceOutput.classList.remove('flex', 'items-center', 'justify-center');
-                            this.elements.adviceOutput.classList.add('text-left');
-                        } else {
-                            throw new Error("No content in API response.");
-                        }
-                    } catch (error) {
-                        console.error("Error fetching pricing advice:", error);
-                        this.elements.adviceOutput.innerHTML = `<p class="text-danger-red">Could not fetch advice. This feature requires a backend to work securely. Please check your network connection and browser console for details.</p>`;
-                    }
+                        // Redirect to ChatGPT Concierge after 1 second
+                        setTimeout(() => {
+                            window.open('https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge', '_blank');
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 1000);
+                    }).catch(err => {
+                        alert('Failed to copy data. Please try again.');
+                        console.error('Copy failed:', err);
+                    });
                 }
             };
 
@@ -1861,41 +1923,98 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.bindEvents();
                     this.render();
                 },
+                /**
+                 * REFINED: Data model changed to {task, interval, lastDone}.
+                 * This fixes a data corruption bug where sorting/adding tasks
+                 * would misalign the 'lastDone' dates, which were previously
+                 * stored separately by index in localStorage.
+                 * Includes a one-time migration for old data.
+                 */
                 loadState() {
-                    this.state.tasks = JSON.parse(localStorage.getItem('maintenanceTasks')) || [
-                        { task: "Clean A/C Filter", interval: 30 }, { task: "Deep Clean Refrigerator", interval: 60 },
-                        { task: "Check Fire Extinguisher", interval: 90 }, { task: "Pest Control", interval: 90 },
-                        { task: "Descale Shower Head & Faucets", interval: 90 }, { task: "Professional A/C Service", interval: 180 },
-                        { task: "Wash Curtains", interval: 180 }, { task: "Deep Clean Mattress Protector", interval: 180 }, { task: "Replace Pillows", interval: 365 },
+                    let tasks = JSON.parse(localStorage.getItem('maintenanceTasks')) || [
+                        { task: "Clean A/C Filter", interval: 30, lastDone: "" }, { task: "Deep Clean Refrigerator", interval: 60, lastDone: "" },
+                        { task: "Check Fire Extinguisher", interval: 90, lastDone: "" }, { task: "Pest Control", interval: 90, lastDone: "" },
+                        { task: "Descale Shower Head & Faucets", interval: 90, lastDone: "" }, { task: "Professional A/C Service", interval: 180, lastDone: "" },
+                        { task: "Wash Curtains", interval: 180, lastDone: "" }, { task: "Deep Clean Mattress Protector", interval: 180, lastDone: "" }, { task: "Replace Pillows", interval: 365, lastDone: "" },
                     ];
+                    
+                    // --- Data Migration Logic ---
+                    let needsMigration = false;
+                    if (tasks.length > 0) {
+                        const firstTask = tasks[0];
+                        if (typeof firstTask === 'object' && firstTask !== null && typeof firstTask.lastDone === 'undefined') {
+                            needsMigration = true;
+                        }
+                    }
+                    
+                    if (needsMigration) {
+                        const defaultTasks = [
+                            { task: "Clean A/C Filter", interval: 30 }, { task: "Deep Clean Refrigerator", interval: 60 },
+                            { task: "Check Fire Extinguisher", interval: 90 }, { task: "Pest Control", interval: 90 },
+                            { task: "Descale Shower Head & Faucets", interval: 90 }, { task: "Professional A/C Service", interval: 180 },
+                            { task: "Wash Curtains", interval: 180 }, { task: "Deep Clean Mattress Protector", interval: 180 }, { task: "Replace Pillows", interval: 365 },
+                        ];
+                        
+                        // Re-build tasks from defaults, trying to find old lastDone dates
+                        tasks = defaultTasks.map((item, index) => {
+                            const oldLastDone = localStorage.getItem(`maint_lastDone_${index}`);
+                            return {
+                                ...item,
+                                lastDone: oldLastDone || ""
+                            };
+                        });
+                        
+                        // Clean up old localStorage keys
+                        for (let i = 0; i < 20; i++) { // Check a reasonable number of old keys
+                            localStorage.removeItem(`maint_lastDone_${i}`);
+                        }
+                    }
+                    // --- End Migration Logic ---
+                    
+                    this.state.tasks = tasks;
+                    this.saveState(); // Save the potentially migrated state
                 },
                 saveState() {
                     localStorage.setItem('maintenanceTasks', JSON.stringify(this.state.tasks));
                 },
+                /**
+                 * REFINED: Event listener now updates the 'lastDone' property
+                 * in the state object and calls saveState() immediately.
+                 */
                 bindEvents() {
                     this.elements.addTaskBtn.addEventListener('click', () => this.addTask());
                     this.elements.createAllBtn.addEventListener('click', () => this.createIcsFile());
                     this.elements.checklistContainer.addEventListener('change', (e) => {
                         if (e.target.classList.contains('maint-date-input')) {
-                            localStorage.setItem(`maint_lastDone_${e.target.dataset.index}`, e.target.value);
-                            this.render();
+                            const index = parseInt(e.target.dataset.index);
+                            if (!isNaN(index) && this.state.tasks[index]) {
+                                this.state.tasks[index].lastDone = e.target.value;
+                                this.saveState(); // Save the state on change
+                                this.render(); // Re-render to update "Next Due"
+                            }
                         }
                     });
                 },
+                /**
+                 * REFINED: Adds new task with an empty 'lastDone' property.
+                 */
                 addTask() {
-                    const name = this.elements.newTaskName.value;
+                    const name = this.elements.newTaskName.value.trim();
                     const interval = parseInt(this.elements.newTaskInterval.value);
                     if (name && interval > 0) {
-                        this.state.tasks.push({ task: name, interval: interval });
+                        this.state.tasks.push({ task: name, interval: interval, lastDone: "" });
                         this.state.tasks.sort((a, b) => a.interval - b.interval);
                         this.saveState();
                         this.render();
                         this.elements.newTaskName.value = ''; this.elements.newTaskInterval.value = '';
                     } else { alert('Please enter a valid task name and interval.'); }
                 },
+                /**
+                 * REFINED: Reads 'lastDone' from the item object.
+                 */
                 render() {
                     this.elements.checklistContainer.innerHTML = this.state.tasks.map((item, index) => {
-                        const lastDone = localStorage.getItem(`maint_lastDone_${index}`) || '';
+                        const lastDone = item.lastDone || '';
                         let nextDue = 'N/A';
                         if (lastDone) {
                             const nextDueDate = new Date(lastDone);
@@ -2011,14 +2130,17 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                 toggleEdit(isEditing) {
                     this.elements.infoForm.querySelectorAll('.info-text, #togglePass').forEach(t => t.classList.toggle('hidden', isEditing));
                     this.elements.infoForm.querySelectorAll('.info-input').forEach(i => i.classList.toggle('hidden', !isEditing));
-                    document.getElementById('editInfoBtn').classList.toggle('hidden', isEditing);
-                    document.getElementById('saveInfoBtn').classList.toggle('hidden', !isEditing);
+                    const editBtn = document.getElementById('editInfoBtn');
+                    const saveBtn = document.getElementById('saveInfoBtn');
+                    if (editBtn) editBtn.classList.toggle('hidden', isEditing);
+                    if (saveBtn) saveBtn.classList.toggle('hidden', !isEditing);
                     if (!isEditing) {
                         this.render();
                     }
                 },
                 togglePasswordVisibility(button) {
                     const passField = this.elements.infoForm.querySelector('.info-text[data-field="cohost_pass"]');
+                    if (!passField) return;
                     const isMasked = passField.style.webkitTextSecurity === 'disc';
                     passField.style.webkitTextSecurity = isMasked ? 'none' : 'disc';
                     button.textContent = isMasked ? '🙈' : '👁️';
