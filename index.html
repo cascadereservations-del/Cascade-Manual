@@ -563,7 +563,49 @@
         body.regular-user .admin-only {
             display: none !important;
         }
-  </style>
+  
+        /* Enhanced Card Hover */
+        .content-card:hover, .quick-link-card:hover, .capability-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 18px 55px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        /* Enhanced Sidebar Link Hover */
+        .nav-link:hover {
+             transform: translateX(8px) scale(1.03);
+             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Subtle animation for checklist items */
+        .checklist-item:hover {
+            transform: translateX(5px) scale(1.01);
+             background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.7) 100%);
+        }
+
+        /* Ensure emojis don't prevent text wrapping */
+         h2 .emoji-prefix { margin-right: 0.3em; }
+
+        /* Refined Login Button Shimmer */
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        #login-form button[type="submit"] {
+            background-size: 250% 100%; /* Slightly slower shimmer */
+            background-image: linear-gradient(120deg, var(--dark-bronze) 0%, var(--bronze) 50%, var(--dark-bronze) 100%);
+            animation: shimmer 4s infinite linear; /* Smoother, linear animation */
+        }
+
+        /* Ensure login title is visible - moved from injected styles */
+        #login-overlay h2 {
+             color: var(--warm-white);
+             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        #login-overlay h2::before {
+             content: '🔒 '; display: inline-block; margin-right: 0.25em; opacity: 0.8;
+        }
+        
+</style>
   <style>
    /* --- Injected Styles for Luxury Effects & Animations --- */
 .content-section {
@@ -631,7 +673,49 @@ h1, h2, h3, h4, h5, h6 {
     border-color: var(--bronze); /* Keep strong hover */
     box-shadow: 0 15px 40px rgba(140, 109, 70, 0.2); /* Soften shadow */
 }
-  </style>
+  
+        /* Enhanced Card Hover */
+        .content-card:hover, .quick-link-card:hover, .capability-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 18px 55px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        /* Enhanced Sidebar Link Hover */
+        .nav-link:hover {
+             transform: translateX(8px) scale(1.03);
+             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Subtle animation for checklist items */
+        .checklist-item:hover {
+            transform: translateX(5px) scale(1.01);
+             background: linear-gradient(135deg, var(--warm-cream) 0%, rgba(245, 241, 232, 0.7) 100%);
+        }
+
+        /* Ensure emojis don't prevent text wrapping */
+         h2 .emoji-prefix { margin-right: 0.3em; }
+
+        /* Refined Login Button Shimmer */
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        #login-form button[type="submit"] {
+            background-size: 250% 100%; /* Slightly slower shimmer */
+            background-image: linear-gradient(120deg, var(--dark-bronze) 0%, var(--bronze) 50%, var(--dark-bronze) 100%);
+            animation: shimmer 4s infinite linear; /* Smoother, linear animation */
+        }
+
+        /* Ensure login title is visible - moved from injected styles */
+        #login-overlay h2 {
+             color: var(--warm-white);
+             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        #login-overlay h2::before {
+             content: '🔒 '; display: inline-block; margin-right: 0.25em; opacity: 0.8;
+        }
+        
+</style>
  </head>
  <body class="bg-warm-cream pb-10">
   <div id="login-overlay">
@@ -3800,6 +3884,75 @@ Date: ${new Date().toLocaleDateString()}`;
             };
 
             app.init();
+
+            app.navigation.setupSwipeNavigation = function() {
+                const contentHost = document.getElementById('content-host');
+                if (!contentHost) return;
+
+                let touchstartX = 0;
+                let touchendX = 0;
+                const swipeThreshold = 60; // Minimum pixels for a swipe
+
+                contentHost.addEventListener('touchstart', (event) => {
+                    // Check if the touch starts inside an input, textarea, or button to avoid conflicts
+                    if (event.target.closest('input, textarea, button, select, a.copy-button, .editable-cost-input')) {
+                        touchstartX = null; // Ignore swipe if starting on interactive element
+                        return;
+                    }
+                    touchstartX = event.changedTouches[0].screenX;
+                }, { passive: true });
+
+                contentHost.addEventListener('touchend', (event) => {
+                    if (touchstartX === null) return; // Exit if swipe started on interactive element
+
+                    touchendX = event.changedTouches[0].screenX;
+                    handleSwipe();
+                }, { passive: true });
+
+                function handleSwipe() {
+                    const deltaX = touchendX - touchstartX;
+                    if (Math.abs(deltaX) < swipeThreshold) return; // Not a long enough swipe
+
+                    const navLinks = document.querySelectorAll('#sidebar-nav a.nav-link:not(.admin-only), #pill-nav a.pill-link:not(.admin-only)');
+                    const visibleLinks = Array.from(navLinks).filter(link => link.offsetParent !== null); // Filter visible links only
+
+                    if (visibleLinks.length === 0) return;
+
+                    let currentActiveIndex = -1;
+                    visibleLinks.forEach((link, index) => {
+                        if (link.classList.contains('nav-active') || link.classList.contains('pill-active')) {
+                            currentActiveIndex = index;
+                        }
+                    });
+
+                    if (currentActiveIndex === -1) return; // Should not happen, but safety check
+
+                    let nextIndex;
+                    if (deltaX < 0) { // Swiped Left
+                        nextIndex = (currentActiveIndex + 1) % visibleLinks.length;
+                    } else { // Swiped Right
+                        nextIndex = (currentActiveIndex - 1 + visibleLinks.length) % visibleLinks.length;
+                    }
+
+                    // Simulate a click on the target link
+                    if (visibleLinks[nextIndex]) {
+                        console.log(`Swipe detected: Navigating to ${visibleLinks[nextIndex].getAttribute('href')}`);
+                        // Use activateSection directly for smoother transition
+                        app.navigation.activateSection(visibleLinks[nextIndex].getAttribute('href'));
+                         // Update URL hash manually if needed, ensuring smooth scroll works
+                        try { window.history.pushState(null, '', visibleLinks[nextIndex].getAttribute('href')); } catch(e){}
+                    }
+
+                    // Reset coordinates
+                    touchstartX = 0;
+                    touchendX = 0;
+                }
+            };
+
+            // Call the setup function after app initialization
+            app.navigation.setupSwipeNavigation();
+            
+
         });
   </script>
  </body>
