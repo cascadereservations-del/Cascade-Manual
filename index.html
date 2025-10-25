@@ -605,6 +605,19 @@
              content: '🔒 '; display: inline-block; margin-right: 0.25em; opacity: 0.8;
         }
         
+
+/* Video helper styles */
+.video-embed { position: relative; width: 100%; padding-top: 56.25%; border-radius: 0.75rem; overflow: hidden; }
+.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-card { display: flex; flex-direction: column; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+/* Avoid footer overlap on small screens */
+#content-host { padding-bottom: 5rem; }
+
 </style>
   <style>
    /* --- Injected Styles for Luxury Effects & Animations --- */
@@ -717,7 +730,7 @@ h1, h2, h3, h4, h5, h6 {
         
 </style>
  </head>
- <body class="bg-warm-cream pb-10">
+ <body class="bg-warm-cream pb-24">
   <div id="login-overlay">
    <div class="bg-warm-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center" style="border: 3px solid var(--bronze);">
     <h2 class="text-4xl font-bold mb-2">
@@ -784,7 +797,11 @@ h1, h2, h3, h4, h5, h6 {
      <a class="nav-link p-3 rounded-lg text-md" href="#cleaning">
       🧼 Cleaning Checklist
      </a>
-     <a class="nav-link admin-only p-3 rounded-lg text-md" href="#costing">
+     
+      <a class="nav-link p-3 rounded-lg text-md" href="#videos">
+       🎬 Video Resources
+      </a>
+<a class="nav-link admin-only p-3 rounded-lg text-md" href="#costing">
       💰 Cost &amp; Profitability
      </a>
      <a class="nav-link admin-only p-3 rounded-lg text-md" href="#pricing">
@@ -844,7 +861,11 @@ h1, h2, h3, h4, h5, h6 {
       <a class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold" href="#cleaning">
        Cleaning
       </a>
-      <a class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold" href="#costing">
+      
+       <a class="pill-link shrink-0 py-2 px-3 text-charcoal font-semibold" href="#videos">
+        Videos
+       </a>
+<a class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold" href="#costing">
        Costing
       </a>
       <a class="pill-link admin-only shrink-0 py-2 px-3 text-charcoal font-semibold" href="#pricing">
@@ -2658,7 +2679,119 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
        </div>
       </div>
      </section>
-     <section class="content-section" id="playbook">
+
+      <section class="content-section" id="videos">
+       <div class="content-card rounded-3xl p-6 sm:p-10">
+        <h2 class="text-5xl font-bold mb-6 text-center">🎬 Video Resources</h2>
+        <p class="instructional-note text-center mb-8">
+         Short, practical training videos. Watch, then follow the 2–4 key steps listed under each video.
+        </p>
+
+        <!-- Bed making & Turnover -->
+        <h3 class="text-3xl font-bold mb-4 text-bronze">Bed Making & Turnover Service</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <!-- Video card helper class is styled in CSS we’ll inject below -->
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/ZYwXds5HrU8" title="Bed making hotel style #1" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Hotel Bed Corners (fast demo)</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Pull fitted sheet tight; remove wrinkles.</li>
+              <li>Use hospital corners on the top sheet.</li>
+              <li>Center duvet; smooth from headboard down.</li>
+              <li>Pillow presentation: open seam facing inside.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=ZYwXds5HrU8" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/G3dIEdDi0uM" title="Bed making #2" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Tight, Wrinkle-free Finish</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Lock sheet at corners first.</li>
+              <li>Hand-press &amp; smooth toward the foot.</li>
+              <li>Final polish: brush duvet edges &amp; fluff pillows.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=G3dIEdDi0uM" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/jaBkG2sIIMw" title="Turnover steps" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Turnover Flow (sequence)</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Strip linens, empty trash first.</li>
+              <li>Ventilate (open curtains/windows).</li>
+              <li>Pre-spray bathroom, then room surfaces.</li>
+              <li>Make bed, restock, final QC photos.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=jaBkG2sIIMw" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/Bx60qK_piYU" title="Housekeeping bed-making" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Housekeeping Style Corners</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Hospital corners: fold, tuck, and lock.</li>
+              <li>Align duvet 5–10 cm from headboard.</li>
+              <li>Final smooth with both hands.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=Bx60qK_piYU" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card md:col-span-2">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/ggZ8QxMN8Uw" title="Hotel room cleaning sequence" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Hotel Room Cleaning Sequence</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Prep: open curtains; pre-spray bathroom.</li>
+              <li>Strip linens &amp; rubbish, then bed-making.</li>
+              <li>Bathroom high→low; vacuum out the door.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=ggZ8QxMN8Uw&t=232s" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+        </div>
+
+        <!-- Cleaning Guides -->
+        <h3 class="text-3xl font-bold mb-4 text-bronze">Cleaning Guides</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/U0LSxF8Yr0E" title="Types of cleaning products" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Types of Cleaning Products &amp; When to Use</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Alkaline vs Acid vs Neutral cleaners.</li>
+              <li>Degreasers for organic soil; acids for hard water.</li>
+              <li>Disinfect vs sanitize; specialty products.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=U0LSxF8Yr0E" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+
+          <article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
+            <div class="video-embed">
+              <iframe src="https://www.youtube.com/embed/4T7lyhObHf0" title="Filipino toilet cleaning" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <h4 class="font-semibold mt-3">Toilet Cleaning Like a Pro (Filipino)</h4>
+            <ul class="text-sm list-disc list-inside instructional-note mt-2">
+              <li>Top→bottom; outside→inside workflow.</li>
+              <li>Deep clean: bleach + antibacterial wipe pass.</li>
+              <li>Edge areas &amp; hinge details last.</li>
+            </ul>
+            <a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=4T7lyhObHf0" target="_blank" rel="noopener">Open on YouTube</a>
+          </article>
+        </div>
+       </div>
+      </section>
+
+      <section class="content-section" id="playbook">
       <div class="content-card rounded-3xl p-6 sm:p-10">
        <h2 class="text-5xl font-bold mb-6 text-center">
         Comprehensive Crisis Playbook
@@ -3142,9 +3275,12 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         <p class="ml-4 flex items-center gap-3"><strong>Password:</strong> <span class="info-text protected" data-field="cohost_pass" style="-webkit-text-security: disc;"></span> <input type="text" class="info-input hidden w-full p-2 border-2 border-soft-taupe rounded-lg" data-field="cohost_pass"> <button class="text-2xl" id="togglePass">👁️</button></p>
                     `;
                     // Re-render info section to populate data
-                    if (app.info && app.info.render) {
-                        app.info.render();
-                    }
+                    if (app.info) {
+    try {
+        if (!app.info.elements || !app.info.elements.infoForm) { app.info.init?.(); }
+        app.info.render?.();
+    } catch (e) { /* ignore */ }
+}
                 }
             };
 
@@ -3800,6 +3936,7 @@ Date: ${new Date().toLocaleDateString()}`;
                     });
                 },
                 render() {
+                    if (!this.elements || !this.elements.infoForm) return;
                     for (const field in this.state.defaultInfo) {
                         const value = localStorage.getItem(`ch_info_${field}`) || this.state.defaultInfo[field];
                         const textEl = this.elements.infoForm.querySelector(`.info-text[data-field="${field}"]`);
@@ -3957,3 +4094,4 @@ Date: ${new Date().toLocaleDateString()}`;
   </script>
  </body>
 </html>
+
