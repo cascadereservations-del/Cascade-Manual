@@ -24,6 +24,11 @@
     --charcoal: #1a1a1a;     /* A deeper, softer black for text */
     --warm-white: #FFFFFF;
     --accent-gold: #D7B377;   /* A brighter, more elegant gold for highlights */
+
+  --success-green: #2e7d67;
+  --danger-red: #b91c1c;
+  --info-blue: #2563eb;
+  --grayscale-bg: #f3f4f6;
 }
 
         
@@ -124,7 +129,7 @@
         
         .content-section.active { display: block; }
         
-        /* @keyframes fadeIn (Replaced) */Up { 
+        @keyframes fadeInUp { 
             from { opacity: 0; transform: translateY(15px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
@@ -618,6 +623,13 @@
 /* Avoid footer overlap on small screens */
 #content-host { padding-bottom: 5rem; }
 
+
+/* === injected: a11y + layout polish (non-destructive) === */
+:focus-visible { outline: 3px solid var(--accent-gold); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+main, #content-host { padding-bottom: 4.5rem; } /* avoid overlap with fixed footer */
 </style>
   <style>
    /* --- Injected Styles for Luxury Effects & Animations --- */
@@ -3159,20 +3171,23 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         loginNameOther: document.getElementById('login-name-other'),
                         usernameInput: document.getElementById('username'),
                     };
+                    try { localStorage.removeItem('isAuthenticated'); localStorage.removeItem('userRole'); localStorage.removeItem('currentUser'); } catch (e) {}
+;
                     this.bindEvents();
                     this.checkAuth();
                 },
                 bindEvents() {
                     this.elements.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
                     this.elements.loginNameSelect.addEventListener('change', () => this.toggleOtherName());
-                },
+                                    const logoutBtn = document.getElementById('logout-btn'); if (logoutBtn) { logoutBtn.addEventListener('click', () => this.logout()); }
+},
                 toggleOtherName() {
                     const isOther = this.elements.loginNameSelect.value === 'Other';
                     this.elements.loginNameOther.classList.toggle('hidden', !isOther);
                     this.elements.loginNameOther.required = isOther;
                 },
                 checkAuth() {
-                    if (localStorage.getItem('isAuthenticated') === 'true') {
+                    if (sessionStorage.getItem('isAuthenticated') === 'true') {
                         this.elements.loginOverlay.style.display = 'none';
                         this.elements.appContainer.style.display = 'block';
                         this.updateUserUI();
@@ -3212,17 +3227,33 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     }
 
                     if (loginSuccess) {
-                        localStorage.setItem('isAuthenticated', 'true');
-                        localStorage.setItem('currentUser', userName);
-                        localStorage.setItem('userRole', userRole);
+                        sessionStorage.setItem('isAuthenticated', 'true');
+                        sessionStorage.setItem('currentUser', userName);
+                        sessionStorage.setItem('userRole', userRole);
                         this.checkAuth();
                     } else {
                         this.elements.loginError.textContent = 'Invalid username or password.';
                         setTimeout(() => { this.elements.loginError.textContent = '' }, 3000);
                     }
                 },
+                logout() {
+                    try {
+                        sessionStorage.removeItem('isAuthenticated');
+                        sessionStorage.removeItem('userRole');
+                        sessionStorage.removeItem('currentUser');
+                        sessionStorage.removeItem('operationsUnlocked');
+                        localStorage.removeItem('isAuthenticated'); /* legacy clean-up */
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('currentUser');
+                    } catch (e) {}
+                    if (this.elements && this.elements.appContainer && this.elements.loginOverlay) {
+                        this.elements.appContainer.style.display = 'none';
+                        this.elements.loginOverlay.style.display = 'flex';
+                    }
+                },
+
                 updateUserUI() {
-                    const userRole = localStorage.getItem('userRole');
+                    const userRole = sessionStorage.getItem('userRole');
                     if (userRole === 'regular') {
                         document.body.classList.add('regular-user');
                     } else {
@@ -3232,7 +3263,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.protectOperationsContacts();
                 },
                 protectOperationsContacts() {
-                    const userRole = localStorage.getItem('userRole');
+                    const userRole = sessionStorage.getItem('userRole');
                     const operationsSection = document.getElementById('operations-contacts-section');
                     const operationsContent = document.getElementById('operations-contacts-content');
                     
@@ -3622,7 +3653,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.elements.scenarioProfit500Alt.textContent = `₱${calculatePrice(500, feeRateAlt).toFixed(2)}`;
                 },
                 logAccess() {
-                    const currentUser = localStorage.getItem('currentUser');
+                    const currentUser = sessionStorage.getItem('currentUser');
                     if(currentUser) {
                         const newLog = { name: currentUser, timestamp: new Date().toLocaleString() };
                         this.state.accessLog.unshift(newLog);
@@ -4092,6 +4123,77 @@ Date: ${new Date().toLocaleDateString()}`;
 
         });
   </script>
- </body>
+ 
+<!-- injected: non-destructive UX/a11y enhancements -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    // 5.a Enhance activateSection to set aria-current
+    if (window.app && app.navigation && typeof app.navigation.activateSection === 'function') {
+      const _origActivate = app.navigation.activateSection.bind(app.navigation);
+      app.navigation.activateSection = function (hash) {
+        _origActivate(hash);
+        var targetHash = hash || '#dashboard';
+        document.querySelectorAll('#sidebar-nav a.nav-link, #pill-nav a.pill-link').forEach(function(a){
+          a.setAttribute('aria-current', a.getAttribute('href') === targetHash ? 'page' : 'false');
+        });
+      };
+      // Initialize aria-current for initial view
+      app.navigation.activateSection(window.location.hash || '#dashboard');
+    }
+
+    // 5.b Make copy buttons polite for screen readers
+    document.querySelectorAll('.copy-button').forEach(function(btn){
+      btn.setAttribute('aria-live', 'polite');
+    });
+
+    // 5.c Keyboard navigation for tabs and pill-bar
+    function setupTabA11y(navSelector, tabSelector) {
+      document.querySelectorAll(navSelector).forEach(function(nav){
+        nav.setAttribute('role', 'tablist');
+        var tabs = nav.querySelectorAll(tabSelector);
+        tabs.forEach(function(tab){
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('tabindex', tab.classList.contains('active') ? '0' : '-1');
+          tab.addEventListener('keydown', function(e){
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              e.preventDefault();
+              var arr = Array.prototype.slice.call(tabs);
+              var i = arr.indexOf(document.activeElement);
+              if (i === -1) i = 0;
+              var next = e.key === 'ArrowRight' ? (i + 1) % arr.length : (i - 1 + arr.length) % arr.length;
+              arr[next].focus();
+              arr[next].click();
+            }
+          });
+        });
+      });
+    }
+    // Try to bind common containers if present
+    setupTabA11y('#playbook-tabs', '.playbook-tab');
+    setupTabA11y('#costing-tabs', '.cost-tab');
+
+    // 5.d Arrow navigation for pill or sidebar nav
+    function setupArrowNav(containerSelector) {
+      document.querySelectorAll(containerSelector).forEach(function(nav){
+        nav.addEventListener('keydown', function(e){
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+            var active = links.findIndex(function(a){ return a.classList.contains('pill-active') || a.classList.contains('nav-active'); });
+            if (active >= 0) {
+              e.preventDefault();
+              var next = e.key === 'ArrowRight' ? (active + 1) % links.length : (active - 1 + links.length) % links.length;
+              links[next].focus(); links[next].click();
+            }
+          }
+        });
+      });
+    }
+    setupArrowNav('#pill-nav');
+    setupArrowNav('#sidebar-nav');
+  } catch (e) { /* no-op: enhancements optional */ }
+});
+</script>
+</body>
 </html>
 
