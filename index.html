@@ -4589,231 +4589,7 @@ Date: ${new Date().toLocaleDateString()}`;
   } catch (e) { /* no-op: enhancements optional */ }
 });
   </script>
-<script type="module">
-/* Inline Module: Dashboard Shortcuts (safe-quoted) */
-(function () {
-  "use strict";
 
-  const STORAGE_KEY = "ch_shortcuts_v1";
-  const STORAGE_VERSION = 1;
-  const SETTINGS_KEY = "ch_shortcuts_settings_v2";
-
-  const QS = (s, r=document) => r.querySelector(s);
-  const QSA = (s, r=document) => Array.from(r.querySelectorAll(s));
-  const debounce = (fn, ms=500) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; };
-
-  const uid = () => `s_${Math.random().toString(36).slice(2)}${Date.now()}`;
-  const escapeHTML = (s="") => s.replace(/[&<>\"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[c]));
-  const isHttpUrl = u => { try { const x=new URL(u); return x.protocol==="http:"||x.protocol==="https:"; } catch { return false; } };
-  const nowIso = () => new Date().toISOString();
-
-  function suggestEmoji(title="") {
-    const t = title.toLowerCase();
-    if (/ledger|finance|book|sheet/.test(t)) return "📒";
-    if (/inventory|stock|supply/.test(t)) return "📦";
-    if (/clean|checklist/.test(t)) return "✔️";
-    if (/message|chat|comm(uni)?cation/.test(t)) return "💬";
-    if (/welcome|guide|manual/.test(t)) return "📖";
-    if (/price|profit|cost|budget/.test(t)) return "💰";
-    if (/maint(enance)?|repair|fix/.test(t)) return "🔧";
-    if (/video|training/.test(t)) return "🎬";
-    return "🔗";
-  }
-
-  const readLocal = () => {
-    try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return null;
-      const parsed = JSON.parse(raw); if (!parsed || parsed.version !== STORAGE_VERSION || !Array.isArray(parsed.items)) return null;
-      return parsed.items;
-    } catch { return null; }
-  };
-  const writeLocal = (items=[]) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STORAGE_VERSION, savedAt: nowIso(), items }));
-      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY, newValue: localStorage.getItem(STORAGE_KEY) }));
-    } catch {}
-  };
-
-  function findDashboardGrid() {
-    const dashboard = QS("#dashboard"); if (!dashboard) return null;
-    const resH3 = QSA("h3", dashboard).find(h => /Essential Resources/i.test(h.textContent.trim()));
-    if (!resH3) return null;
-    const grid = (resH3.nextElementSibling && resH3.nextElementSibling.classList.contains("grid")) ? resH3.nextElementSibling : null;
-    return grid;
-  }
-
-  function seedFromDOM(gridEl) {
-    const anchors = QSA("a.quick-link-card[href]", gridEl);
-    return anchors.map((a, idx) => {
-      const emojiDiv = a.querySelector(".text-5xl");
-      const titleDiv = a.querySelector("div:not(.text-5xl)");
-      const emoji = (emojiDiv && emojiDiv.textContent.trim()) || "🔗";
-      const title = (titleDiv && titleDiv.textContent.trim()) || (a.getAttribute("aria-label") || "Link");
-      const url = a.getAttribute("href");
-      return { id: uid(), emoji, title, url, order: idx };
-    });
-  }
-
-  function renderDashboardButtons(gridEl, items) {
-    if (!gridEl) return;
-    const container = document.createElement("div");
-    container.className = gridEl.className;
-    container.setAttribute("data-managed-by", "shortcut-manager");
-    container.id = "dashboard-shortcuts-grid";
-    const list = [...items].sort((a,b) => (a.order ?? 0) - (b.order ?? 0) || a.title.localeCompare(b.title));
-    list.forEach(item => {
-      const a = document.createElement("a");
-      a.className = "p-7 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze";
-      a.href = item.url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.ariaLabel = item.title;
-      a.innerHTML = `<div class="text-5xl mb-3">${escapeHTML(item.emoji || suggestEmoji(item.title))}</div><div>${escapeHTML(item.title)}</div>`;
-      container.appendChild(a);
-    });
-    if (!gridEl.__shortcutsBound) { gridEl.__shortcutsOriginal = gridEl.cloneNode(true); gridEl.__shortcutsBound = true; }
-    gridEl.replaceWith(container);
-  }
-
-  function injectAdminCard(initialItems) {
-    const accessLog = QS("#access-log .content-card") || QS("#access-log"); if (!accessLog) return;
-    if (QS("#shortcut-admin-card", accessLog)) return;
-
-    const card = document.createElement("div");
-    card.id = "shortcut-admin-card";
-    card.className = "admin-only mt-10 bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe";
-    card.innerHTML = `
-      <h3 class="text-3xl font-bold mb-2 text-bronze">🔗 Dashboard Shortcuts</h3>
-      <p class="instructional-note mb-4">Edit, add, reorder. Autosaves locally; use Export/Import for backups.</p>
-      <div class="overflow-x-auto"><ul id="shortcut-rows" class="space-y-3"></ul></div>
-      <div class="flex flex-wrap gap-3 mt-4">
-        <button id="add-shortcut" class="copy-button px-4 py-2 rounded-lg font-semibold">Add Link</button>
-        <button id="save-shortcuts" class="copy-button px-4 py-2 rounded-lg font-semibold" style="background-color: var(--success-green);">Save</button>
-        <button id="undo-shortcuts" class="copy-button px-4 py-2 rounded-lg font-semibold">Undo</button>
-        <button id="reset-shortcuts" class="copy-button px-4 py-2 rounded-lg font-semibold" style="background-color: var(--danger-red);">Reset to Defaults</button>
-        <button id="export-shortcuts" class="copy-button px-4 py-2 rounded-lg font-semibold">Export JSON</button>
-        <button id="import-shortcuts" class="copy-button px-4 py-2 rounded-lg font-semibold">Import JSON</button>
-        <input id="import-file" type="file" accept="application/json" class="hidden" />
-      </div>`;
-    accessLog.appendChild(card);
-
-    const listEl = card.querySelector("#shortcut-rows");
-    let undoStack = [];
-
-    const rowTemplate = (item) => {
-      const li = document.createElement("li");
-      li.className = "rounded-xl border-2 border-soft-taupe p-3 bg-white grid grid-cols-1 md:grid-cols-[40px_80px_1fr_1fr] gap-3 items-start";
-      li.setAttribute("draggable", "true");
-      li.dataset.id = item.id;
-      li.innerHTML = `
-        <div class="text-xl cursor-grab select-none text-center md:self-center" title="Drag to reorder">↕️</div>
-        <input type="text" maxlength="4" placeholder="Emoji" value="${escapeHTML(item.emoji || "")}" class="w-full p-2 border-2 border-soft-taupe rounded-lg">
-        <input type="text" placeholder="Title" value="${escapeHTML(item.title || "")}" class="w-full p-2 border-2 border-soft-taupe rounded-lg">
-        <input type="url"  placeholder="https://example.com" value="${escapeHTML(item.url || "")}" class="w-full p-2 border-2 border-soft-taupe rounded-lg">
-        <div class="flex gap-2 justify-end md:justify-start md:col-span-4 col-span-1 pt-1">
-          <button class="copy-button px-3 py-2 rounded-lg" data-action="suggest">Suggest Emoji</button>
-          <button class="copy-button px-3 py-2 rounded-lg" data-action="delete" style="background-color: var(--danger-red);">Delete</button>
-        </div>`;
-      li.addEventListener("dragstart", e => { li.classList.add("opacity-60"); e.dataTransfer.setData("text/plain", li.dataset.id); });
-      li.addEventListener("dragend", () => li.classList.remove("opacity-60"));
-      li.addEventListener("dragover", e => { e.preventDefault(); li.classList.add("ring-2"); });
-      li.addEventListener("dragleave", () => li.classList.remove("ring-2"));
-      li.addEventListener("drop", e => { e.preventDefault(); li.classList.remove("ring-2"); const fromId=e.dataTransfer.getData("text/plain"); if(!fromId||fromId===li.dataset.id) return; const fromEl=listEl.querySelector(`li[data-id="${fromId}"]`); if(!fromEl) return; listEl.insertBefore(fromEl, li); autosave(); });
-      return li;
-    };
-
-    const renderList = (arr=[]) => { listEl.innerHTML=""; arr.forEach(it => listEl.appendChild(rowTemplate(it))); };
-    const collectFromUI = (strict=false) => {
-      const rows = Array.from(listEl.children), next = [];
-      for (let i=0;i<rows.length;i++) {
-        const r=rows[i]; const [emojiEl,titleEl,urlEl]=r.querySelectorAll("input");
-        const emoji=(emojiEl.value||"").trim()||suggestEmoji(titleEl.value);
-        const title=(titleEl.value||"").trim(); const url=(urlEl.value||"").trim();
-        if (strict) { if(!title) throw new Error("Please provide a title."); if(!isHttpUrl(url)) throw new Error("Please provide a valid http(s) URL."); }
-        if (title && isHttpUrl(url)) next.push({ id:r.dataset.id, emoji, title, url, order:i });
-      }
-      return next;
-    };
-    const pushUndo = () => { const snap=collectFromUI(); if(snap && snap.length){ undoStack.push(snap); if(undoStack.length>20) undoStack.shift(); } };
-    const toast = (btn, msg) => { const t=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=t, 1200); };
-
-    renderList(initialItems);
-
-    listEl.addEventListener("click", e => {
-      const btn = e.target.closest("button"); if(!btn) return;
-      const li = e.target.closest("li"); if(!li) return;
-      const [emojiEl,titleEl] = li.querySelectorAll("input");
-      if (btn.dataset.action==="suggest"){ emojiEl.value = suggestEmoji(titleEl.value); autosave(); }
-      if (btn.dataset.action==="delete"){ li.remove(); autosave(); }
-    });
-    listEl.addEventListener("input", debounce(()=>autosave(), 600));
-
-    card.querySelector("#add-shortcut").addEventListener("click", () => {
-      const item = { id: uid(), emoji: "🔗", title: "", url: "", order: listEl.children.length };
-      listEl.appendChild(rowTemplate(item));
-      listEl.lastElementChild.scrollIntoView({ behavior:"smooth", block:"nearest" });
-    });
-    card.querySelector("#save-shortcuts").addEventListener("click", e => {
-      try { const next = collectFromUI(true); pushUndo(); persistLocalOnly(next); toast(e.target, "Saved! ✔"); }
-      catch(err){ alert(err.message || "Validation failed"); }
-    });
-    card.querySelector("#undo-shortcuts").addEventListener("click", () => {
-      const prev = undoStack.pop(); if(!prev){ alert("Nothing to undo."); return; }
-      renderList(prev); persistLocalOnly(prev);
-    });
-    card.querySelector("#reset-shortcuts").addEventListener("click", () => {
-      if (!confirm("Reset to defaults from original Dashboard buttons?")) return;
-      const original = findDashboardGrid() || document.getElementById("dashboard-shortcuts-grid"); if (!original) return;
-      const source = original.__shortcutsOriginal || original; const defaults = seedFromDOM(source);
-      pushUndo(); renderList(defaults); persistLocalOnly(defaults);
-    });
-
-    card.querySelector("#export-shortcuts").addEventListener("click", () => {
-      const items = collectFromUI() || readLocal() || []; const payload = { version: STORAGE_VERSION, exportedAt: nowIso(), items };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
-      const url = URL.createObjectURL(blob); const a=document.createElement("a"); const ts=nowIso().replace(/[:.]/g,"-"); a.href=url; a.download=`dashboard-shortcuts-${ts}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
-    const importBtn = card.querySelector("#import-shortcuts"); const importFile = card.querySelector("#import-file");
-    importBtn.addEventListener("click", () => importFile.click());
-    importFile.addEventListener("change", async () => {
-      const file = importFile.files && importFile.files[0]; if(!file) return;
-      try {
-        const text = await file.text(); const parsed = JSON.parse(text); let items = Array.isArray(parsed)?parsed:parsed.items;
-        if (!Array.isArray(items)) throw new Error("Invalid JSON format.");
-        items = items.map((it,idx)=>({ id:it.id||uid(), emoji: `${it.emoji||"🔗"}`, title: `${it.title||""}`, url: `${it.url||""}`, order: typeof it.order==="number"?it.order:idx }));
-        for (const it of items){ if(!it.title) throw new Error("Title missing"); if(!isHttpUrl(it.url)) throw new Error("Invalid URL"); }
-        renderList(items); persistLocalOnly(items); alert("Import successful.");
-      } catch(e){ alert("Import failed: " + (e && e.message ? e.message : "Unknown error")); } finally { importFile.value=""; }
-    });
-
-    const autosave = debounce(() => { const next = collectFromUI(false); persistLocalOnly(next); }, 600);
-
-    function persistLocalOnly(items){ writeLocal(items); const grid = document.getElementById("dashboard-shortcuts-grid") || findDashboardGrid(); if (grid) renderDashboardButtons(grid, items); }
-  }
-
-  function initShortcuts(){
-    const grid = findDashboardGrid(); if (!grid) return;
-    let items = readLocal();
-    if (!items || !items.length){ const seeded = seedFromDOM(grid); if (seeded && seeded.length){ writeLocal(seeded); items=seeded; } else { items = []; } }
-
-    // Migration: update Ledger URL if present
-    try {
-      const NEW_LEDGER = "https://script.google.com/macros/s/AKfycbwBnqBnv7DCRNljJFPcTT1RHp8Fh3ZMwOGk9fZkiK2vfLUZnKsE2N0dz9kZr3hBdATq/exec";
-      let changed = false;
-      if (Array.isArray(items)) {
-        for (const it of items) {
-          if (typeof it.title === "string" && /ledger/i.test(it.title)) {
-            if (it.url !== NEW_LEDGER) { it.url = NEW_LEDGER; changed = true; }
-          }
-        }
-      }
-      if (changed) writeLocal(items);
-    } catch {}
-
-    renderDashboardButtons(grid, items);
-    injectAdminCard(items);
-    window.addEventListener("storage", (e) => { if (e.key !== STORAGE_KEY) return; const next = readLocal(); if (!next) return; const g = document.getElementById("dashboard-shortcuts-grid") || findDashboardGrid(); if (g) renderDashboardButtons(g, next); });
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initShortcuts); else initShortcuts();
-})();
-</script>
 <!-- Equipment Manuals Modal -->
 <div class="fixed inset-0 z-50 hidden" id="equipmentModal">
 <div class="absolute inset-0" data-close-modal="" style="background: rgba(0,0,0,0.45);"></div>
@@ -4870,6 +4646,279 @@ Date: ${new Date().toLocaleDateString()}`;
     if (e.key === 'Escape') closeEquipmentModal();
   });
 })();
+</script>
+<script type="module">
+
+/* Dashboard Shortcuts – fixed + improved (GH Pages safe) */
+// type: module
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "ch_shortcuts_v1";
+  const STORAGE_VERSION = 1;
+  const SETTINGS_KEY = "ch_shortcuts_settings_v2";
+
+  const QS  = (s, r=document) => r.querySelector(s);
+  const QSA = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const debounce = (fn, ms=500) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; };
+
+  const uid = () => `s_${Math.random().toString(36).slice(2)}${Date.now()}`;
+  const escapeHTML = (s="") => s.replace(/[&<>\"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" }[c]));
+  const isHttpUrl = u => { try { const x=new URL(u); return x.protocol==="http:"||x.protocol==="https:"; } catch { return false; } };
+  const nowIso = () => new Date().toISOString();
+
+  function suggestEmoji(title="") {
+    const t = title.toLowerCase();
+    if (/ledger|finance|book|sheet/.test(t)) return "📒";
+    if (/inventory|stock|supply/.test(t)) return "📦";
+    if (/clean|checklist/.test(t)) return "✔️";
+    if (/message|chat|communication/.test(t)) return "💬";
+    if (/welcome|guide|manual/.test(t)) return "📖";
+    if (/price|profit|cost|budget/.test(t)) return "💰";
+    if (/maint(enance)?|repair|fix/.test(t)) return "🔧";
+    if (/video|training/.test(t)) return "🎬";
+    return "🔗";
+  }
+
+  const readLocal = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || parsed.version !== STORAGE_VERSION || !Array.isArray(parsed.items)) return null;
+      return parsed.items;
+    } catch { return null; }
+  };
+
+  const writeLocal = (items=[]) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STORAGE_VERSION, savedAt: nowIso(), items }));
+      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY, newValue: localStorage.getItem(STORAGE_KEY) }));
+    } catch {}
+  };
+
+  function findDashboardGrid() {
+    // Primary: #dashboard -> "Essential Resources" -> next .grid
+    const dashboard = QS("#dashboard");
+    if (dashboard) {
+      const resH3 = QSA("h3", dashboard).find(h => /Essential Resources/i.test(h.textContent.trim()));
+      if (resH3 && resH3.nextElementSibling && resH3.nextElementSibling.classList.contains("grid")) {
+        return resH3.nextElementSibling;
+      }
+    }
+    // Fallback: any .grid that has at least 4 quick-link cards
+    const grids = QSA(".grid");
+    for (const g of grids) {
+      const cards = QSA("a.quick-link-card[href], a[aria-label][href]", g);
+      if (cards.length >= 4) return g;
+    }
+    return null;
+  }
+
+  function seedFromDOM(gridEl) {
+    const anchors = QSA("a.quick-link-card[href], a[aria-label][href]", gridEl);
+    return anchors.map((a, idx) => {
+      const emojiDiv = a.querySelector(".text-5xl");
+      const titleDiv = a.querySelector("div:not(.text-5xl)");
+      const emoji = (emojiDiv && emojiDiv.textContent.trim()) || "🔗";
+      const title = (titleDiv && titleDiv.textContent.trim()) || (a.getAttribute("aria-label") || "Link");
+      const url = a.getAttribute("href");
+      return { id: uid(), emoji, title, url, order: idx };
+    });
+  }
+
+  function normalizeUrl(u="") {
+    try {
+      const x = new URL(u);
+      x.hash=""; x.search="";
+      let s = x.toString();
+      if (s.endsWith("/")) s = s.slice(0,-1);
+      return s;
+    } catch { return (u||"").replace(/[?#].*$/,"").replace(/\/$/,""); }
+  }
+
+  function renderDashboardButtons(gridEl, items) {
+    if (!gridEl) return;
+    const container = document.createElement("div");
+    container.className = gridEl.className;
+    container.setAttribute("data-managed-by", "shortcut-manager");
+    container.id = "dashboard-shortcuts-grid";
+
+    const list = [...items].sort((a,b) => (a.order ?? 0) - (b.order ?? 0) || a.title.localeCompare(b.title));
+    list.forEach(item => {
+      const a = document.createElement("a");
+      a.className = "p-7 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze";
+      a.href = item.url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.ariaLabel = item.title;
+      a.innerHTML = `<div class="text-5xl mb-3">${escapeHTML(item.emoji || suggestEmoji(item.title))}</div><div>${escapeHTML(item.title)}</div>`;
+      container.appendChild(a);
+    });
+
+    if (!gridEl.__shortcutsBound) { gridEl.__shortcutsOriginal = gridEl.cloneNode(true); gridEl.__shortcutsBound = true; }
+    gridEl.replaceWith(container);
+  }
+
+  function mergeDefaults(existing=[], defaults=[]) {
+    const taken = new Map();
+    existing.forEach(it => taken.set(normalizeUrl(it.url) || it.title.toLowerCase(), true));
+
+    const baseOrder = existing.reduce((m,it)=>Math.max(m, typeof it.order==="number"?it.order:0), -1);
+    let nextOrder = baseOrder + 1;
+    let changed = false;
+
+    defaults.forEach(def => {
+      const key = normalizeUrl(def.url) || def.title.toLowerCase();
+      if (!taken.has(key)) {
+        existing.push({ id: uid(), emoji: def.emoji, title: def.title, url: def.url, order: nextOrder++ });
+        taken.set(key, true);
+        changed = true;
+      }
+    });
+    return { items: existing, changed };
+  }
+
+  function injectAdminCard(initialItems) {
+    const accessLog = QS("#access-log .content-card") || QS("#access-log"); if (!accessLog) return;
+    if (QS("#shortcut-admin-card", accessLog)) return;
+
+    const card = document.createElement("div");
+    card.id = "shortcut-admin-card";
+    card.className = "admin-only mt-10 bg-warm-white p-6 rounded-2xl border-2 border-soft-taupe";
+    card.innerHTML = `
+      <h3 class="text-3xl font-bold mb-2 text-bronze">🔗 Dashboard Shortcuts</h3>
+      <p class="instructional-note mb-4">Edit, add, reorder. Autosaves locally; use Export/Import for backups.</p>
+      <div class="space-y-3" id="shortcut-list"></div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button class="copy-button px-5 py-3 rounded-lg font-semibold" id="add-shortcut">Add</button>
+        <button class="copy-button px-5 py-3 rounded-lg font-semibold" id="reset-shortcuts">Reset to Defaults</button>
+        <button class="copy-button px-5 py-3 rounded-lg font-semibold" id="export-shortcuts">Export</button>
+        <button class="copy-button px-5 py-3 rounded-lg font-semibold" id="import-shortcuts">Import</button>
+        <input type="file" accept="application/json" id="import-file" class="hidden" />
+      </div>
+    `;
+
+    const listHost = card.querySelector("#shortcut-list");
+
+    function renderList(items=[]) {
+      listHost.innerHTML = "";
+      items.sort((a,b)=>(a.order??0)-(b.order??0));
+      items.forEach((it, idx) => {
+        const row = document.createElement("div");
+        row.className = "bg-warm-cream p-3 rounded-lg border-2 border-soft-taupe grid grid-cols-1 md:grid-cols-[80px_1fr_1fr_auto] gap-3 items-center";
+        row.innerHTML = `
+          <input class="w-16 p-2 border-2 border-soft-taupe rounded-md text-center" data-k="emoji" value="${escapeHTML(it.emoji||'🔗')}" />
+          <input class="p-2 border-2 border-soft-taupe rounded-md" data-k="title" value="${escapeHTML(it.title||'')}" placeholder="Title" />
+          <input class="p-2 border-2 border-soft-taupe rounded-md" data-k="url"   value="${escapeHTML(it.url||'')}"   placeholder="https://..." />
+          <div class="flex gap-2 justify-end">
+            <button class="copy-button px-3 py-2 rounded-md" data-act="up">↑</button>
+            <button class="copy-button px-3 py-2 rounded-md" data-act="down">↓</button>
+            <button class="remove-btn px-3 py-2 rounded-md" data-act="del">✖</button>
+          </div>
+        `;
+        row.querySelectorAll("input").forEach(inp => {
+          inp.addEventListener("input", autosave);
+        });
+        row.querySelector('[data-act="up"]').addEventListener("click", () => { if (idx>0){ const t=items[idx-1]; items[idx-1]=items[idx]; items[idx]=t; items.forEach((x,i)=>x.order=i); renderList(items); persistLocalOnly(items); } });
+        row.querySelector('[data-act="down"]').addEventListener("click", () => { if (idx<items.length-1){ const t=items[idx+1]; items[idx+1]=items[idx]; items[idx]=t; items.forEach((x,i)=>x.order=i); renderList(items); persistLocalOnly(items); } });
+        row.querySelector('[data-act="del"]').addEventListener("click", () => { items.splice(idx,1); items.forEach((x,i)=>x.order=i); renderList(items); persistLocalOnly(items); });
+        listHost.appendChild(row);
+      });
+    }
+
+    function collectFromUI(ensureValid=true) {
+      const rows = Array.from(listHost.children);
+      const items = rows.map((row, i) => {
+        const get = k => row.querySelector(`[data-k="${k}"]`).value.trim();
+        return { id: uid(), emoji: get("emoji") || "🔗", title: get("title"), url: get("url"), order: i };
+      });
+      if (ensureValid) {
+        for (const it of items) { if (!it.title) throw new Error("Title missing"); if (!isHttpUrl(it.url)) throw new Error("Invalid URL"); }
+      }
+      return items;
+    }
+
+    function persistLocalOnly(items){ writeLocal(items); const grid = document.getElementById("dashboard-shortcuts-grid") || findDashboardGrid(); if (grid) renderDashboardButtons(grid, items); }
+
+    const prev = initialItems && initialItems.length ? initialItems : [];
+    renderList(prev);
+
+    card.querySelector("#add-shortcut").addEventListener("click", () => {
+      const next = prev.concat({ id: uid(), emoji: "🔗", title: "New Link", url: "https://", order: prev.length });
+      next.forEach((x,i)=>x.order=i);
+      renderList(next); persistLocalOnly(next);
+    });
+
+    card.querySelector("#reset-shortcuts").addEventListener("click", () => {
+      if (!confirm("Reset to defaults from original Dashboard buttons?")) return;
+      const original = findDashboardGrid() || document.getElementById("dashboard-shortcuts-grid"); if (!original) return;
+      const source = original.__shortcutsOriginal || original; const defaults = seedFromDOM(source);
+      persistLocalOnly(defaults); renderList(defaults);
+    });
+
+    card.querySelector("#export-shortcuts").addEventListener("click", () => {
+      const items = collectFromUI(false) || readLocal() || []; const payload = { version: STORAGE_VERSION, exportedAt: nowIso(), items };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+      const url = URL.createObjectURL(blob); const a=document.createElement("a"); const ts=nowIso().replace(/[:.]/g,"-"); a.href=url; a.download=`dashboard-shortcuts-${ts}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    const importBtn = card.querySelector("#import-shortcuts"); const importFile = card.querySelector("#import-file");
+    importBtn.addEventListener("click", () => importFile.click());
+    importFile.addEventListener("change", async () => {
+      const file = importFile.files && importFile.files[0]; if(!file) return;
+      try {
+        const text = await file.text(); const parsed = JSON.parse(text); let items = Array.isArray(parsed)?parsed:parsed.items;
+        if (!Array.isArray(items)) throw new Error("Invalid JSON format.");
+        items = items.map((it,idx)=>({ id:it.id||uid(), emoji: `${it.emoji||"🔗"}`, title: `${it.title||""}`, url: `${it.url||""}`, order: typeof it.order==="number"?it.order:idx }));
+        for (const it of items){ if(!it.title) throw new Error("Title missing"); if(!isHttpUrl(it.url)) throw new Error("Invalid URL"); }
+        renderList(items); persistLocalOnly(items); alert("Import successful.");
+      } catch(e){ alert("Import failed: " + (e && e.message ? e.message : "Unknown error")); } finally { importFile.value=""; }
+    });
+
+    const autosave = debounce(() => { const next = collectFromUI(false); persistLocalOnly(next); }, 600);
+
+    accessLog.appendChild(card);
+  }
+
+  function initShortcuts(){
+    const grid = findDashboardGrid(); if (!grid) return;
+
+    let items = readLocal();
+    const defaults = seedFromDOM(grid);
+
+    if (!items || !items.length) {
+      items = defaults;
+      writeLocal(items);
+    } else {
+      try {
+        const NEW_LEDGER = "https://script.google.com/macros/s/AKfycbwBnqBnv7DCRNljJFPcTT1RHp8Fh3ZMwOGk9fZkiK2vfLUZnKsE2N0dz9kZr3hBdATq/exec";
+        let changed = false;
+        for (const it of items) {
+          if (typeof it.title === "string" && /ledger/i.test(it.title) && it.url !== NEW_LEDGER) { it.url = NEW_LEDGER; changed = true; }
+        }
+        if (changed) writeLocal(items);
+      } catch {}
+
+      const merged = mergeDefaults(items, defaults);
+      if (merged.changed) {
+        items = merged.items;
+        writeLocal(items);
+      }
+    }
+
+    renderDashboardButtons(grid, items);
+    injectAdminCard(items);
+
+    window.addEventListener("storage", (e) => {
+      if (e.key !== STORAGE_KEY) return;
+      const next = readLocal(); if (!next) return;
+      const g = document.getElementById("dashboard-shortcuts-grid") || findDashboardGrid();
+      if (g) renderDashboardButtons(g, next);
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initShortcuts);
+  else initShortcuts();
+})();
+
 </script>
 </body>
 </html>
