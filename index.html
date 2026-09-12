@@ -12,8 +12,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <!-- Tailwind (utilities retained for section content) -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -673,16 +671,6 @@ body.owner-user  .admin-only  { display: none !important; }
   font-weight: 400;
 }
 
-.section-eyebrow {
-  font-family: var(--font-b);
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--bronze);
-  margin-bottom: 6px;
-}
-
 /* ── Cards ────────────────────────────────────────────── */
 .ch-card {
   background: var(--surface-raised);
@@ -861,18 +849,12 @@ body.owner-user  .admin-only  { display: none !important; }
 /* ── Dashboard Groups ─────────────────────────────────── */
 /* Eyebrow pill group label */
 .dash-label {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(201,150,58,.08);
-  border: 1px solid rgba(201,150,58,.18);
-  border-radius: 999px;
-  padding: 3px 12px;
   font-family: var(--font-b);
-  font-size: 9px;
+  font-size: .7rem;
   font-weight: 700;
-  letter-spacing: .15em;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--bronze);
+  color: var(--text-3);
   margin-bottom: 12px;
 }
 
@@ -888,16 +870,25 @@ body.owner-user  .admin-only  { display: none !important; }
   gap: 10px;
 }
 @media (min-width: 480px) {
-  .daily-ops-grid {
-    grid-template-columns: 1.9fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 10px;
-  }
-  .daily-ops-primary {
-    grid-row: 1 / 3;
-    font-size: .88rem;
-  }
-  .daily-ops-primary .dash-icon { font-size: 3rem !important; }
+  .daily-ops-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* The booking site is the one tile that earns money — mark it by
+   surface, not by size, so the row keeps one rhythm. */
+.daily-ops-primary {
+  background: var(--mahogany);
+  color: var(--cream);
+  box-shadow:
+    0 0 0 1px rgba(201,150,58,.28),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 4px 16px rgba(28,16,6,.16);
+}
+
+.daily-ops-primary .ch-tile-ico { color: var(--gold); }
+.daily-ops-primary:hover {
+  box-shadow:
+    0 0 0 1.5px rgba(201,150,58,.5),
+    0 16px 34px rgba(28,16,6,.2);
 }
 
 /* Guest-facing 2-col mobile, 4-col tablet */
@@ -1612,41 +1603,466 @@ body.owner-user  .admin-only  { display: none !important; }
 .g-warn { background: rgba(220,38,38,.05); border: 1px solid rgba(220,38,38,.16); border-radius: .75rem; padding: 10px 13px; font-size: .8rem; color: var(--text-1); display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; }
 .g-tip { background: rgba(201,150,58,.06); border: 1px solid rgba(201,150,58,.18); border-radius: .75rem; padding: 10px 13px; font-size: .8rem; color: var(--text-1); display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; }
 button.quick-link-card { cursor: pointer; background: none; font-family: var(--font-b); font-weight: 600; border: none; width: 100%; }
+
+/* ── PIN gate ─────────────────────────────────────────── */
+.pin-prompt {
+  font-family: var(--font-b);
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 26px;
+  height: 16px;
+}
+
+.pin-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.pin-dot.filled {
+  background: var(--mahogany);
+  border-color: var(--mahogany);
+  transform: scale(1.12);
+}
+
+.login-card.shake { animation: pinShake .4s var(--ease); }
+
+@keyframes pinShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-7px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(2px); }
+}
+
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.pin-key {
+  height: 58px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  font-family: var(--font-b);
+  font-size: 1.28rem;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--text-1);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform 90ms var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pin-key:hover  { background: var(--bg); border-color: var(--border-strong); }
+.pin-key:active { transform: scale(.95); background: var(--accent-soft); }
+.pin-key:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+
+.pin-key.pin-util {
+  font-family: var(--font-b);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--text-3);
+  border-color: transparent;
+  background: transparent;
+}
+
+.pin-key.pin-util:hover { color: var(--text-1); background: var(--bg); border-color: var(--border); }
+
+.pin-remember {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: var(--font-b);
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pin-remember input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--bronze);
+  cursor: pointer;
+}
+
+.pin-welcome {
+  font-family: var(--font-d);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--mahogany);
+  min-height: 1.4em;
+}
+
+/* ── Search (Cmd/Ctrl-K) ──────────────────────────────── */
+#search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh 16px 16px;
+  background: rgba(28,16,6,.34);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+#search-overlay.open { display: flex; }
+
+.search-panel {
+  width: 620px;
+  max-width: 100%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-raised);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-input-row svg { width: 18px; height: 18px; stroke: var(--text-3); flex-shrink: 0; }
+
+#search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: var(--font-b);
+  font-size: 1rem;
+  color: var(--text-1);
+}
+
+#search-input::placeholder { color: var(--text-3); }
+
+.search-esc {
+  font-family: var(--font-b);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 3px 6px;
+}
+
+.search-results {
+  overflow-y: auto;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.search-hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 11px 12px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-family: var(--font-b);
+  transition: background var(--t-fast) var(--ease);
+}
+
+.search-hit:hover, .search-hit.sel { background: var(--accent-soft); }
+
+.search-hit .sh-section {
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  margin-bottom: 3px;
+}
+
+.search-hit .sh-title {
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 2px;
+}
+
+.search-hit .sh-snippet {
+  font-size: .78rem;
+  color: var(--text-2);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search-hit mark {
+  background: rgba(201,150,58,.28);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.search-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-family: var(--font-b);
+  font-size: .84rem;
+  color: var(--text-3);
+}
+
+.topbar-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-raised);
+  font-family: var(--font-b);
+  font-size: .76rem;
+  font-weight: 500;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+
+.topbar-search-btn:hover { border-color: var(--border-strong); color: var(--text-1); }
+.topbar-search-btn svg   { width: 15px; height: 15px; stroke: currentColor; }
+.topbar-search-btn kbd {
+  font-family: var(--font-b);
+  font-size: .64rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--text-3);
+}
+
+/* ── Copy button on message templates ─────────────────── */
+.copy-tpl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface-raised);
+  font-family: var(--font-b);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+
+.copy-tpl-btn:hover { border-color: var(--bronze); color: var(--text-1); background: var(--accent-soft); }
+.copy-tpl-btn svg   { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+.copy-tpl-btn.copied { border-color: var(--success); color: var(--success); background: rgba(46,125,95,.08); }
+
+/* ── Browser surfaces ─────────────────────────────────── */
+::selection { background: rgba(201,150,58,.3); color: var(--text-display); }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; border-radius: 3px; }
+html { scrollbar-color: var(--border-strong) var(--bg); }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 6px; border: 3px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+a { text-underline-offset: 3px; }
+input, textarea { caret-color: var(--bronze); }
+
+/* ── Drawn icon system ────────────────────────────────── */
+.ch-ico {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-icon { color: var(--text-3); }
+.nav-link:hover .nav-icon { color: var(--bronze); }
+
+.ch-tile-ico {
+  width: 30px;
+  height: 30px;
+  stroke-width: 1.45;
+  color: var(--bronze);
+}
+
+.daily-ops-primary .ch-tile-ico { width: 34px; height: 34px; }
+
+.mobile-topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.mobile-topbar-row h1 { margin-bottom: 0; }
+
+.mobile-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  color: var(--text-2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+
+.mobile-search-btn:active { border-color: var(--bronze); color: var(--text-1); }
+
+/* Two tiles a row on a phone — thumb-sized, never a cramped third column. */
+@media (max-width: 479px) {
+  .daily-ops-grid,
+  .training-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 
 </head>
 <body>
 
+<!-- ═══════════════ ICON SPRITE ═══════════════ -->
+<svg id="ch-icons" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
+  <defs>
+    <g id="i-home"><path d="M3 10.4 12 3l9 7.4"/><path d="M5.5 9.4V20a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V9.4"/><path d="M10 21v-6h4v6"/></g>
+    <g id="i-sop"><path d="M9 3h6v3H9z"/><path d="M15 4.5h2.5A1.5 1.5 0 0 1 19 6v13.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5V6a1.5 1.5 0 0 1 1.5-1.5H9"/><path d="M9 11h6"/><path d="M9 15h6"/></g>
+    <g id="i-clean"><path d="M12 3.5 13.5 8 18 9.5 13.5 11 12 15.5 10.5 11 6 9.5 10.5 8z"/><path d="M18 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></g>
+    <g id="i-video"><circle cx="12" cy="12" r="8.5"/><path d="M10.2 8.6 15.5 12l-5.3 3.4z"/></g>
+    <g id="i-crisis"><path d="M10.6 4 3.3 17.4A1.6 1.6 0 0 0 4.7 20h14.6a1.6 1.6 0 0 0 1.4-2.6L13.4 4a1.6 1.6 0 0 0-2.8 0z"/><path d="M12 9.5v4"/><path d="M12 17h.01"/></g>
+    <g id="i-wrench"><path d="M14.9 6.4a1 1 0 0 0 0 1.4l1.3 1.3a1 1 0 0 0 1.4 0l3.1-3.1a5.5 5.5 0 0 1-7.3 7.3l-5.9 5.9a2 2 0 0 1-2.8-2.8l5.9-5.9a5.5 5.5 0 0 1 7.3-7.3z"/></g>
+    <g id="i-message"><path d="M20.5 14.5a1.8 1.8 0 0 1-1.8 1.8H8.2L4 20.5V5.3a1.8 1.8 0 0 1 1.8-1.8h12.9a1.8 1.8 0 0 1 1.8 1.8z"/><path d="M8.5 8.5h7"/><path d="M8.5 12h4.5"/></g>
+    <g id="i-concierge"><path d="M12 3.2v3.4"/><path d="M12 17.4v3.4"/><path d="M3.2 12h3.4"/><path d="M17.4 12h3.4"/><path d="m6 6 2.4 2.4"/><path d="m15.6 15.6 2.4 2.4"/><path d="m18 6-2.4 2.4"/><path d="M8.4 15.6 6 18"/><circle cx="12" cy="12" r="2.6"/></g>
+    <g id="i-guide"><path d="M12 7.6v13"/><path d="M3.5 18.2a.9.9 0 0 1-.9-.9V5.2a.9.9 0 0 1 .9-.9H8a4 4 0 0 1 4 3.3 4 4 0 0 1 4-3.3h4.5a.9.9 0 0 1 .9.9v12.1a.9.9 0 0 1-.9.9H15a3 3 0 0 0-3 2.4 3 3 0 0 0-3-2.4z"/></g>
+    <g id="i-cost"><rect x="4.5" y="2.8" width="15" height="18.4" rx="2"/><path d="M8.5 7h7"/><path d="M8.5 11.5h.01"/><path d="M12 11.5h.01"/><path d="M15.5 11.5h.01"/><path d="M8.5 15.5h.01"/><path d="M12 15.5h.01"/><path d="M15.5 15v3.5"/><path d="M8.5 18.5h3.5"/></g>
+    <g id="i-pricing"><path d="M12.7 2.9a2 2 0 0 0-1.4-.6H4.6a2 2 0 0 0-2 2v6.7a2 2 0 0 0 .6 1.4l7.8 7.8a2 2 0 0 0 2.8 0l6.7-6.7a2 2 0 0 0 0-2.8z"/><path d="M7.3 7.3h.01"/></g>
+    <g id="i-info"><circle cx="12" cy="12" r="8.8"/><path d="M12 16.4v-4.8"/><path d="M12 8.2h.01"/></g>
+    <g id="i-finance"><rect x="2.6" y="6.4" width="18.8" height="11.2" rx="2"/><circle cx="12" cy="12" r="2.4"/><path d="M6.4 12h.01"/><path d="M17.6 12h.01"/></g>
+    <g id="i-log"><path d="M3.4 12a8.6 8.6 0 1 0 2.9-6.4L3.4 8.2"/><path d="M3.4 3.6v4.6h4.6"/><path d="M12 7.6V12l3 1.9"/></g>
+    <g id="i-access"><path d="M12 3.2 19 6v5.1c0 4.3-2.9 8-7 9.7-4.1-1.7-7-5.4-7-9.7V6z"/><path d="M12 11.2v2.6"/><path d="M12 8.9h.01"/></g>
+    <g id="i-search"><circle cx="11" cy="11" r="6.6"/><path d="m20.5 20.5-4.8-4.8"/></g>
+    <g id="i-copy"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15.5 5.8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2"/></g>
+    <g id="i-booking"><path d="M3.2 10.6 12 3.4l8.8 7.2"/><path d="M5.6 9.5V20a1 1 0 0 0 1 1h10.8a1 1 0 0 0 1-1V9.5"/><path d="M9.4 21v-5.2a2.6 2.6 0 0 1 5.2 0V21"/></g>
+    <g id="i-tile-clean"><path d="M20.4 7.2 10 17.6l-5-5"/><path d="M3.6 20.4h5"/></g>
+    <g id="i-box"><path d="M3.4 7.6 12 3.2l8.6 4.4v8.8L12 20.8l-8.6-4.4z"/><path d="M3.4 7.6 12 12l8.6-4.4"/><path d="M12 12v8.8"/></g>
+    <g id="i-chart"><path d="M3.6 20.4h16.8"/><path d="M7 20.4v-6.6"/><path d="M12 20.4V6.4"/><path d="M17 20.4v-9.6"/></g>
+    <g id="i-map"><path d="M19 10.2c0 5-7 11-7 11s-7-6-7-11a7 7 0 0 1 14 0z"/><circle cx="12" cy="10" r="2.6"/></g>
+    <g id="i-dining"><path d="M6.4 3.2v7.4a2.2 2.2 0 0 0 4.4 0V3.2"/><path d="M8.6 10.6V20.8"/><path d="M16.4 20.8v-6.6h1.4a1.4 1.4 0 0 0 1.4-1.5l-.7-6.5a2.4 2.4 0 0 0-4.8.3l.3 6.2a1.4 1.4 0 0 0 1.4 1.5h1"/></g>
+    <g id="i-coins"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.2v9.6"/><path d="M14.4 9.4a2.6 2.6 0 0 0-2.4-1.3c-1.5 0-2.6.8-2.6 2s1 1.8 2.6 2.1 2.8.9 2.8 2.1-1.2 2-2.8 2a2.9 2.9 0 0 1-2.6-1.4"/></g>
+    <g id="i-star"><path d="m12 3.4 2.7 5.6 6 .9-4.4 4.3 1.1 6.1-5.4-2.9-5.4 2.9 1.1-6.1L3.3 9.9l6-.9z"/></g>
+    <g id="i-lock"><rect x="4.6" y="10.4" width="14.8" height="10.2" rx="2"/><path d="M8 10.4V7.6a4 4 0 0 1 8 0v2.8"/><path d="M12 14.6v2.2"/></g>
+    <g id="i-battery"><rect x="2.6" y="7.4" width="16.4" height="9.2" rx="2"/><path d="M21.4 10.6v2.8"/><path d="m11.4 9.6-2.2 3.4h3l-2.2 3.4"/></g>
+    <g id="i-aircon"><path d="M12 3.2v17.6"/><path d="M3.4 7.8 20.6 16.2"/><path d="M20.6 7.8 3.4 16.2"/><path d="m9.4 5 2.6 2.6L14.6 5"/><path d="m9.4 19 2.6-2.6 2.6 2.6"/></g>
+    <g id="i-tv"><rect x="2.8" y="5.4" width="18.4" height="12.2" rx="2"/><path d="M8.4 21h7.2"/><path d="M12 17.6V21"/></g>
+    <g id="i-shower"><path d="M4.4 20.6V8.2a3.4 3.4 0 0 1 6.8 0"/><path d="M11.2 8.2h8.4l-1.6 4.2h-5.2z"/><path d="M14 16.4h.01"/><path d="M17 18.6h.01"/><path d="M15.4 20.8h.01"/></g>
+    <g id="i-cooker"><rect x="3.4" y="7.6" width="17.2" height="13" rx="2"/><circle cx="8.4" cy="12.4" r="2.2"/><circle cx="15.6" cy="12.4" r="2.2"/><path d="M7 3.4v2.8"/><path d="M17 3.4v2.8"/></g>
+    <g id="i-air"><path d="M3.4 8.4h10.2a3 3 0 1 0-3-3"/><path d="M3.4 12.4h14a3 3 0 1 1-3 3"/><path d="M3.4 16.4h6.2"/></g>
+    <g id="i-vacuum"><path d="M4.2 20.6V14a7.4 7.4 0 0 1 14.8 0v6.6"/><path d="M4.2 20.6h14.8"/><path d="M11.6 6.6V3.2"/><path d="M9.2 20.6v-3.4"/><path d="M14 20.6v-3.4"/></g>
+    <g id="i-iron"><path d="M4.2 6.6h9.2a6.6 6.6 0 0 1 6.6 6.6v1.2H4.2z"/><path d="M4.2 18.4h15.8"/><path d="M8.8 6.6V4.4h4.6"/></g>
+    <g id="i-people"><circle cx="9.2" cy="8.4" r="3.4"/><path d="M3.2 20.4a6 6 0 0 1 12 0"/><path d="M16.2 5.4a3.4 3.4 0 0 1 0 6.6"/><path d="M17.4 14.8a6 6 0 0 1 3.4 5.6"/></g>
+    <g id="i-guide-tile"><path d="M4.2 5a1.6 1.6 0 0 1 1.6-1.6H18a1.4 1.4 0 0 1 1.4 1.4v14.4a1.4 1.4 0 0 1-1.4 1.4H5.8A1.6 1.6 0 0 1 4.2 19z"/><path d="M4.2 17h13.8"/><path d="M8.4 8h7"/></g>
+    <g id="i-check"><path d="m4.5 12.5 5 5 10-11"/></g>
+  </defs>
+</svg>
+
 <a class="skip-to-content" href="#content-host">Skip to content</a>
 
 <!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
 <div id="login-overlay">
-  <div class="login-card">
+  <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="pin-prompt">
     <div class="login-logo-mark">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 2L3 7v10l9 5 9-5V7L12 2zm0 2.18L19 8v8l-7 3.88L5 16V8l7-3.82z"/>
       </svg>
     </div>
     <h1>Cascade Hideaway</h1>
-    <p class="subtitle">Operations Manual · Staff Access</p>
+    <p class="subtitle">Operations Manual</p>
 
-    <form id="login-form" style="text-align:left;" onsubmit="return false;">
-      <div class="login-field">
-        <label>Email Address</label>
-        <input id="email" type="email" placeholder="your@email.com" required autocomplete="email"/>
-      </div>
-      <div class="login-field">
-        <label>Password</label>
-        <input id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
-      </div>
-      <button class="login-btn" type="submit" id="login-submit-btn">Sign In</button>
-    </form>
+    <p class="pin-prompt" id="pin-prompt">Enter your 4-digit PIN</p>
 
-    <p id="login-error"></p>
+    <div class="pin-dots" id="pin-dots">
+      <span class="pin-dot"></span>
+      <span class="pin-dot"></span>
+      <span class="pin-dot"></span>
+      <span class="pin-dot"></span>
+    </div>
+
+    <div class="pin-pad" id="pin-pad">
+      <button class="pin-key" type="button" data-key="1">1</button>
+      <button class="pin-key" type="button" data-key="2">2</button>
+      <button class="pin-key" type="button" data-key="3">3</button>
+      <button class="pin-key" type="button" data-key="4">4</button>
+      <button class="pin-key" type="button" data-key="5">5</button>
+      <button class="pin-key" type="button" data-key="6">6</button>
+      <button class="pin-key" type="button" data-key="7">7</button>
+      <button class="pin-key" type="button" data-key="8">8</button>
+      <button class="pin-key" type="button" data-key="9">9</button>
+      <span></span>
+      <button class="pin-key" type="button" data-key="0">0</button>
+      <button class="pin-key pin-util" type="button" data-key="del" aria-label="Delete last digit">Delete</button>
+    </div>
+
+    <label class="pin-remember" for="pin-remember">
+      <input type="checkbox" id="pin-remember" checked/>
+      Keep me signed in on this device
+    </label>
+
+    <p id="login-error" role="alert"></p>
 
     <div class="login-divider">
-      <span>CONFIDENTIAL OPERATIONS DOCUMENT</span>
+      <span>CASCADE OPERATIONS · STAFF ONLY</span>
     </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════ SEARCH ═══════════════ -->
+<div id="search-overlay" role="dialog" aria-modal="true" aria-label="Search the manual">
+  <div class="search-panel">
+    <div class="search-input-row">
+      <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="search-input" type="search" placeholder="Search the manual…" autocomplete="off" spellcheck="false" aria-label="Search the manual"/>
+      <span class="search-esc">ESC</span>
+    </div>
+    <div class="search-results" id="search-results"></div>
   </div>
 </div>
 
@@ -1674,22 +2090,22 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
       <div class="nav-group">
         <div class="nav-group-label">Operations</div>
         <a class="nav-link" href="#dashboard">
-          <span class="nav-icon">🏠</span>Dashboard
+          <svg class="ch-ico nav-icon"><use href="#i-home"/></svg>Dashboard
         </a>
         <a class="nav-link" href="#sops">
-          <span class="nav-icon">📋</span>Guest Journey SOPs
+          <svg class="ch-ico nav-icon"><use href="#i-sop"/></svg>Guest Journey SOPs
         </a>
         <a class="nav-link" href="#cleaning">
-          <span class="nav-icon">🧼</span>Cleaning Checklist
+          <svg class="ch-ico nav-icon"><use href="#i-clean"/></svg>Cleaning Checklist
         </a>
         <a class="nav-link" href="#videos">
-          <span class="nav-icon">🎬</span>Video Resources
+          <svg class="ch-ico nav-icon"><use href="#i-video"/></svg>Video Resources
         </a>
         <a class="nav-link" href="#playbook">
-          <span class="nav-icon">🚨</span>Crisis Playbook
+          <svg class="ch-ico nav-icon"><use href="#i-crisis"/></svg>Crisis Playbook
         </a>
         <a class="nav-link" href="#maintenance">
-          <span class="nav-icon">🔧</span>Maintenance Log
+          <svg class="ch-ico nav-icon"><use href="#i-wrench"/></svg>Maintenance Log
         </a>
       </div>
 
@@ -1697,13 +2113,13 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
       <div class="nav-group">
         <div class="nav-group-label">Communication</div>
         <a class="nav-link owner-only" href="#messages">
-          <span class="nav-icon">✉️</span>Message Hub
+          <svg class="ch-ico nav-icon"><use href="#i-message"/></svg>Message Hub
         </a>
         <a class="nav-link" href="#concierge">
-          <span class="nav-icon">🤖</span>AI Concierge
+          <svg class="ch-ico nav-icon"><use href="#i-concierge"/></svg>AI Concierge
         </a>
         <a class="nav-link owner-only" href="#guest-guide">
-          <span class="nav-icon">🌿</span>Guest-Facing Guide
+          <svg class="ch-ico nav-icon"><use href="#i-guide"/></svg>Guest-Facing Guide
         </a>
       </div>
 
@@ -1711,16 +2127,16 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
       <div class="nav-group owner-only">
         <div class="nav-group-label">Business</div>
         <a class="nav-link owner-only" href="#costing">
-          <span class="nav-icon">💰</span>Cost &amp; Profitability
+          <svg class="ch-ico nav-icon"><use href="#i-cost"/></svg>Cost &amp; Profitability
         </a>
         <a class="nav-link owner-only" href="#pricing">
-          <span class="nav-icon">📈</span>Pricing Strategy
+          <svg class="ch-ico nav-icon"><use href="#i-pricing"/></svg>Pricing Strategy
         </a>
         <a class="nav-link owner-only" href="#info">
-          <span class="nav-icon">📞</span>Important Info
+          <svg class="ch-ico nav-icon"><use href="#i-info"/></svg>Important Info
         </a>
         <a class="nav-link owner-only" href="#finance">
-          <span class="nav-icon">💰</span>Finance
+          <svg class="ch-ico nav-icon"><use href="#i-finance"/></svg>Finance
         </a>
       </div>
 
@@ -1728,10 +2144,10 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
       <div class="nav-group admin-only">
         <div class="nav-group-label">System</div>
         <a class="nav-link admin-only" href="#access-log">
-          <span class="nav-icon">📊</span>Access Log
+          <svg class="ch-ico nav-icon"><use href="#i-log"/></svg>Access Log
         </a>
         <a class="nav-link admin-only" href="#account-settings">
-          <span class="nav-icon">🔑</span>Account Settings
+          <svg class="ch-ico nav-icon"><use href="#i-access"/></svg>Account Settings
         </a>
       </div>
     </div>
@@ -1761,17 +2177,27 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
         <p id="topbar-greeting-sub">Here's your operations command center.</p>
       </div>
       <div class="topbar-right">
+        <button class="topbar-search-btn" id="search-open-btn" type="button" aria-label="Search the manual">
+          <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd>Ctrl K</kbd>
+        </button>
         <div class="topbar-role-badge" id="topbar-role-badge">
           <span class="role-dot"></span>
           <span id="topbar-role-text">Loading…</span>
         </div>
-        <span class="topbar-version">v23 · Phase 4</span>
+        <span class="topbar-version">v24</span>
       </div>
     </div>
 
     <!-- Mobile topbar -->
     <div class="mobile-topbar">
-      <h1>Cascade Hideaway</h1>
+      <div class="mobile-topbar-row">
+        <h1>Cascade Hideaway</h1>
+        <button class="mobile-search-btn" id="search-open-btn-m" type="button" aria-label="Search the manual">
+          <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+        </button>
+      </div>
       <nav class="pill-nav" id="pill-nav">
         <a class="pill-link" href="#dashboard">Dashboard</a>
         <a class="pill-link" href="#sops">SOPs</a>
@@ -1796,7 +2222,6 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
 <section class="content-section" id="dashboard">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Operations</div>
     <h2>Dashboard</h2>
     <p>Your hospitality command centre for Cascade Hideaway.</p>
   </div>
@@ -1811,20 +2236,20 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
   <div class="dash-label">Daily Operations</div>
   <div class="daily-ops-grid">
     <a class="quick-link-card daily-ops-primary" href="https://cascadereservations-del.github.io/Stay_At_CascadeGSC/" rel="noopener noreferrer" target="_blank">
-      <div class="dash-icon text-4xl mb-2">🏡</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-booking"/></svg>
       <div>Direct Booking</div>
       <div style="font-size:.68rem;opacity:.6;font-weight:400;margin-top:2px">Open site ↗</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" rel="noopener noreferrer" target="_blank">
-      <div class="dash-icon text-3xl mb-1">✅</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-tile-clean"/></svg>
       <div class="text-xs">Cleaning App</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH_Inventory/" rel="noopener noreferrer" target="_blank">
-      <div class="dash-icon text-3xl mb-1">📦</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-box"/></svg>
       <div class="text-xs">Inventory</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/cascade-admin-dashboard/" rel="noopener noreferrer" target="_blank">
-      <div class="dash-icon text-3xl mb-1">📊</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-chart"/></svg>
       <div class="text-xs">Admin DB</div>
     </a>
   </div>
@@ -1837,16 +2262,16 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
   <div class="dash-label">Guest-Facing</div>
   <div class="guest-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">📖</div><div class="text-xs">Welcome Guide</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-guide-tile"/></svg><div class="text-xs">Welcome Guide</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Nearby-POIS/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">📍</div><div class="text-xs">Nearby POIs</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Nearby POIs</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">🍽️</div><div class="text-xs">Dining Map</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-dining"/></svg><div class="text-xs">Dining Map</div>
     </a>
     <a class="quick-link-card owner-only" href="#finance">
-      <div class="text-3xl mb-1">💰</div><div class="text-xs">Finance</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-coins"/></svg><div class="text-xs">Finance</div>
     </a>
   </div>
 </div>
@@ -1858,34 +2283,34 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
   <div class="dash-label">Training &amp; Guides</div>
   <div class="training-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/5-Star-Mandate/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">⭐</div><div class="text-xs">5-Star Mandate</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-star"/></svg><div class="text-xs">5-Star Mandate</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">🔐</div><div class="text-xs">Smart Lock</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-lock"/></svg><div class="text-xs">Smart Lock</div>
     </a>
     <button class="quick-link-card" data-guide="ecoflow-river">
-      <div class="text-3xl mb-1">🔋</div><div class="text-xs">EcoFlow River</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-battery"/></svg><div class="text-xs">EcoFlow River</div>
     </button>
     <button class="quick-link-card" data-guide="ac-guide">
-      <div class="text-3xl mb-1">❄️</div><div class="text-xs">Aircon Remote</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-aircon"/></svg><div class="text-xs">Aircon Remote</div>
     </button>
     <button class="quick-link-card" data-guide="tv-remote">
-      <div class="text-3xl mb-1">📺</div><div class="text-xs">TV Remote</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-tv"/></svg><div class="text-xs">TV Remote</div>
     </button>
     <button class="quick-link-card" data-guide="water-heater">
-      <div class="text-3xl mb-1">🚿</div><div class="text-xs">Water Heater</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-shower"/></svg><div class="text-xs">Water Heater</div>
     </button>
     <button class="quick-link-card" data-guide="induction-cooker">
-      <div class="text-3xl mb-1">🍳</div><div class="text-xs">Induction Cooker</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-cooker"/></svg><div class="text-xs">Induction Cooker</div>
     </button>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">🌬️</div><div class="text-xs">Air Purifier</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-air"/></svg><div class="text-xs">Air Purifier</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">🧹</div><div class="text-xs">Dust Mite Vac</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-vacuum"/></svg><div class="text-xs">Dust Mite Vac</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/iron-guide/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">👕</div><div class="text-xs">Iron Guide</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-iron"/></svg><div class="text-xs">Iron Guide</div>
     </a>
   </div>
 </div>
@@ -1896,7 +2321,7 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
   <div class="dash-label">Admin</div>
   <div class="guest-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CASCADE-EMPLOYEE/" rel="noopener noreferrer" target="_blank">
-      <div class="text-3xl mb-1">👥</div><div class="text-xs">Employee DB</div>
+      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-people"/></svg><div class="text-xs">Employee DB</div>
     </a>
   </div>
 </div>
@@ -1905,7 +2330,6 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
 <section class="content-section" id="sops">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Operations</div>
     <h2>Guest Journey SOPs</h2>
     <p>The 5-star standard from first inquiry to post-stay review.</p>
   </div>
@@ -2048,7 +2472,6 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
 <section class="content-section owner-only" id="messages">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Communication</div>
     <h2>Message Hub</h2>
     <p>Ready-to-use templates for every guest interaction.</p>
   </div>
@@ -2061,7 +2484,7 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
 <p class="text-lg mb-4">
          🤖
          <strong>
-          Supercharge Your Messaging with AI!
+          Let the Concierge draft it
          </strong>
 </p>
 <p class="mb-6">
@@ -2222,7 +2645,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section" id="concierge">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Communication</div>
     <h2>AI Concierge</h2>
     <p>Your AI assistant powered by Gemini 2.0 Flash.</p>
   </div>
@@ -3046,7 +3468,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section owner-only" id="guest-guide">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Communication</div>
     <h2>Guest-Facing Guide</h2>
     <p>What guests see — the Welcome Guide and direct booking site.</p>
   </div>
@@ -3159,7 +3580,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section" id="cleaning">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Operations</div>
     <h2>Cleaning Checklist</h2>
     <p>Standards and procedures for every turnover.</p>
   </div>
@@ -3346,7 +3766,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section owner-only" id="costing">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Business</div>
     <h2>Cost & Profitability</h2>
     <p>Per-booking cost breakdown and breakeven analysis.</p>
   </div>
@@ -4233,7 +4652,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section" id="playbook">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Operations</div>
     <h2>Crisis Playbook</h2>
     <p>Step-by-step responses for every operational emergency.</p>
   </div>
@@ -4385,7 +4803,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section" id="maintenance">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Operations</div>
     <h2>Maintenance Log</h2>
     <p>Scheduled maintenance tracker and reminder system.</p>
   </div>
@@ -4422,7 +4839,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section owner-only" id="info">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">Business</div>
     <h2>Important Info</h2>
     <p>Key contacts, banking details, and operational references.</p>
   </div>
@@ -4572,7 +4988,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <section class="content-section admin-only" id="access-log">
 <div class="section-header">
   <div>
-    <div class="section-eyebrow">System</div>
     <h2>Access Log</h2>
     <p>Record of every manual access by staff members.</p>
   </div>
@@ -4595,6 +5010,94 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </div>
 </div>
 </section>
+<!-- ── Finance Section (Phase 7 stub) ─────────────────────── -->
+<section class="content-section owner-only" id="finance">
+<div class="section-header">
+  <div>
+    <h2>Finance</h2>
+    <p>Revenue, expenses, and BIR-ready records for Cascade Hideaway.</p>
+  </div>
+</div>
+<div class="content-card" style="padding: 28px;">
+<div class="promise-card my-0 mb-8">
+<h3>Phase 7 — Coming Soon</h3>
+<p>The Finance module is being built. It will include monthly P&amp;L, expense tracking, Airbnb payout reconciliation, and BIR-ready export. All transaction data is already being captured in Supabase.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div class="accent-box p-5 rounded-xl text-center">
+    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-coins"/></svg>
+    <div class="font-semibold">Airbnb Payouts</div>
+    <div class="instructional-note mt-1">62 reservations synced</div>
+  </div>
+  <div class="accent-box p-5 rounded-xl text-center">
+    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-chart"/></svg>
+    <div class="font-semibold">Monthly P&amp;L</div>
+    <div class="instructional-note mt-1">In development</div>
+  </div>
+  <div class="accent-box p-5 rounded-xl text-center">
+    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-sop"/></svg>
+    <div class="font-semibold">BIR Export</div>
+    <div class="instructional-note mt-1">Raw fields captured</div>
+  </div>
+</div>
+<div class="luxury-divider my-8"></div>
+<h3 class="text-3xl font-bold mb-4 text-bronze">Current Ledger</h3>
+<p class="instructional-note mb-4">Until Phase 7 is complete, use the Cascade Ledger GAS app for expense recording.</p>
+<a href="https://script.google.com/macros/s/AKfycbwBnqBnv7DCRNljJFPcTT1RHp8Fh3ZMwOGk9fZkiK2vfLUZnKsE2N0dz9kZr3hBdATq/exec"
+   target="_blank" rel="noopener noreferrer"
+   class="copy-button inline-flex items-center gap-3 px-6 py-3 rounded-lg font-semibold">
+  📒 Open Cascade Ledger
+</a>
+</div>
+</section>
+
+<!-- ── Account Settings (admin-only) ──────────────────────── -->
+<section class="content-section admin-only" id="account-settings">
+<div class="section-header">
+  <div>
+    <h2>Access &amp; PINs</h2>
+    <p>Who can open this manual, and what each person sees.</p>
+  </div>
+</div>
+<div class="content-card" style="padding: 28px;">
+<div class="space-y-8">
+<div>
+<h3 class="text-3xl font-bold mb-4 text-bronze">Who has a PIN</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+<thead><tr class="bg-warm-cream"><th class="text-left p-3 rounded-tl-lg">PIN</th><th class="text-left p-3">Person</th><th class="text-left p-3">Role</th><th class="text-left p-3 rounded-tr-lg">Sees</th></tr></thead>
+<tbody>
+<tr class="border-b border-soft-taupe"><td class="p-3"><code>0000</code></td><td class="p-3">Honey</td><td class="p-3">staff</td><td class="p-3">Dashboard, SOPs, Cleaning, Videos, Playbook, Maintenance, Concierge</td></tr>
+<tr class="border-b border-soft-taupe"><td class="p-3"><code>1234</code></td><td class="p-3">Marifel</td><td class="p-3">admin</td><td class="p-3">Everything, including this page and the Access Log</td></tr>
+<tr><td class="p-3"><code>1871</code></td><td class="p-3">Lloyd</td><td class="p-3">owner</td><td class="p-3">Everything except this page and the Access Log</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="luxury-divider"></div>
+<div>
+<h3 class="text-3xl font-bold mb-4 text-bronze">How the gate works</h3>
+<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
+<p class="instructional-note mb-3">The PIN is checked in this page, on the device. There is no server and no account to lock out. A device that ticks <strong>Keep me signed in</strong> stays signed in for 30 days; <strong>Sign out</strong> in the sidebar clears it immediately.</p>
+<p class="instructional-note">The PIN decides which sections appear — nothing more. This repository is public, so treat the PIN as a way to keep the right screens in front of the right person, not as a lock on the contents. That trade-off is recorded and accepted (D-082).</p>
+</div>
+</div>
+<div class="luxury-divider"></div>
+<div>
+<h3 class="text-3xl font-bold mb-4 text-bronze">Changing a PIN</h3>
+<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
+<p class="instructional-note mb-3">PINs live in one place in this file — the <code>PEOPLE</code> map at the top of the auth module. Editing it is a code change, so it goes through Lloyd.</p>
+<pre class="bg-warm-cream p-4 rounded-lg text-sm overflow-x-auto"><code>PEOPLE: {
+  '0000': { name: 'Honey',   role: 'staff' },
+  '1234': { name: 'Marifel', role: 'admin' },
+  '1871': { name: 'Lloyd',   role: 'owner' },
+}</code></pre>
+<p class="instructional-note mt-3">Anyone whose PIN changes should tap <strong>Sign out</strong> once so the old remembered session is cleared.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
 </div>
 
 
@@ -4604,7 +5107,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 
 <!-- ── FOOTER ── -->
 <footer style="position:fixed;bottom:0;left:var(--sidebar-w);right:0;background:rgba(28,16,6,.97);color:rgba(247,242,232,.6);font-family:var(--font-b);font-size:.68rem;text-align:center;padding:8px 16px;backdrop-filter:blur(8px);z-index:40;letter-spacing:.04em;" id="app-footer">
-  🔒 Cascade Hideaway · Operations Manual · v23 · Supabase Auth
+  Cascade Hideaway · Operations Manual · v24
 </footer>
 
 <!-- ── EQUIPMENT MODAL ── -->
@@ -4660,125 +5163,174 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     this.costing.init();
                     this.maintenance.init();
                     this.info.init();
+                    this.search.init();
                 }
             };
 
             app.auth = {
-                SUPABASE_URL: 'https://qkgfhsdppslwunarczeq.supabase.co',
-                SUPABASE_ANON_KEY: 'sb_publishable_JFuRYZ9csmQULcMRmHXDSg_Abo9UeCj',
-                client: null,
-                session: null,
+                // Client-side PIN gate (D-082). The repo is public, so this gates
+                // convenience and identity, never secrecy — see the decision log.
+                PEOPLE: {
+                    '0000': { name: 'Honey',   role: 'staff' },
+                    '1234': { name: 'Marifel', role: 'admin' },
+                    '1871': { name: 'Lloyd',   role: 'owner' },
+                },
+                REMEMBER_KEY: 'ch_manual_session_v1',
+                REMEMBER_DAYS: 30,
+                person: null,
+                entry: '',
                 elements: {},
 
                 async init() {
-                    this.client = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY, {
-                        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: false }
-                    });
                     this.elements = {
-                        loginOverlay:  document.getElementById('login-overlay'),
-                        loginForm:     document.getElementById('login-form'),
-                        loginError:    document.getElementById('login-error'),
-                        appContainer:  document.getElementById('app-container'),
+                        loginOverlay: document.getElementById('login-overlay'),
+                        loginCard:    document.querySelector('.login-card'),
+                        loginError:   document.getElementById('login-error'),
+                        appContainer: document.getElementById('app-container'),
+                        dots:         document.getElementById('pin-dots'),
+                        prompt:       document.getElementById('pin-prompt'),
+                        remember:     document.getElementById('pin-remember'),
                     };
                     this.bindEvents();
-                    await this.checkAuth();
+                    this.checkAuth();
                 },
 
                 bindEvents() {
-                    this.elements.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+                    document.getElementById('pin-pad').addEventListener('click', (e) => {
+                        const btn = e.target.closest('.pin-key');
+                        if (!btn) return;
+                        const k = btn.dataset.key;
+                        if (k === 'del') this.backspace(); else this.push(k);
+                    });
+
+                    // Physical keyboard — only while the gate is up
+                    document.addEventListener('keydown', (e) => {
+                        if (this.elements.loginOverlay.style.display === 'none') return;
+                        if (e.key >= '0' && e.key <= '9') { e.preventDefault(); this.push(e.key); }
+                        else if (e.key === 'Backspace')   { e.preventDefault(); this.backspace(); }
+                    });
+
                     const logoutBtn = document.getElementById('logout-btn');
                     if (logoutBtn) logoutBtn.addEventListener('click', () => this.logout());
 
-                    // Change password handler (Account Settings section)
-                    const changePwBtn = document.getElementById('changePasswordBtn');
-                    if (changePwBtn) {
-                        changePwBtn.addEventListener('click', async () => {
-                            const input = document.getElementById('newPasswordInput');
-                            const msg   = document.getElementById('passwordChangeMsg');
-                            const pw    = input ? input.value.trim() : '';
-                            if (!pw || pw.length < 8) { msg.textContent = '⚠️ Password must be at least 8 characters.'; msg.style.color = 'var(--danger)'; return; }
-                            const { error } = await this.client.auth.updateUser({ password: pw });
-                            if (error) { msg.textContent = '✗ ' + error.message; msg.style.color = 'var(--danger)'; }
-                            else { msg.textContent = '✓ Password updated successfully.'; msg.style.color = 'var(--success-green)'; if(input) input.value = ''; }
-                        });
-                    }
-                    // Trap focus inside login card while overlay is visible
                     const loginCard = document.querySelector('.login-card');
                     if (loginCard) trapFocus(loginCard);
                 },
 
-                async checkAuth() {
-                    const { data: { session } } = await this.client.auth.getSession();
-                    if (session) {
-                        this.session = session;
-                        // Fade out login overlay then show app
-                        this.elements.loginOverlay.classList.add('fadeout');
-                        setTimeout(() => {
-                            this.elements.loginOverlay.style.display = 'none';
-                            this.elements.loginOverlay.classList.remove('fadeout');
-                            this.elements.appContainer.style.display = 'block';
-                        }, 300);
-                        this.updateUserUI();
-                        if (app.costing && app.costing.logAccess) app.costing.logAccess();
-                    } else {
-                        this.elements.loginOverlay.style.display = 'flex';
-                        this.elements.appContainer.style.display = 'none';
-                        // Focus first input on login form
-                        setTimeout(() => {
-                            const firstInput = this.elements.loginForm.querySelector('input');
-                            if (firstInput) firstInput.focus();
-                        }, 100);
-                    }
+                push(digit) {
+                    if (this.entry.length >= 4) return;
+                    this.entry += digit;
+                    this.renderDots();
+                    if (this.entry.length === 4) setTimeout(() => this.submit(), 130);
                 },
 
-                async handleLogin(e) {
-                    e.preventDefault();
-                    const email    = document.getElementById('email').value.trim();
-                    const password = document.getElementById('password').value;
-                    const submitBtn = this.elements.loginForm.querySelector('button[type="submit"]');
+                backspace() {
+                    this.entry = this.entry.slice(0, -1);
+                    this.elements.loginError.textContent = '';
+                    this.renderDots();
+                },
 
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'Signing in…';
+                renderDots() {
+                    const dots = this.elements.dots.querySelectorAll('.pin-dot');
+                    dots.forEach((d, i) => d.classList.toggle('filled', i < this.entry.length));
+                },
 
-                    const { data, error } = await this.client.auth.signInWithPassword({ email, password });
-
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Sign In';
-
-                    if (error) {
-                        this.elements.loginError.textContent = 'Invalid email or password.';
-                        setTimeout(() => { this.elements.loginError.textContent = ''; }, 3000);
+                submit() {
+                    const match = this.PEOPLE[this.entry];
+                    if (!match) {
+                        this.entry = '';
+                        this.renderDots();
+                        this.elements.loginCard.classList.add('shake');
+                        setTimeout(() => this.elements.loginCard.classList.remove('shake'), 420);
+                        this.elements.loginError.textContent = 'That PIN is not recognised. Try again.';
                         return;
                     }
-                    this.session = data.session;
-                    await this.checkAuth();
+                    if (this.elements.remember && this.elements.remember.checked) {
+                        this.remember(this.entry);
+                    }
+                    this.signIn(match);
                 },
 
-                async logout() {
-                    await this.client.auth.signOut();
-                    this.session = null;
+                remember(pin) {
+                    try {
+                        localStorage.setItem(this.REMEMBER_KEY, JSON.stringify({
+                            pin, exp: Date.now() + this.REMEMBER_DAYS * 864e5,
+                        }));
+                    } catch (e) { /* private mode — sign-in still works, just not remembered */ }
+                },
+
+                recall() {
+                    try {
+                        const raw = localStorage.getItem(this.REMEMBER_KEY);
+                        if (!raw) return null;
+                        const saved = JSON.parse(raw);
+                        if (!saved || !saved.exp || saved.exp < Date.now()) {
+                            localStorage.removeItem(this.REMEMBER_KEY);
+                            return null;
+                        }
+                        return this.PEOPLE[saved.pin] || null;
+                    } catch (e) { return null; }
+                },
+
+                checkAuth() {
+                    const remembered = this.recall();
+                    if (remembered) { this.signIn(remembered, true); return; }
+                    this.elements.loginOverlay.style.display = 'flex';
+                    this.elements.appContainer.style.display = 'none';
+                    this.entry = '';
+                    this.renderDots();
+                    setTimeout(() => {
+                        const firstKey = document.querySelector('.pin-key');
+                        if (firstKey) firstKey.focus();
+                    }, 100);
+                },
+
+                signIn(person, silent) {
+                    this.person = person;
+                    this.entry  = '';
+                    try { sessionStorage.setItem('currentUser', person.name); } catch (e) {}
+
+                    const reveal = () => {
+                        this.elements.loginOverlay.style.display = 'none';
+                        this.elements.loginOverlay.classList.remove('fadeout');
+                        this.elements.appContainer.style.display = 'block';
+                        this.updateUserUI();
+                        if (app.costing && app.costing.logAccess) app.costing.logAccess();
+                    };
+
+                    if (silent) { reveal(); return; }
+                    this.elements.loginOverlay.classList.add('fadeout');
+                    setTimeout(reveal, 300);
+                },
+
+                logout() {
+                    try { localStorage.removeItem(this.REMEMBER_KEY); } catch (e) {}
+                    try { sessionStorage.removeItem('currentUser'); } catch (e) {}
+                    this.person = null;
                     document.body.className = document.body.className
                         .replace(/\b(staff|owner|admin)-user\b/g, '').trim();
                     this.elements.appContainer.style.display = 'none';
-                    this.elements.loginOverlay.style.display  = 'flex';
+                    this.elements.prompt.textContent = 'Enter your 4-digit PIN';
+                    this.elements.loginError.textContent = '';
+                    this.elements.loginOverlay.style.display = 'flex';
                     const badge = document.getElementById('user-badge');
                     if (badge) badge.classList.remove('visible');
+                    this.entry = '';
+                    this.renderDots();
                 },
 
                 getRole() {
-                    return this.session?.user?.app_metadata?.role || 'staff';
+                    return (this.person && this.person.role) || 'staff';
                 },
 
                 updateUserUI() {
-                    const role  = this.getRole();
-                    const email = this.session?.user?.email || '';
-                    const name  = email.split('@')[0];
+                    const role = this.getRole();
+                    const name = (this.person && this.person.name) || 'Team';
                     const initial = name.charAt(0).toUpperCase();
 
                     document.body.classList.remove('staff-user', 'owner-user', 'admin-user');
                     document.body.classList.add(`${role}-user`);
 
-                    // Sidebar user badge
                     const badge     = document.getElementById('user-badge');
                     const badgeRole = document.getElementById('user-badge-role');
                     const badgeName = document.getElementById('user-badge-name');
@@ -4788,17 +5340,14 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     if (badgeName) badgeName.textContent = name;
                     if (avatarEl)  avatarEl.textContent  = initial;
 
-                    // Topbar role badge
                     const topbarRole = document.getElementById('topbar-role-text');
                     if (topbarRole) topbarRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
 
-                    // Topbar greeting
                     const hour = new Date().getHours();
                     const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
                     const greetEl = document.getElementById('topbar-greeting-text');
-                    if (greetEl) greetEl.textContent = `${greeting}, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+                    if (greetEl) greetEl.textContent = `${greeting}, ${name}`;
 
-                    // Footer offset for mobile (sidebar hidden)
                     const footer = document.getElementById('app-footer');
                     if (footer && window.innerWidth < 1024) {
                         footer.style.left = '0';
@@ -4813,14 +5362,193 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     if (role === 'staff' && operationsContent) {
                         operationsContent.innerHTML = `
                             <div class="admin-password-prompt">
-                                <p class="text-lg mb-4">🔒 <strong>Access Restricted</strong></p>
-                                <p class="instructional-note">This section requires Owner or Admin access.</p>
+                                <p class="text-lg mb-4"><strong>Access restricted</strong></p>
+                                <p class="instructional-note">This section needs Marifel's or Lloyd's PIN.</p>
                             </div>
                         `;
                     }
                 }
             };
                     
+
+            /* ── Search across every section (Ctrl/Cmd-K) ──────────── */
+            app.search = {
+                index: null,
+                hits: [],
+                sel: 0,
+
+                init() {
+                    this.overlay = document.getElementById('search-overlay');
+                    this.input   = document.getElementById('search-input');
+                    this.results = document.getElementById('search-results');
+                    if (!this.overlay) return;
+
+                    document.getElementById('search-open-btn')
+                        ?.addEventListener('click', () => this.open());
+                    document.getElementById('search-open-btn-m')
+                        ?.addEventListener('click', () => this.open());
+
+                    document.addEventListener('keydown', (e) => {
+                        const gateUp = document.getElementById('login-overlay').style.display !== 'none';
+                        if (gateUp) return;
+                        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                            e.preventDefault(); this.open();
+                        } else if (e.key === 'Escape' && this.overlay.classList.contains('open')) {
+                            this.close();
+                        }
+                    });
+
+                    this.input.addEventListener('input', () => this.render());
+                    this.input.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowDown') { e.preventDefault(); this.move(1); }
+                        else if (e.key === 'ArrowUp') { e.preventDefault(); this.move(-1); }
+                        else if (e.key === 'Enter')  { e.preventDefault(); this.go(this.sel); }
+                    });
+
+                    this.overlay.addEventListener('click', (e) => {
+                        if (e.target === this.overlay) this.close();
+                        const hit = e.target.closest('.search-hit');
+                        if (hit) this.go(Number(hit.dataset.i));
+                    });
+                },
+
+                // Built once, on first open — each heading plus the prose under it.
+                build() {
+                    if (this.index) return this.index;
+                    const idx = [];
+                    document.querySelectorAll('.content-section').forEach((sec) => {
+                        const secName = (sec.querySelector('.section-header h2') || sec.querySelector('h2'));
+                        const label = secName ? secName.textContent.trim() : sec.id;
+                        sec.querySelectorAll('h2, h3, h4').forEach((h) => {
+                            const title = h.textContent.replace(/\s+/g, ' ').trim();
+                            if (!title) return;
+                            let body = '', node = h.nextElementSibling, steps = 0;
+                            while (node && steps < 4 && !/^H[1-4]$/.test(node.tagName)) {
+                                body += ' ' + node.textContent;
+                                node = node.nextElementSibling; steps++;
+                            }
+                            const passage = body.replace(/\s+/g, ' ').trim().slice(0, 1200);
+                            idx.push({
+                                id: sec.id,
+                                section: this.plain(label),
+                                title: this.plain(title),
+                                body: passage,
+                                el: h,
+                                // Same text the snippet can show, so every hit can prove itself.
+                                hay: (label + ' ' + title + ' ' + passage).toLowerCase(),
+                            });
+                        });
+                    });
+                    this.index = idx;
+                    return idx;
+                },
+
+                // Section headings carry decorative emoji; the index should not.
+                plain(t) {
+                    return t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '')
+                            .replace(/\s+/g, ' ').trim();
+                },
+
+                // Mirror the role CSS: never surface a section the reader cannot open.
+                visible(entry) {
+                    const sec = document.getElementById(entry.id);
+                    if (!sec) return false;
+                    const body = document.body;
+                    if (sec.matches('.owner-only') && body.classList.contains('staff-user')) return false;
+                    if (sec.matches('.admin-only') && !body.classList.contains('admin-user')) return false;
+                    return true;
+                },
+
+                open() {
+                    this.build();
+                    this.overlay.classList.add('open');
+                    this.input.value = '';
+                    this.render();
+                    setTimeout(() => this.input.focus(), 30);
+                },
+
+                close() {
+                    this.overlay.classList.remove('open');
+                    this.input.blur();
+                },
+
+                render() {
+                    const q = this.input.value.trim().toLowerCase();
+                    if (q.length < 2) {
+                        this.hits = [];
+                        this.results.innerHTML =
+                            '<p class="search-empty">Type at least two letters \u2014 headings and text from every section you can see.</p>';
+                        return;
+                    }
+                    const terms = q.split(/\s+/);
+                    this.hits = this.build()
+                        .filter((e) => this.visible(e) && terms.every((t) => e.hay.includes(t)))
+                        .slice(0, 40);
+                    this.sel = 0;
+
+                    if (!this.hits.length) {
+                        this.results.innerHTML =
+                            '<p class="search-empty">Nothing matches \u201c' + this.esc(this.input.value.trim()) + '\u201d.</p>';
+                        return;
+                    }
+                    this.results.innerHTML = this.hits.map((h, i) => `
+                        <button class="search-hit${i === 0 ? ' sel' : ''}" data-i="${i}" type="button">
+                          <span class="sh-section">${this.esc(h.section)}</span>
+                          <span class="sh-title">${this.mark(h.title, terms)}</span>
+                          <span class="sh-snippet">${this.mark(this.window(h.body, terms), terms)}</span>
+                        </button>`).join('');
+                },
+
+                // Show the part of the passage the match is actually in.
+                window(body, terms) {
+                    const low = body.toLowerCase();
+                    let at = -1;
+                    terms.forEach((t) => {
+                        const i = low.indexOf(t);
+                        if (i !== -1 && (at === -1 || i < at)) at = i;
+                    });
+                    if (at < 90) return body.slice(0, 260);
+                    return '…' + body.slice(at - 80, at + 180);
+                },
+
+                esc(t) {
+                    return String(t).replace(/[&<>"]/g, (c) =>
+                        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+                },
+
+                mark(text, terms) {
+                    let out = this.esc(text);
+                    terms.forEach((t) => {
+                        if (!t) return;
+                        const re = new RegExp('(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+                        out = out.replace(re, '<mark>$1</mark>');
+                    });
+                    return out;
+                },
+
+                move(delta) {
+                    if (!this.hits.length) return;
+                    this.sel = (this.sel + delta + this.hits.length) % this.hits.length;
+                    this.results.querySelectorAll('.search-hit').forEach((el, i) =>
+                        el.classList.toggle('sel', i === this.sel));
+                    this.results.querySelector('.search-hit.sel')
+                        ?.scrollIntoView({ block: 'nearest' });
+                },
+
+                go(i) {
+                    const hit = this.hits[i];
+                    if (!hit) return;
+                    this.close();
+                    app.navigation.activateSection('#' + hit.id);
+                    setTimeout(() => {
+                        hit.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        hit.el.animate(
+                            [{ backgroundColor: 'rgba(201,150,58,.28)' }, { backgroundColor: 'transparent' }],
+                            { duration: 1400, easing: 'cubic-bezier(0.16,1,0.3,1)' });
+                    }, 260);
+                },
+            };
+
             app.navigation = {
                 init() {
                     const allLinks = document.querySelectorAll('a[href^="#"]');
@@ -4831,10 +5559,20 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                             this.activateSection(link.getAttribute('href'));
                         });
                     });
-                    this.activateSection(window.location.hash || '#dashboard');
+                    this.activateSection(window.location.hash || this.lastSection() || '#dashboard');
                 },
+                LAST_KEY: 'ch_manual_last_section',
+
+                lastSection() {
+                    try {
+                        const hash = localStorage.getItem(this.LAST_KEY);
+                        return hash && document.getElementById(hash.replace('#', '')) ? hash : null;
+                    } catch (e) { return null; }
+                },
+
                 activateSection(hash) {
                     const targetHash = hash || '#dashboard';
+                    try { localStorage.setItem(this.LAST_KEY, targetHash); } catch (e) {}
                     const current = document.querySelector('.content-section.active');
                     const next = document.getElementById(targetHash.replace('#', ''));
 
@@ -5745,13 +6483,13 @@ Date: ${new Date().toLocaleDateString()}`;
 <p class="instructional-note mb-4">Quick access to equipment references used in operations.</p>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
-<div class="text-5xl mb-3">🔐</div><div>Smart Lock Manual</div>
+<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-lock"/></svg><div>Smart Lock Manual</div>
 </a>
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
-<div class="text-5xl mb-3">🌬️</div><div>Air Purifier Guide</div>
+<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-air"/></svg><div>Air Purifier Guide</div>
 </a>
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
-<div class="text-5xl mb-3">🧹</div><div>Dust Mite Vacuum</div>
+<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-vacuum"/></svg><div>Dust Mite Vacuum</div>
 </a>
 </div>
 </div>
@@ -6086,111 +6824,6 @@ Date: ${new Date().toLocaleDateString()}`;
 })();
 
 </script>
-<!-- ── Finance Section (Phase 7 stub) ─────────────────────── -->
-<section class="content-section owner-only" id="finance">
-<div class="section-header">
-  <div>
-    <div class="section-eyebrow">Business</div>
-    <h2>Finance</h2>
-    <p>Revenue, expenses, and BIR-ready records for Cascade Hideaway.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="promise-card my-0 mb-8">
-<h3>Phase 7 — Coming Soon</h3>
-<p>The Finance module is being built. It will include monthly P&amp;L, expense tracking, Airbnb payout reconciliation, and BIR-ready export. All transaction data is already being captured in Supabase.</p>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-  <div class="accent-box p-5 rounded-xl text-center">
-    <div class="text-4xl mb-2">📥</div>
-    <div class="font-semibold">Airbnb Payouts</div>
-    <div class="instructional-note mt-1">62 reservations synced</div>
-  </div>
-  <div class="accent-box p-5 rounded-xl text-center">
-    <div class="text-4xl mb-2">📊</div>
-    <div class="font-semibold">Monthly P&amp;L</div>
-    <div class="instructional-note mt-1">In development</div>
-  </div>
-  <div class="accent-box p-5 rounded-xl text-center">
-    <div class="text-4xl mb-2">🧾</div>
-    <div class="font-semibold">BIR Export</div>
-    <div class="instructional-note mt-1">Raw fields captured</div>
-  </div>
-</div>
-<div class="luxury-divider my-8"></div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Current Ledger</h3>
-<p class="instructional-note mb-4">Until Phase 7 is complete, use the Cascade Ledger GAS app for expense recording.</p>
-<a href="https://script.google.com/macros/s/AKfycbwBnqBnv7DCRNljJFPcTT1RHp8Fh3ZMwOGk9fZkiK2vfLUZnKsE2N0dz9kZr3hBdATq/exec"
-   target="_blank" rel="noopener noreferrer"
-   class="copy-button inline-flex items-center gap-3 px-6 py-3 rounded-lg font-semibold">
-  📒 Open Cascade Ledger
-</a>
-</div>
-</section>
-
-<!-- ── Account Settings (admin-only) ──────────────────────── -->
-<section class="content-section admin-only" id="account-settings">
-<div class="section-header">
-  <div>
-    <div class="section-eyebrow">System</div>
-    <h2>Account Settings</h2>
-    <p>Manage user accounts and passwords for the Cascade Manual.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="space-y-8">
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Current Accounts</h3>
-<div class="overflow-x-auto">
-<table class="w-full text-sm">
-<thead><tr class="bg-warm-cream"><th class="text-left p-3 rounded-tl-lg">Email</th><th class="text-left p-3">Role</th><th class="text-left p-3">Sections</th><th class="text-left p-3 rounded-tr-lg">Status</th></tr></thead>
-<tbody class="space-y-1">
-<tr class="border-b border-soft-taupe"><td class="p-3">rocloyd87@gmail.com</td><td class="p-3"><span class="badge badge-new">admin</span></td><td class="p-3">All 15</td><td class="p-3 text-success-green">Active</td></tr>
-<tr class="border-b border-soft-taupe"><td class="p-3">cascadereservations@gmail.com</td><td class="p-3">owner</td><td class="p-3">14 (no Access Log / Account)</td><td class="p-3 text-soft-taupe">Pending password reset</td></tr>
-<tr><td class="p-3">Honey's email (TBD)</td><td class="p-3">staff</td><td class="p-3">7 sections</td><td class="p-3 text-soft-taupe">Not yet provisioned</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="luxury-divider"></div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Password Management</h3>
-<div class="space-y-4">
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
-<p class="font-semibold mb-2">Send Password Reset Email</p>
-<p class="instructional-note mb-4">Use the Supabase Dashboard to send a secure password reset link to any user.</p>
-<ol class="list-decimal list-inside instructional-note space-y-2">
-<li>Go to <a class="text-bronze underline" href="https://supabase.com/dashboard/project/qkgfhsdppslwunarczeq/auth/users" target="_blank">Supabase Auth Users</a></li>
-<li>Find the user by email → click the row</li>
-<li>Click <strong>Send password recovery</strong></li>
-</ol>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
-<p class="font-semibold mb-2">Change Your Own Password</p>
-<p class="instructional-note mb-4">Must be logged in with an active session.</p>
-<div class="flex flex-col sm:flex-row gap-3">
-<input class="flex-grow p-3 border-2 border-soft-taupe rounded-lg" id="newPasswordInput" placeholder="New password (min. 8 characters)" type="password"/>
-<button class="copy-button px-5 py-3 rounded-lg font-semibold shrink-0" id="changePasswordBtn">Update Password</button>
-</div>
-<p class="instructional-note mt-2" id="passwordChangeMsg"></p>
-</div>
-</div>
-</div>
-<div class="luxury-divider"></div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Provision New Staff Account</h3>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
-<p class="instructional-note mb-4">Run this SQL in Supabase after creating the user via Auth → Add User:</p>
-<pre class="bg-warm-cream p-4 rounded-lg text-sm overflow-x-auto"><code>update auth.users
-set raw_app_meta_data =
-  raw_app_meta_data || '{"role":"staff"}'::jsonb
-where email = 'staff@email.here';</code></pre>
-<button class="copy-button text-xs px-3 py-2 mt-3 rounded" onclick="navigator.clipboard.writeText('update auth.users\nset raw_app_meta_data = raw_app_meta_data || \'{ &quot;role&quot;: &quot;staff&quot; }\'::jsonb\nwhere email = \'staff@email.here\';')">Copy SQL</button>
-</div>
-</div>
-</div>
-</div>
-</section>
 
 <!-- ── Appliance Guide Modal ──────────────────────────── -->
 <div class="guide-modal-overlay" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
