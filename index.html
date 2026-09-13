@@ -1898,6 +1898,12 @@ a { text-underline-offset: 3px; }
 input, textarea { caret-color: var(--bronze); }
 
 /* ── Drawn icon system ────────────────────────────────── */
+/* Every instance carries viewBox="0 0 24 24" (added 2026-09-13). Without
+   it an <svg><use> does not scale: the sprite's 24-unit paths draw 1:1
+   into this 18px box and the outer quarter of each drawing is simply
+   cropped. It read as "slightly tight" rather than broken, which is why
+   it survived since the icons were drawn. Found when the cleaners
+   checklist hit the same omission at 1em, where it was unmistakable. */
 .ch-ico {
   width: 18px;
   height: 18px;
@@ -2058,7 +2064,7 @@ input, textarea { caret-color: var(--bronze); }
 <div id="search-overlay" role="dialog" aria-modal="true" aria-label="Search the manual">
   <div class="search-panel">
     <div class="search-input-row">
-      <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+      <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
       <input id="search-input" type="search" placeholder="Search the manual…" autocomplete="off" spellcheck="false" aria-label="Search the manual"/>
       <span class="search-esc">ESC</span>
     </div>
@@ -2090,22 +2096,22 @@ input, textarea { caret-color: var(--bronze); }
       <div class="nav-group">
         <div class="nav-group-label">Operations</div>
         <a class="nav-link" href="#dashboard">
-          <svg class="ch-ico nav-icon"><use href="#i-home"/></svg>Dashboard
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-home"/></svg>Dashboard
         </a>
         <a class="nav-link" href="#sops">
-          <svg class="ch-ico nav-icon"><use href="#i-sop"/></svg>Guest Journey SOPs
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-sop"/></svg>Guest Journey SOPs
         </a>
         <a class="nav-link" href="#cleaning">
-          <svg class="ch-ico nav-icon"><use href="#i-clean"/></svg>Cleaning Checklist
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-clean"/></svg>Cleaning Checklist
         </a>
         <a class="nav-link" href="#videos">
-          <svg class="ch-ico nav-icon"><use href="#i-video"/></svg>Video Resources
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-video"/></svg>Video Resources
         </a>
         <a class="nav-link" href="#playbook">
-          <svg class="ch-ico nav-icon"><use href="#i-crisis"/></svg>Crisis Playbook
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-crisis"/></svg>Crisis Playbook
         </a>
         <a class="nav-link" href="#maintenance">
-          <svg class="ch-ico nav-icon"><use href="#i-wrench"/></svg>Maintenance Log
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-wrench"/></svg>Maintenance Log
         </a>
       </div>
 
@@ -2113,13 +2119,13 @@ input, textarea { caret-color: var(--bronze); }
       <div class="nav-group">
         <div class="nav-group-label">Communication</div>
         <a class="nav-link owner-only" href="#messages">
-          <svg class="ch-ico nav-icon"><use href="#i-message"/></svg>Message Hub
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-message"/></svg>Message Hub
         </a>
         <a class="nav-link" href="#concierge">
-          <svg class="ch-ico nav-icon"><use href="#i-concierge"/></svg>AI Concierge
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-concierge"/></svg>AI Concierge
         </a>
         <a class="nav-link owner-only" href="#guest-guide">
-          <svg class="ch-ico nav-icon"><use href="#i-guide"/></svg>Guest-Facing Guide
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-guide"/></svg>Guest-Facing Guide
         </a>
       </div>
 
@@ -2127,16 +2133,16 @@ input, textarea { caret-color: var(--bronze); }
       <div class="nav-group owner-only">
         <div class="nav-group-label">Business</div>
         <a class="nav-link owner-only" href="#costing">
-          <svg class="ch-ico nav-icon"><use href="#i-cost"/></svg>Cost &amp; Profitability
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-cost"/></svg>Cost &amp; Profitability
         </a>
         <a class="nav-link owner-only" href="#pricing">
-          <svg class="ch-ico nav-icon"><use href="#i-pricing"/></svg>Pricing Strategy
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-pricing"/></svg>Pricing Strategy
         </a>
         <a class="nav-link owner-only" href="#info">
-          <svg class="ch-ico nav-icon"><use href="#i-info"/></svg>Important Info
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-info"/></svg>Important Info
         </a>
         <a class="nav-link owner-only" href="#finance">
-          <svg class="ch-ico nav-icon"><use href="#i-finance"/></svg>Finance
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-finance"/></svg>Finance
         </a>
       </div>
 
@@ -2144,10 +2150,10 @@ input, textarea { caret-color: var(--bronze); }
       <div class="nav-group admin-only">
         <div class="nav-group-label">System</div>
         <a class="nav-link admin-only" href="#access-log">
-          <svg class="ch-ico nav-icon"><use href="#i-log"/></svg>Access Log
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-log"/></svg>Access Log
         </a>
         <a class="nav-link admin-only" href="#account-settings">
-          <svg class="ch-ico nav-icon"><use href="#i-access"/></svg>Account Settings
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-access"/></svg>Account Settings
         </a>
       </div>
     </div>
@@ -2178,7 +2184,7 @@ input, textarea { caret-color: var(--bronze); }
       </div>
       <div class="topbar-right">
         <button class="topbar-search-btn" id="search-open-btn" type="button" aria-label="Search the manual">
-          <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+          <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
           <span class="search-btn-label">Search</span>
           <kbd>Ctrl K</kbd>
         </button>
@@ -2195,7 +2201,7 @@ input, textarea { caret-color: var(--bronze); }
       <div class="mobile-topbar-row">
         <h1>Cascade Hideaway</h1>
         <button class="mobile-search-btn" id="search-open-btn-m" type="button" aria-label="Search the manual">
-          <svg class="ch-ico" aria-hidden="true"><use href="#i-search"/></svg>
+          <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
         </button>
       </div>
       <nav class="pill-nav" id="pill-nav">
@@ -2236,20 +2242,20 @@ input, textarea { caret-color: var(--bronze); }
   <div class="dash-label">Daily Operations</div>
   <div class="daily-ops-grid">
     <a class="quick-link-card daily-ops-primary" href="https://cascadereservations-del.github.io/Stay_At_CascadeGSC/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-booking"/></svg>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-booking"/></svg>
       <div>Direct Booking</div>
       <div style="font-size:.68rem;opacity:.6;font-weight:400;margin-top:2px">Open site ↗</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-tile-clean"/></svg>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tile-clean"/></svg>
       <div class="text-xs">Cleaning App</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH_Inventory/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-box"/></svg>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-box"/></svg>
       <div class="text-xs">Inventory</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/cascade-admin-dashboard/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-chart"/></svg>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>
       <div class="text-xs">Admin DB</div>
     </a>
   </div>
@@ -2262,16 +2268,16 @@ input, textarea { caret-color: var(--bronze); }
   <div class="dash-label">Guest-Facing</div>
   <div class="guest-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-guide-tile"/></svg><div class="text-xs">Welcome Guide</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-guide-tile"/></svg><div class="text-xs">Welcome Guide</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Nearby-POIS/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Nearby POIs</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Nearby POIs</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-dining"/></svg><div class="text-xs">Dining Map</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dining"/></svg><div class="text-xs">Dining Map</div>
     </a>
     <a class="quick-link-card owner-only" href="#finance">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-coins"/></svg><div class="text-xs">Finance</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coins"/></svg><div class="text-xs">Finance</div>
     </a>
   </div>
 </div>
@@ -2283,34 +2289,34 @@ input, textarea { caret-color: var(--bronze); }
   <div class="dash-label">Training &amp; Guides</div>
   <div class="training-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/5-Star-Mandate/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-star"/></svg><div class="text-xs">5-Star Mandate</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-star"/></svg><div class="text-xs">5-Star Mandate</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-lock"/></svg><div class="text-xs">Smart Lock</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg><div class="text-xs">Smart Lock</div>
     </a>
     <button class="quick-link-card" data-guide="ecoflow-river">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-battery"/></svg><div class="text-xs">EcoFlow River</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-battery"/></svg><div class="text-xs">EcoFlow River</div>
     </button>
     <button class="quick-link-card" data-guide="ac-guide">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-aircon"/></svg><div class="text-xs">Aircon Remote</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-aircon"/></svg><div class="text-xs">Aircon Remote</div>
     </button>
     <button class="quick-link-card" data-guide="tv-remote">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-tv"/></svg><div class="text-xs">TV Remote</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div class="text-xs">TV Remote</div>
     </button>
     <button class="quick-link-card" data-guide="water-heater">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-shower"/></svg><div class="text-xs">Water Heater</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shower"/></svg><div class="text-xs">Water Heater</div>
     </button>
     <button class="quick-link-card" data-guide="induction-cooker">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-cooker"/></svg><div class="text-xs">Induction Cooker</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cooker"/></svg><div class="text-xs">Induction Cooker</div>
     </button>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-air"/></svg><div class="text-xs">Air Purifier</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-air"/></svg><div class="text-xs">Air Purifier</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-vacuum"/></svg><div class="text-xs">Dust Mite Vac</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vacuum"/></svg><div class="text-xs">Dust Mite Vac</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/iron-guide/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-iron"/></svg><div class="text-xs">Iron Guide</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-iron"/></svg><div class="text-xs">Iron Guide</div>
     </a>
   </div>
 </div>
@@ -2321,7 +2327,7 @@ input, textarea { caret-color: var(--bronze); }
   <div class="dash-label">Admin</div>
   <div class="guest-grid">
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CASCADE-EMPLOYEE/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-people"/></svg><div class="text-xs">Employee DB</div>
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-people"/></svg><div class="text-xs">Employee DB</div>
     </a>
   </div>
 </div>
@@ -5025,17 +5031,17 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
   <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-coins"/></svg>
+    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coins"/></svg>
     <div class="font-semibold">Airbnb Payouts</div>
     <div class="instructional-note mt-1">62 reservations synced</div>
   </div>
   <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-chart"/></svg>
+    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>
     <div class="font-semibold">Monthly P&amp;L</div>
     <div class="instructional-note mt-1">In development</div>
   </div>
   <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-sop"/></svg>
+    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sop"/></svg>
     <div class="font-semibold">BIR Export</div>
     <div class="instructional-note mt-1">Raw fields captured</div>
   </div>
@@ -6483,13 +6489,13 @@ Date: ${new Date().toLocaleDateString()}`;
 <p class="instructional-note mb-4">Quick access to equipment references used in operations.</p>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
-<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-lock"/></svg><div>Smart Lock Manual</div>
+<svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg><div>Smart Lock Manual</div>
 </a>
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
-<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-air"/></svg><div>Air Purifier Guide</div>
+<svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-air"/></svg><div>Air Purifier Guide</div>
 </a>
 <a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
-<svg class="ch-ico ch-tile-ico" aria-hidden="true"><use href="#i-vacuum"/></svg><div>Dust Mite Vacuum</div>
+<svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vacuum"/></svg><div>Dust Mite Vacuum</div>
 </a>
 </div>
 </div>
