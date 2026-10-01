@@ -96,7 +96,7 @@
 
 /* ── Reset & Base ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; }
+html { font-size: 15px; overflow-x: clip; }
 body {
   font-family: var(--font-b);
   background: var(--bg);
@@ -105,6 +105,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Subtle parchment grain overlay */
@@ -866,13 +867,24 @@ body.owner-user  .admin-only  { display: none !important; }
 }
 
 /* Daily Ops bento: featured card gets priority on wider screens */
-.daily-ops-grid {
+/* One grid for every dashboard group: cards in a row are the same height and the columns follow the width. */
+.daily-ops-grid,
+.guest-grid,
+.training-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
 }
-@media (min-width: 480px) {
-  .daily-ops-grid { grid-template-columns: repeat(4, 1fr); }
+@media (min-width: 768px) {
+  .daily-ops-grid,
+  .guest-grid,
+  .training-grid { gap: 16px; }
+}
+@media (max-width: 380px) {
+  .daily-ops-grid,
+  .guest-grid,
+  .training-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }
 
 /* The booking site is the one tile that earns money — mark it by
@@ -893,22 +905,7 @@ body.owner-user  .admin-only  { display: none !important; }
     0 16px 34px rgba(28,16,6,.2);
 }
 
-/* Guest-facing 2-col mobile, 4-col tablet */
-.guest-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-@media (min-width: 480px) {
-  .guest-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
-/* Training strip: auto-fill — always fills row cleanly regardless of card count */
-.training-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
-  gap: 10px;
-}
+/* Guest-facing and Training grids share the rule above. */
 
 /* Divider between groups */
 .dash-divider {
@@ -1416,6 +1413,7 @@ body.owner-user  .admin-only  { display: none !important; }
   gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
+  padding-top: 2px;
   padding-bottom: 4px;
   /* Right-edge fade shows the bar scrolls; the padding lets the last pill clear it. */
   padding-right: 28px;
@@ -1427,7 +1425,11 @@ body.owner-user  .admin-only  { display: none !important; }
 
 .pill-link {
   flex-shrink: 0;
-  padding: 6px 12px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
   border-radius: 20px;
   font-family: var(--font-b);
   font-size: .75rem;
@@ -1850,8 +1852,9 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px 6px 10px;
-  border-radius: 20px;
+  min-height: 44px;
+  padding: 0 14px 0 12px;
+  border-radius: 22px;
   border: 1.5px solid var(--border);
   background: var(--surface-raised);
   font-family: var(--font-b);
@@ -1863,7 +1866,7 @@ button.quick-link-card { cursor: pointer; background: none; font-family: var(--f
 }
 
 .topbar-search-btn:hover { border-color: var(--border-strong); color: var(--text-1); }
-.topbar-search-btn svg   { width: 15px; height: 15px; stroke: currentColor; }
+.topbar-search-btn svg   { width: 18px; height: 18px; stroke: currentColor; }
 .topbar-search-btn kbd {
   font-family: var(--font-b);
   font-size: .64rem;
@@ -1951,8 +1954,8 @@ input, textarea { caret-color: var(--bronze); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   border: 1.5px solid var(--border);
   border-radius: var(--r-md);
@@ -1965,11 +1968,7 @@ input, textarea { caret-color: var(--bronze); }
 
 .mobile-search-btn:active { border-color: var(--bronze); color: var(--text-1); }
 
-/* Two tiles a row on a phone — thumb-sized, never a cramped third column. */
-@media (max-width: 479px) {
-  .daily-ops-grid,
-  .training-grid { grid-template-columns: repeat(2, 1fr); }
-}
+/* Two tiles a row on a phone: the shared grid above gives 2 columns at 375 and 414 px. */
 
 /* ══ v24.2 design fixes ═══════════════════════════════════ */
 
@@ -2027,6 +2026,244 @@ details.more{margin:.5rem 0}
 details.more summary{cursor:pointer;color:var(--bronze-ink);font-weight:600;font-size:.9rem;min-height:44px;display:flex;align-items:center}
 details.more summary::before{content:"\25B8\00a0"}
 details.more[open] summary::before{content:"\25BE\00a0"}
+
+/* ══ v24.2 layout pass: one card, one button system ═══════ */
+
+/* Dashboard cards: same box, icon box, label and summary lines in every group, so rows line up. */
+.dash-group .quick-link-card {
+  justify-content: flex-start;
+  gap: 0;
+  padding: 16px 12px;
+  min-width: 0;
+}
+.dash-group button.quick-link-card { background: var(--surface); width: auto; }
+.dash-group .quick-link-card .ch-tile-ico {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.dash-group .quick-link-card > div:not(.ql-sub) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.5em;
+  font-size: .8rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.dash-group .ql-sub {
+  width: 100%;
+  margin-top: 4px;
+  min-height: 2.6em;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-wrap: balance;
+}
+.daily-ops-primary .ql-sub { color: var(--cream); opacity: .8; }
+
+/* Page edge: nothing may push the page sideways. */
+.topbar-greeting { min-width: 0; }
+.topbar-greeting h2,
+.topbar-greeting p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-right { gap: 12px; flex-shrink: 0; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.mobile-topbar-row h1 { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill-link::after { content: ''; position: absolute; inset: -2px 0; }
+
+/* On a phone the fixed footer starts at the left edge (it was offset by the sidebar width and squeezed into a corner). */
+@media (max-width: 1023px) { #app-footer { left: 0 !important; } }
+
+/* Home button: same look as the search button, hidden on the Dashboard itself. */
+.topbar-search-btn.home-btn { width: 44px; padding: 0; justify-content: center; }
+html[data-page="dashboard"] .home-btn { display: none; }
+
+/* One button: 44px tall, 18px icon, 8px gap, never wraps. */
+.ch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  color: var(--text-2);
+  font-family: var(--font-b);
+  font-size: .8rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.ch-btn:hover { border-color: var(--bronze); color: var(--text-1); }
+.ch-btn .ch-ico { width: 18px; height: 18px; }
+.ch-btn-icon { width: 44px; padding: 0; }
+.ch-btn-ghost { border-color: transparent; background: transparent; color: var(--bronze-ink); padding: 0 12px 0 8px; }
+.ch-btn-ghost:hover { border-color: transparent; background: var(--accent-soft); color: var(--bronze-ink); }
+.ch-btn-primary { background: var(--mahogany); border-color: var(--mahogany); color: var(--cream); }
+.ch-btn-primary:hover { background: var(--walnut); border-color: var(--walnut); color: var(--cream); }
+.ch-btn[hidden], .guide-modal-foot[hidden] { display: none !important; }
+
+/* Existing buttons brought onto the same sizes. */
+.copy-button { min-height: 44px; flex-shrink: 0; justify-content: center; white-space: nowrap; gap: 8px; }
+.prompt-card .copy-button { align-self: center; }
+.copy-tpl-btn { min-height: 44px; padding: 0 14px; gap: 8px; white-space: nowrap; }
+.copy-tpl-btn svg { width: 18px; height: 18px; }
+.ch-tab, .playbook-tab, .cost-tab { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+#playbook-tabs, #costing-tabs { overflow-x: auto; scrollbar-width: none; }
+#playbook-tabs::-webkit-scrollbar, #costing-tabs::-webkit-scrollbar { display: none; }
+@media (max-width: 479px) { .playbook-tab, .cost-tab { padding: 0 .7rem; font-size: .76rem; } }
+#togglePass { min-width: 44px; min-height: 44px; }
+
+/* Access Log, Finance and Account Settings sit directly in #main-content (an unbalanced tag in the Info page closes #content-host early), so they get the same page padding. */
+#main-content > .content-section { padding: 28px 28px 80px; }
+@media (max-width: 1023px) { #main-content > .content-section { padding: 16px 12px 80px; } }
+
+/* Back button at the start of each page header */
+.section-header.has-back { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 6px; }
+.sec-back { margin-left: -8px; }
+.sec-back-row { margin-bottom: 8px; }
+
+/* Appliance guide modal: Back at the left of the header, Copy for guest in the footer */
+.guide-modal-header .ch-btn-ghost { margin-left: -6px; }
+.guide-modal-close { width: 44px; height: 44px; font-size: 1rem; }
+.guide-modal-foot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  max-height: 46dvh;
+  overflow-y: auto;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.guest-preview { margin: 0; }
+.guest-preview-text {
+  margin: 0 0 8px;
+  padding: 12px 14px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  font-family: var(--font-b);
+  font-size: .82rem;
+  line-height: 1.55;
+  color: var(--text-1);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Full-page viewer for the public guide pages */
+.viewer { position: fixed; inset: 0; z-index: 450; display: none; flex-direction: column; background: var(--bg); }
+.viewer.open { display: flex; }
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: max(8px, env(safe-area-inset-top, 0px)) 12px 8px;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+}
+.viewer-back { order: 1; padding: 0 12px 0 8px; }
+.viewer-title {
+  order: 2;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-d);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.viewer-actions { order: 3; display: flex; gap: 8px; }
+.viewer-share { order: 3; }
+.viewer-ext { order: 4; }
+.viewer-host { flex: 1 1 0; min-height: 0; display: flex; }
+.viewer-frame { flex: 1 1 auto; width: 100%; height: 100%; border: 0; background: #fff; }
+.viewer-actions[hidden], .poster-strip[hidden] { display: none; }
+@media (max-width: 560px) {
+  .viewer-actions { order: 5; flex: 1 1 100%; }
+  .viewer-actions .ch-btn { flex: 1 1 0; min-width: 0; }
+}
+@media (max-width: 359px) {
+  .viewer-actions { flex-wrap: wrap; }
+  .viewer-actions .ch-btn { flex-basis: 100%; }
+}
+
+/* Copy for guest and Share poster sit side by side, one per row under 360 px */
+.action-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.action-row .ch-btn { flex: 1 1 0; min-width: 0; }
+@media (max-width: 359px) { .action-row .ch-btn { flex-basis: 100%; } }
+.action-row .ch-btn[hidden] { display: none; }
+
+/* Equipment posters */
+.poster-block { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.poster-thumb {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  overflow: hidden;
+  cursor: pointer;
+}
+.poster-thumb:hover { border-color: var(--bronze); }
+.poster-thumb img { display: block; width: auto; height: auto; max-width: 100%; max-height: 220px; object-fit: contain; }
+.poster-cap { font-size: .78rem; line-height: 1.4; color: var(--text-2); }
+.poster-strip { flex-shrink: 0; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.poster-strip .poster-block { flex-direction: row; align-items: center; gap: 12px; }
+.poster-strip .poster-thumb img { max-height: 64px; }
+.viewer.poster-view { z-index: 460; }
+.poster-scroll { flex: 1 1 0; min-height: 0; overflow: auto; padding: 12px; display: flex; justify-content: center; align-items: flex-start; background: var(--bg); -webkit-overflow-scrolling: touch; }
+.poster-scroll img { display: block; width: auto; max-width: 100%; height: auto; border-radius: var(--r-sm); box-shadow: 0 2px 12px rgba(28,16,6,.12); }
+
+/* Small confirmation message */
+.ch-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 600;
+  max-width: min(92vw, 420px);
+  padding: 12px 18px;
+  border-radius: var(--r-md);
+  background: var(--mahogany);
+  color: var(--cream);
+  font-family: var(--font-b);
+  font-size: .85rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.ch-toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) {
+  .ch-toast { transition: none; transform: translate(-50%, 0); }
+  .dash-group .quick-link-card:hover,
+  .dash-group .quick-link-card:active { transform: none !important; }
+}
 </style>
 
 </head>
@@ -2051,6 +2288,9 @@ details.more[open] summary::before{content:"\25BE\00a0"}
     <g id="i-log"><path d="M3.4 12a8.6 8.6 0 1 0 2.9-6.4L3.4 8.2"/><path d="M3.4 3.6v4.6h4.6"/><path d="M12 7.6V12l3 1.9"/></g>
     <g id="i-access"><path d="M12 3.2 19 6v5.1c0 4.3-2.9 8-7 9.7-4.1-1.7-7-5.4-7-9.7V6z"/><path d="M12 11.2v2.6"/><path d="M12 8.9h.01"/></g>
     <g id="i-search"><circle cx="11" cy="11" r="6.6"/><path d="m20.5 20.5-4.8-4.8"/></g>
+    <g id="i-back"><path d="M19.5 12h-15"/><path d="m11 5.5-6.5 6.5 6.5 6.5"/></g>
+    <g id="i-external"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></g>
+    <g id="i-share"><path d="M12 15V3.5"/><path d="m7.5 8 4.5-4.5L16.5 8"/><path d="M5 12.5v6a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-6"/></g>
     <g id="i-copy"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15.5 5.8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2"/></g>
     <g id="i-booking"><path d="M3.2 10.6 12 3.4l8.8 7.2"/><path d="M5.6 9.5V20a1 1 0 0 0 1 1h10.8a1 1 0 0 0 1-1V9.5"/><path d="M9.4 21v-5.2a2.6 2.6 0 0 1 5.2 0V21"/></g>
     <g id="i-tile-clean"><path d="M20.4 7.2 10 17.6l-5-5"/><path d="M3.6 20.4h5"/></g>
@@ -2253,6 +2493,9 @@ details.more[open] summary::before{content:"\25BE\00a0"}
         <p id="topbar-greeting-sub">Here's your operations command center.</p>
       </div>
       <div class="topbar-right">
+        <button class="topbar-search-btn home-btn" type="button" aria-label="Home">
+          <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg>
+        </button>
         <button class="topbar-search-btn" id="search-open-btn" type="button" aria-label="Search the manual">
           <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
           <span class="search-btn-label">Search</span>
@@ -2270,9 +2513,14 @@ details.more[open] summary::before{content:"\25BE\00a0"}
     <div class="mobile-topbar">
       <div class="mobile-topbar-row">
         <h1>Cascade Hideaway</h1>
-        <button class="mobile-search-btn" id="search-open-btn-m" type="button" aria-label="Search the manual">
-          <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
-        </button>
+        <div class="topbar-actions">
+          <button class="mobile-search-btn home-btn" type="button" aria-label="Home">
+            <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg>
+          </button>
+          <button class="mobile-search-btn" id="search-open-btn-m" type="button" aria-label="Search the manual">
+            <svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
+          </button>
+        </div>
       </div>
       <nav class="pill-nav" id="pill-nav">
         <a class="pill-link" href="#dashboard">Dashboard</a>
@@ -2315,7 +2563,7 @@ details.more[open] summary::before{content:"\25BE\00a0"}
     <a class="quick-link-card daily-ops-primary" href="https://cascadereservations-del.github.io/Stay_At_CascadeGSC/" rel="noopener noreferrer" target="_blank">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-booking"/></svg>
       <div>Direct Booking</div>
-      <div style="font-size:.68rem;opacity:.6;font-weight:400;margin-top:2px">Open site ↗</div>
+      <div class="ql-sub">Open site ↗</div>
     </a>
     <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" rel="noopener noreferrer" target="_blank">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tile-clean"/></svg>
@@ -2338,13 +2586,13 @@ details.more[open] summary::before{content:"\25BE\00a0"}
 <div class="dash-group">
   <div class="dash-label">Guest-Facing</div>
   <div class="guest-grid">
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" rel="noopener noreferrer" target="_blank" data-viewer="Welcome Guide">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-guide-tile"/></svg><div class="text-xs">Welcome Guide</div><div class="ql-sub">What guests see</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Nearby-POIS/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Nearby-POIS/" rel="noopener noreferrer" target="_blank" data-viewer="Nearby POIs">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Nearby POIs</div><div class="ql-sub">Places near the unit</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" rel="noopener noreferrer" target="_blank" data-viewer="Dining Map">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dining"/></svg><div class="text-xs">Dining Map</div><div class="ql-sub">Where to eat nearby</div>
     </a>
     <a class="quick-link-card owner-only" href="#finance">
@@ -2362,10 +2610,10 @@ details.more[open] summary::before{content:"\25BE\00a0"}
     <a class="quick-link-card" href="#maps">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Maps</div><div class="ql-sub">Find any page or thing</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/5-Star-Mandate/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/5-Star-Mandate/" rel="noopener noreferrer" target="_blank" data-viewer="5-Star Mandate">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-star"/></svg><div class="text-xs">5-Star Mandate</div><div class="ql-sub">Training guide</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank" data-viewer="Smart Lock">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg><div class="text-xs">Smart Lock</div><div class="ql-sub">PIN and key card</div>
     </a>
     <button class="quick-link-card" data-guide="ecoflow-river">
@@ -2383,13 +2631,16 @@ details.more[open] summary::before{content:"\25BE\00a0"}
     <button class="quick-link-card" data-guide="induction-cooker">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cooker"/></svg><div class="text-xs">Induction Cooker</div><div class="ql-sub">Cookware and power levels</div>
     </button>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
+    <button class="quick-link-card" data-guide="washing-machine">
+      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clean"/></svg><div class="text-xs">Washing Machine</div><div class="ql-sub">Faucet valve, poster</div>
+    </button>
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank" data-viewer="Air Purifier">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-air"/></svg><div class="text-xs">Air Purifier</div><div class="ql-sub">Guest and turnover use</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank" data-viewer="Dust Mite Vac">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vacuum"/></svg><div class="text-xs">Dust Mite Vac</div><div class="ql-sub">Vacuum how-to guide</div>
     </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/iron-guide/" rel="noopener noreferrer" target="_blank">
+    <a class="quick-link-card" href="https://cascadereservations-del.github.io/iron-guide/" rel="noopener noreferrer" target="_blank" data-viewer="Iron Guide">
       <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-iron"/></svg><div class="text-xs">Iron Guide</div><div class="ql-sub">Iron how-to guide</div>
     </a>
   </div>
@@ -3809,7 +4060,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <h3 class="text-3xl font-bold mb-4 text-bronze">Guest-Facing Apps</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
   <a href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold">
+     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Welcome Guide">
     <span class="text-4xl">📖</span>
     <div><div class="font-bold">Welcome Guide PWA</div><div class="text-xs instructional-note mt-1">Live · v7.8.4</div></div>
   </a>
@@ -3819,12 +4070,12 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
     <div><div class="font-bold">Direct Booking Site</div><div class="text-xs instructional-note mt-1">Live · v36</div></div>
   </a>
   <a href="https://cascadereservations-del.github.io/Nearby-POIS/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold">
+     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Nearby POIs">
     <span class="text-4xl">📍</span>
     <div><div class="font-bold">Nearby POIs Map</div><div class="text-xs instructional-note mt-1">Live · v2.5</div></div>
   </a>
   <a href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold">
+     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Dining Map">
     <span class="text-4xl">🍽️</span>
     <div><div class="font-bold">Dining Map</div><div class="text-xs instructional-note mt-1">Live · v3.1</div></div>
   </a>
@@ -4875,7 +5126,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <h2 class="section-title text-4xl font-extrabold text-bronze mb-6">Haier Air Purifier: Guides &amp; Videos</h2>
 <p class="instructional-note mb-6">Centralized resources for the Haier air purifier used in our listings.</p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<a class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe quick-link-card flex items-center justify-between" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
+<a class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe quick-link-card flex items-center justify-between" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank" data-viewer="Air Purifier">
 <span class="font-semibold text-lg">Air Purifier Guide</span>
 <span class="badge badge-new">NEW</span>
 </a>
@@ -5417,13 +5668,13 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
     </div>
     <p class="instructional-note mb-4">Quick access to equipment references.</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" target="_blank" rel="noopener">
+      <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" target="_blank" rel="noopener" data-viewer="Smart Lock">
         <span class="ql-emoji">🔐</span><span>Smart Lock Manual</span>
       </a>
-      <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" target="_blank" rel="noopener">
+      <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" target="_blank" rel="noopener" data-viewer="Air Purifier">
         <span class="ql-emoji">🌬️</span><span>Air Purifier Guide</span>
       </a>
-      <a class="quick-link-card sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" target="_blank" rel="noopener">
+      <a class="quick-link-card sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" target="_blank" rel="noopener" data-viewer="Dust Mite Vac">
         <span class="ql-emoji">🧹</span><span>Dust Mite Vacuum</span>
       </a>
     </div>
@@ -5874,16 +6125,21 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                 activateSection(hash, mode) {
                     const targetHash = hash || '#dashboard';
                     try { localStorage.setItem(this.LAST_KEY, targetHash); } catch (e) {}
-                    const current = document.querySelector('.content-section.active');
                     const next = document.getElementById(targetHash.replace('#', ''));
+                    if (!next) return;
 
-                    if (!next || current === next) return;
+                    // Already showing and settled: nothing to do.
+                    if (this._current === next && next.classList.contains('active') && !next.classList.contains('exiting')) return;
+                    this._current = next;
 
                     // Keep the address in step so Back works and a page can be linked.
                     // mode 'none' = already there (popstate); 'replace' = first load; otherwise push.
+                    // history.state.d counts in-app steps so the Back button knows whether Back stays in the Manual.
                     if (mode !== 'none' && window.location.hash !== targetHash) {
-                        try { window.history[mode === 'replace' ? 'replaceState' : 'pushState'](null, '', targetHash); } catch (e) {}
+                        const d = (window.history.state && window.history.state.d) || 0;
+                        try { window.history[mode === 'replace' ? 'replaceState' : 'pushState']({ d: mode === 'replace' ? d : d + 1 }, '', targetHash); } catch (e) {}
                     }
+                    document.documentElement.dataset.page = next.id;
 
                     // Update nav links + aria-current
                     document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -5893,28 +6149,39 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         link.setAttribute('aria-current', isActive ? 'page' : 'false');
                     });
 
-                    // Scroll active pill into view on mobile
-                    const activePill = document.querySelector(`.pill-link[href="${targetHash}"]`);
-                    if (activePill && window.innerWidth <= 1024) {
-                        activePill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    // Centre the active pill inside the pill bar only. scrollIntoView also scrolls
+                    // the window sideways, which shifted the whole page left on phones.
+                    const activePill = document.querySelector('.pill-link[href="' + targetHash + '"]');
+                    const pillBar = document.getElementById('pill-nav');
+                    if (activePill && pillBar && pillBar.scrollTo) {
+                        const barBox = pillBar.getBoundingClientRect();
+                        const pillBox = activePill.getBoundingClientRect();
+                        pillBar.scrollTo({
+                            left: pillBar.scrollLeft + (pillBox.left - barBox.left) - (pillBar.clientWidth - pillBox.width) / 2,
+                            behavior: 'smooth'
+                        });
                     }
 
-                    // Animate out current section, then show next
-                    if (current) {
-                        current.classList.add('exiting');
-                        current.addEventListener('animationend', () => {
-                            current.classList.remove('active', 'exiting');
-                        }, { once: true });
-                        // Fallback timeout in case animationend doesn't fire
-                        setTimeout(() => current.classList.remove('active', 'exiting'), 300);
-                    }
+                    // Every other visible section fades out, then is removed, but only if the user
+                    // has not come back to it in the meantime (rapid A -> B -> A used to blank the page).
+                    document.querySelectorAll('.content-section.active, .content-section.exiting').forEach(sec => {
+                        if (sec === next) return;
+                        sec.classList.add('exiting');
+                        clearTimeout(sec._exitTimer);
+                        sec._exitTimer = setTimeout(() => {
+                            if (this._current !== sec) sec.classList.remove('active', 'exiting');
+                        }, 300);
+                    });
+                    next.classList.remove('exiting');
 
                     requestAnimationFrame(() => {
+                        if (this._current !== next) return; // a newer call owns the page
                         next.classList.add('active');
                         window.scrollTo({ top: 0, behavior: 'instant' });
                     });
                 }
             };
+            window.chNav = app.navigation; // used by the Home and Back buttons further down
 
             app.ui = {
                 init() {
@@ -6787,13 +7054,13 @@ Date: ${new Date().toLocaleDateString()}`;
 </div>
 <p class="instructional-note mb-4">Quick access to equipment references used in operations.</p>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank">
+<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank" data-viewer="Smart Lock">
 <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg><div>Smart Lock Manual</div>
 </a>
-<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank">
+<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank" data-viewer="Air Purifier">
 <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-air"/></svg><div>Air Purifier Guide</div>
 </a>
-<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank">
+<a class="p-5 text-center quick-link-card font-semibold block rounded-xl text-dark-bronze sm:col-span-2" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank" data-viewer="Dust Mite Vac">
 <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vacuum"/></svg><div>Dust Mite Vacuum</div>
 </a>
 </div>
@@ -7136,12 +7403,48 @@ Date: ${new Date().toLocaleDateString()}`;
 <div class="guide-modal-overlay" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="guide-modal-card">
     <div class="guide-modal-header">
+      <button class="ch-btn ch-btn-ghost" id="modal-back" type="button"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg><span>Back</span></button>
       <span class="guide-modal-icon" id="modal-icon"></span>
       <h3 class="guide-modal-title" id="modal-title"></h3>
-      <button class="guide-modal-close" id="modal-close" aria-label="Close guide">✕</button>
+      <button class="guide-modal-close" id="modal-close" type="button" aria-label="Close guide">✕</button>
     </div>
     <div class="guide-modal-body" id="modal-body"></div>
+    <div class="guide-modal-foot" id="modal-foot" hidden>
+      <div class="action-row">
+        <button class="ch-btn ch-btn-primary" id="modal-copy" type="button"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy for guest</span></button>
+        <button class="ch-btn ch-btn-primary" id="modal-share" type="button" hidden><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span>Share poster</span></button>
+      </div>
+      <details class="more guest-preview">
+        <summary>Preview guest text</summary>
+        <p class="guest-preview-text" id="modal-preview-text"></p>
+      </details>
+    </div>
   </div>
+</div>
+
+<!-- ── Full-page viewer for public guide pages ───────── -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
+  <div class="viewer-bar">
+    <button class="ch-btn ch-btn-ghost viewer-back" id="viewer-back" type="button"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg><span>Back</span></button>
+    <h2 class="viewer-title" id="viewer-title"></h2>
+    <div class="viewer-actions" id="viewer-actions" hidden>
+      <button class="ch-btn ch-btn-primary viewer-copy" id="viewer-copy" type="button" hidden><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy for guest</span></button>
+      <button class="ch-btn ch-btn-primary" id="viewer-share" type="button" hidden><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span>Share poster</span></button>
+    </div>
+    <a class="ch-btn ch-btn-icon viewer-ext" id="viewer-ext" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open in new tab" title="Open in new tab"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-external"/></svg></a>
+  </div>
+  <div class="poster-strip" id="viewer-poster" hidden></div>
+  <div class="viewer-host" id="viewer-host"></div>
+</div>
+
+<!-- ── Poster, full size ─────────────────────────────── -->
+<div class="viewer poster-view" id="poster" role="dialog" aria-modal="true" aria-labelledby="poster-title">
+  <div class="viewer-bar">
+    <button class="ch-btn ch-btn-ghost viewer-back" id="poster-back" type="button"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg><span>Back</span></button>
+    <h2 class="viewer-title" id="poster-title"></h2>
+    <button class="ch-btn ch-btn-primary viewer-share" id="poster-share" type="button"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span>Share poster</span></button>
+  </div>
+  <div class="poster-scroll"><img id="poster-img" alt=""></div>
 </div>
 
 <script>
@@ -7319,36 +7622,342 @@ Date: ${new Date().toLocaleDateString()}`;
       `
     }
   };
+  // Washing Machine guide: the poster carries the picture, this is the wording.
+  GUIDES['washing-machine'] = {
+    icon: '🧺',
+    title: 'Washing Machine — Panasonic NA-F80A5',
+    html: `
+        <div class="g-section">
+          <h4>Before you use it</h4>
+          <ul>
+            <li><span class="gi">🚰</span> Please check that the faucet valve is open before using the washing machine. The poster shows the open and closed positions.</li>
+          </ul>
+        </div>
+      `
+  };
 
-  const overlay = document.getElementById('guide-modal');
-  const icon    = document.getElementById('modal-icon');
-  const title   = document.getElementById('modal-title');
-  const body    = document.getElementById('modal-body');
+  // Guest-friendly copies for the Copy for guest buttons. Written from the house facts
+  // (no codes, no Wi-Fi password) so the Manual, Cassy and the guest guide say the same thing.
+  const GUEST_COPY = {
+    "ac-guide": "Aircon (TCL)\nThe aircon is already running when you arrive. Its remote is on the wooden tray on top of the TV cabinet, just below the TV, beside the flower vase, with the TV remote and your key card.\n- A comfortable setting is 26 C on COOL with the fan on AUTO.\n- MODE cycles COOL (everyday cooling), FAN (air only), DRY (takes the humidity out on rainy days) and AUTO (holds the set temperature).\n- SLEEP raises the temperature 1 C an hour overnight. ECO trims power use. SWING moves the louver. TIMER switches the unit off after the hours you set.\nIf anything does not feel right, send us a message and we will help.",
+    "tv-remote": "TV (Samsung)\nThe TV remote is on the wooden tray on top of the TV cabinet, just below the TV, beside the flower vase, with the aircon remote and your key card.\n- Power is at the top of the remote. Hold it for three seconds if the set is slow to wake.\n- Volume is the right rocker, channels the left.\n- Home opens the Smart Hub: Netflix, YouTube Premium, Viu and Samsung TV Plus are signed in and ready.\n- Source switches to HDMI 1 or 2.\n- Screen mirroring from your phone: Settings > General > External Device Manager.\nIf a login screen appears, please message us rather than signing out; the saved accounts are best left as they are.",
+    "ecoflow-river": "EcoFlow RIVER 3 (backup power)\nIt sits near the TV unit and is already set up, so you may plug in whenever you need it.\n1. Check the display for charge.\n2. Hold the main button to power it on.\n3. Press the AC button for the wall sockets, then plug in.\nIt runs the router (about 26 hours), phones (around 15 charges), an LED lamp, a thin laptop (about 4.5 hours), a stand fan (about 3 hours) or a small TV.\nPlease do not use it for the aircon, water heater, microwave, kettle or induction cooker; its output is 300 W in total.\nWhen power returns, plug it into the wall and it recharges in one to two hours.",
+    "water-heater": "Water heater (Panasonic)\n1. Flip the heater's wall switch on before your shower.\n2. Allow three to five minutes for the hot water to reach the shower head.\n3. The red light means it is heating. Once it turns off or green, the water is ready.\nThe dial turns clockwise for hotter and anticlockwise for cooler.\nSwitching it off after your shower saves power. Please keep it off whenever the water supply itself is off.",
+    "induction-cooker": "Induction cooker (Dowell)\n1. Place a pan on the centre of the glass.\n2. Press POWER, then use + and - for the power level. Four or five suits everyday cooking.\n3. TIMER switches it off after a set time.\nThe pans provided all work on it. A pan of your own needs a magnetic base or the coil symbol underneath.\nIt beeps and shuts off on its own after sixty seconds without a pan.\nThe glass stays cool around the pan, and a damp cloth cleans it once it has cooled.",
+    "smart-lock": "Door lock and key card\n- Tap the keypad to wake it, enter your code and press #.\n- The door locks itself when it closes, so pull it firmly shut whenever you leave.\n- Your key card, on its Cascade Hideaway keychain, also opens the door with a tap on the keypad. It is kept with the remotes on the wooden tray on the TV cabinet.\n- Your personal code reaches you at least a day before arrival, once your IDs and the balance are in.\n- A lost key card carries a PHP 1,000 replacement fee.\nIf the keypad does not respond, message us and we will get you in.",
+    "air-purifier": "Air purifier (Simplus)\nThe air purifier works quietly in the corner and keeps the air turning over, which you will notice most if you are prone to allergies. It is set up to run on its own, so there is nothing for you to adjust.",
+    "iron-guide": "Garment steamer\nFor pressing there is a garment steamer rather than a flat iron, stored in the wardrobe cabinet. The wardrobe also has hangers for unpacking.\n1. Fill it with water.\n2. Let it heat.\n3. Keep it moving over the fabric.\nPlease unplug it as soon as you are done.",
+    "washing-machine": "Washing machine (Panasonic NA-F80A5)\nDetergent is not provided, so you may like to bring your own. Load the clothes, then add powder detergent straight into the tub or liquid detergent into its slot. Close the lid and choose your cycle; the machine runs on its own from there. It is a washer only, and a portable drying rack is provided for drying.\nPlease check that the faucet valve is open before you start."
+  };
+
+  // Equipment posters, shared as pictures. Files live next to index.html.
+  const POSTERS = {
+    'smart-lock': { src: 'img/posters/smart-lock.jpg', title: 'Smart lock guide', alt: 'Poster: your smart lock guide. Four steps: wake the keypad, enter your PIN and press the hash key, turn the handle, and close the door firmly. Key card access is explained at the bottom.' },
+    'tv-remote': { src: 'img/posters/tv-remote.jpg', title: 'TV remote guide', alt: 'Poster: the Samsung TV remote with the power, directional pad, select, return, play and pause, Smart Hub, volume and channel buttons labelled.' },
+    'faucet': { src: 'img/posters/faucet.jpg', title: 'Washing machine: check the faucet valve', alt: 'Poster: please check the faucet valve before using the washing machine. Two photos show the valve open and closed.' }
+  };
+  const GUIDE_POSTER = { 'tv-remote': 'tv-remote', 'washing-machine': 'faucet' };
+  const VIEWER_POSTER = { 'lockifi-manual': 'smart-lock' };
+
+  // Pages that open in the full-page viewer, and the guest copy each one carries.
+  const VIEWER_COPY = { 'lockifi-manual': 'smart-lock', 'air-purifier': 'air-purifier', 'iron-guide': 'iron-guide' };
+
+  // ── History: the phone Back button closes an open overlay instead of leaving the Manual ──
+  const ovStack = [];
+  let ovSkip = 0;
+  function ovOpen(hide) {
+    ovStack.push(hide);
+    const d = (history.state && history.state.d) || 0;
+    try { history.pushState({ d: d + 1, ov: 1 }, ''); } catch (e) {}
+  }
+  function ovClose() {
+    const hide = ovStack.pop();
+    if (!hide) return;
+    hide();
+    if (history.state && history.state.ov) {
+      ovSkip++;
+      try { history.back(); } catch (e) { ovSkip--; }
+      setTimeout(() => { ovSkip = 0; }, 600); // no popstate came (the step went to a page inside the viewer): stop waiting
+    }
+  }
+  window.addEventListener('popstate', () => {
+    if (ovSkip > 0) { ovSkip--; return; }
+    const hide = ovStack.pop();
+    if (hide) hide();
+    else if (history.state && history.state.ov) history.back(); // stale overlay entry: step over it
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') ovClose(); });
+
+  // ── Toast and copy ──
+  const toastEl = document.createElement('div');
+  toastEl.className = 'ch-toast';
+  toastEl.setAttribute('role', 'status');
+  toastEl.setAttribute('aria-live', 'polite');
+  document.body.appendChild(toastEl);
+  let toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+  }
+  function legacyCopy(text) {
+    const prev = document.activeElement;
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    if (prev && prev.focus) prev.focus();
+    return ok;
+  }
+  function copyGuest(key) {
+    const text = GUEST_COPY[key];
+    if (!text) return;
+    const done = (ok) => toast(ok ? 'Copied. Paste it in the guest chat.' : 'Could not copy. Open Preview guest text and copy it by hand.');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => done(true), () => done(legacyCopy(text)));
+    } else {
+      done(legacyCopy(text));
+    }
+  }
+
+  // ── Posters: thumbnail block, full-size view, share ──
+  const posterFiles = {};
+  async function posterFile(key) {
+    if (posterFiles[key]) return posterFiles[key];
+    const res = await fetch(POSTERS[key].src);
+    if (!res.ok) throw new Error('poster ' + res.status);
+    const blob = await res.blob();
+    posterFiles[key] = new File([blob], 'cascade-' + key + '-guide.jpg', { type: 'image/jpeg' });
+    return posterFiles[key];
+  }
+  // Fetch the picture ahead of the tap: some phones only allow sharing straight after a tap.
+  function warmPoster(key) { if (key) posterFile(key).catch(() => {}); }
+  async function sharePoster(key) {
+    const p = POSTERS[key];
+    if (!p) return;
+    try {
+      const file = await posterFile(key);
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: p.title }); // phones: Messenger, WhatsApp, Viber
+        return;
+      }
+      // No file sharing here (most desktops): save the picture instead.
+      const url = URL.createObjectURL(file);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      toast('Poster saved. Attach it in the guest chat.');
+    } catch (e) {
+      if (e && e.name === 'AbortError') return; // the person closed the share sheet
+      toast('Could not share the poster. Open it full size and save the picture.');
+    }
+  }
+  function posterEl(key) {
+    const p = POSTERS[key];
+    const wrap = document.createElement('div');
+    wrap.className = 'poster-block';
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'poster-thumb';
+    thumb.setAttribute('aria-label', 'Open the poster full size: ' + p.title);
+    const img = new Image();
+    img.src = p.src;
+    img.alt = p.alt;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    thumb.appendChild(img);
+    thumb.addEventListener('click', () => openPoster(key));
+    const cap = document.createElement('span');
+    cap.className = 'poster-cap';
+    cap.textContent = p.title + '. Tap the picture to enlarge.';
+    wrap.append(thumb, cap);
+    return wrap;
+  }
+  const posterView  = document.getElementById('poster');
+  const posterImg   = document.getElementById('poster-img');
+  const posterTitle = document.getElementById('poster-title');
+  const posterShare = document.getElementById('poster-share');
+  let posterKey = '';
+  let posterOpener = null;
+  function openPoster(key) {
+    const p = POSTERS[key];
+    if (!p || posterView.classList.contains('open')) return;
+    posterKey = key;
+    posterOpener = document.activeElement;
+    posterTitle.textContent = p.title;
+    posterImg.src = p.src;
+    posterImg.alt = p.alt;
+    posterView.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    warmPoster(key);
+    ovOpen(hidePoster);
+    document.getElementById('poster-back').focus();
+  }
+  function hidePoster() {
+    posterView.classList.remove('open');
+    posterImg.removeAttribute('src');
+    document.body.style.overflow = ovStack.length ? 'hidden' : '';
+    if (posterOpener && posterOpener.focus) posterOpener.focus();
+  }
+  document.getElementById('poster-back').addEventListener('click', ovClose);
+  posterShare.addEventListener('click', () => sharePoster(posterKey));
+
+  // ── Appliance guide modal ──
+  const overlay  = document.getElementById('guide-modal');
+  const icon     = document.getElementById('modal-icon');
+  const title    = document.getElementById('modal-title');
+  const body     = document.getElementById('modal-body');
   const closeBtn = document.getElementById('modal-close');
+  const backBtn  = document.getElementById('modal-back');
+  const foot     = document.getElementById('modal-foot');
+  const preview  = document.getElementById('modal-preview-text');
+  const copyBtn  = document.getElementById('modal-copy');
+  const shareBtn = document.getElementById('modal-share');
+  let guideKey = '';
+  let guideOpener = null;
 
   function openGuide(key) {
     const g = GUIDES[key];
-    if (!g) return;
+    if (!g || overlay.classList.contains('open')) return;
+    guideKey = key;
+    guideOpener = document.activeElement;
     icon.textContent  = g.icon;
     title.textContent = g.title;
     body.innerHTML    = g.html;
+    body.scrollTop    = 0;
+    const pk = GUIDE_POSTER[key] || '';
+    if (pk) {
+      const sec = document.createElement('div');
+      sec.className = 'g-section';
+      sec.innerHTML = '<h4>Poster</h4>';
+      sec.appendChild(posterEl(pk));
+      body.appendChild(sec);
+      warmPoster(pk);
+    }
+    shareBtn.hidden = !pk;
+    foot.hidden = !GUEST_COPY[key];
+    preview.textContent = GUEST_COPY[key] || '';
+    foot.querySelector('details').open = false;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    ovOpen(hideGuide);
     closeBtn.focus();
   }
 
-  function closeGuide() {
+  function hideGuide() {
     overlay.classList.remove('open');
-    document.body.style.overflow = '';
+    document.body.style.overflow = ovStack.length ? 'hidden' : '';
+    if (guideOpener && guideOpener.focus) guideOpener.focus();
   }
 
-  closeBtn.addEventListener('click', closeGuide);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeGuide(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGuide(); });
+  closeBtn.addEventListener('click', ovClose);
+  backBtn.addEventListener('click', ovClose);
+  copyBtn.addEventListener('click', () => copyGuest(guideKey));
+  shareBtn.addEventListener('click', () => sharePoster(GUIDE_POSTER[guideKey]));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) ovClose(); });
 
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-guide]');
     if (btn) openGuide(btn.dataset.guide);
+  });
+
+  // ── Full-page viewer for the public guide pages ──
+  const viewer      = document.getElementById('viewer');
+  const viewerHost  = document.getElementById('viewer-host');
+  const viewerTitle = document.getElementById('viewer-title');
+  const viewerExt   = document.getElementById('viewer-ext');
+  const viewerCopy  = document.getElementById('viewer-copy');
+  const viewerShare = document.getElementById('viewer-share');
+  const viewerActions = document.getElementById('viewer-actions');
+  const viewerPoster  = document.getElementById('viewer-poster');
+  let viewerKey = '';
+  let viewerPosterKey = '';
+  let viewerOpener = null;
+
+  function openViewer(a) {
+    if (viewer.classList.contains('open')) return;
+    const name = a.dataset.viewer || 'Guide';
+    const slug = a.pathname.replace(/\/+$/, '').split('/').pop();
+    viewerKey = VIEWER_COPY[slug] || '';
+    viewerOpener = a;
+    viewerTitle.textContent = name;
+    viewerExt.href = a.href;
+    viewerCopy.hidden = !GUEST_COPY[viewerKey];
+    viewerPosterKey = VIEWER_POSTER[slug] || '';
+    viewerShare.hidden = !viewerPosterKey;
+    viewerActions.hidden = viewerCopy.hidden && viewerShare.hidden;
+    viewerPoster.hidden = !viewerPosterKey;
+    viewerPoster.replaceChildren();
+    if (viewerPosterKey) { viewerPoster.appendChild(posterEl(viewerPosterKey)); warmPoster(viewerPosterKey); }
+    viewer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // A fresh iframe each time: the first load of a new iframe adds no history entry, so Back stays in step.
+    const frame = document.createElement('iframe');
+    frame.className = 'viewer-frame';
+    frame.title = name + ' guide';
+    frame.loading = 'lazy';
+    viewerHost.replaceChildren(frame);
+    frame.src = a.href;
+    ovOpen(hideViewer);
+    document.getElementById('viewer-back').focus();
+  }
+
+  function hideViewer() {
+    viewer.classList.remove('open');
+    viewerHost.replaceChildren();
+    document.body.style.overflow = ovStack.length ? 'hidden' : '';
+    if (viewerOpener && viewerOpener.focus) viewerOpener.focus();
+  }
+
+  document.getElementById('viewer-back').addEventListener('click', ovClose);
+  viewerCopy.addEventListener('click', () => copyGuest(viewerKey));
+  viewerShare.addEventListener('click', () => sharePoster(viewerPosterKey));
+  // One handler for every link marked data-viewer. Without JS the link still opens a new tab.
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-viewer]');
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    openViewer(a);
+  });
+
+  // ── Home and Back ──
+  function goHome() { if (window.chNav) window.chNav.activateSection('#dashboard'); }
+  function goBack() {
+    // history.state.d counts in-app steps: Back stays inside the Manual only when there is one.
+    if (history.state && history.state.d > 0) history.back();
+    else goHome();
+  }
+  document.querySelectorAll('.content-section').forEach((sec) => {
+    if (sec.id === 'dashboard') return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ch-btn ch-btn-ghost sec-back';
+    btn.innerHTML = '<svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg><span>Back</span>';
+    const head = sec.querySelector(':scope > .section-header');
+    if (head) {
+      head.classList.add('has-back');
+      head.prepend(btn);
+    } else {
+      const row = document.createElement('div');
+      row.className = 'sec-back-row';
+      row.appendChild(btn);
+      sec.prepend(row);
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.sec-back')) goBack();
+    else if (e.target.closest('.home-btn')) goHome();
   });
 })();
 </script>
