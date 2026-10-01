@@ -2119,6 +2119,8 @@ html[data-page="dashboard"] .home-btn { display: none; }
 /* Existing buttons brought onto the same sizes. */
 .copy-button { min-height: 44px; flex-shrink: 0; justify-content: center; white-space: nowrap; gap: 8px; }
 .prompt-card .copy-button { align-self: center; }
+a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-height: 1.3; }
+@media (max-width: 480px) { a.copy-button { padding-left: 20px; padding-right: 20px; } }
 .copy-tpl-btn { min-height: 44px; padding: 0 14px; gap: 8px; white-space: nowrap; }
 .copy-tpl-btn svg { width: 18px; height: 18px; }
 .ch-tab, .playbook-tab, .cost-tab { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
