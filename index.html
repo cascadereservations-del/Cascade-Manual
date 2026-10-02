@@ -2873,42 +2873,911 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentC
 <div id="content-host">
 <!-- V25:today -->
 <section class="content-section v25" id="today" aria-labelledby="today-h">
-<header class="v-head"><h2 id="today-h">Today</h2><p class="v-sub">This page is being written.</p></header>
+  <header class="v-head">
+    <h2 id="today-h">Today</h2>
+    <p class="v-sub">Start here. Tap what you need to do.</p>
+  </header>
+
+  <div class="v-card">
+    <h3 class="v-card-title">I need to...</h3>
+    <div class="v-tasks">
+      <a class="v-task" href="#turnover"><svg class="ic"><use href="#i-clean"/></svg><strong>Do a turnover</strong><span>Phase 0 to 4</span></a>
+      <a class="v-task" href="#standard-look"><svg class="ic"><use href="#i-check"/></svg><strong>See the finished look</strong><span>Photos with 3 checks</span></a>
+      <a class="v-task" href="#telegram"><svg class="ic"><use href="#i-concierge"/></svg><strong>Ask Cassy</strong><span>Telegram and cards</span></a>
+      <a class="v-task" href="#help"><svg class="ic"><use href="#i-crisis"/></svg><strong>Something is wrong</strong><span>Who to tell, what to do</span></a>
+      <a class="v-task" href="#lookup"><svg class="ic"><use href="#i-search"/></svg><strong>Find a guide</strong><span>Appliances and videos</span></a>
+      <a class="v-task" href="#maps"><svg class="ic"><use href="#i-map"/></svg><strong>Maps</strong><span>Where things are</span></a>
+      <a class="v-task office-only" href="#office"><svg class="ic"><use href="#i-booking"/></svg><strong>Confirm a booking</strong><span>Office desk</span></a>
+      <a class="v-task office-only" href="#templates"><svg class="ic"><use href="#i-message"/></svg><strong>Guest messages</strong><span>Copy-ready templates</span></a>
+    </div>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="today-day1-cleaner-h">Your first day: cleaner</h3>
+    <p>About 40 minutes. Tick each line when you can do it without help. Your ticks stay on this phone.</p>
+    <ul class="v-check" id="today-day1-cleaner">
+      <li><label><input type="checkbox"> I installed the Cleaner app and signed in.</label></li>
+      <li><label><input type="checkbox"> I read <a href="#turnover">Turnover</a>.</label></li>
+      <li><label><input type="checkbox"> I looked at <a href="#standard-look">the standard look</a>.</label></li>
+      <li><label><input type="checkbox"> I know where things are in the unit. See <a href="#maps">Maps</a>.</label></li>
+      <li><label><input type="checkbox"> I know how to ask Cassy. See <a href="#telegram">Telegram &amp; Cassy</a>.</label></li>
+      <li><label><input type="checkbox"> I know who to tell when something is wrong. See <a href="#help">Help</a>.</label></li>
+      <li><label><input type="checkbox"> I know how I get paid: on <strong>Cleaning Fees Settled</strong> I tap <strong>Acknowledge Payment</strong>; on a <strong>Payment Ready</strong> card I tap <strong>Received Payment</strong> only when the money is in my hand.</label></li>
+    </ul>
+    <a class="v-btn" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-external"/></svg>Open the Cleaner app</a>
+  </div>
+
+  <div class="office-only">
+    <div class="v-card">
+      <h3 class="v-card-title" id="today-day1-office-h">Your first day: office</h3>
+      <p>About 45 minutes. Tick each line when you can do it without help.</p>
+      <ul class="v-check" id="today-day1-office">
+        <li><label><input type="checkbox"> I read the policy card and can say the fees and the refund rule the same way as the booking site. See <a href="#office">Office</a>.</label></li>
+        <li><label><input type="checkbox"> I know where the message <a href="#templates">templates</a> are.</label></li>
+        <li><label><input type="checkbox"> I know which dashboard tasks are mine. See <a href="#office">Office</a>.</label></li>
+        <li><label><input type="checkbox"> I know the difference between the Telegram Finance group and the OPS group. See <a href="#telegram">Telegram &amp; Cassy</a>.</label></li>
+        <li><label><input type="checkbox"> I can answer a Cassy handoff card, and I know which buttons send to a guest.</label></li>
+        <li><label><input type="checkbox"> I know who to tell when something is wrong. See <a href="#help">Help</a>.</label></li>
+      </ul>
+    </div>
+  </div>
 </section>
 <!-- /V25:today -->
 <!-- V25:turnover -->
 <section class="content-section v25" id="turnover" aria-labelledby="turnover-h">
-<header class="v-head"><h2 id="turnover-h">Turnover</h2><p class="v-sub">This page is being written.</p></header>
+<header class="v-head"><h2 id="turnover-h">Do a turnover</h2><p class="v-sub">Open the Cleaner app. It takes you from Phase 0 to Phase 4. It will not let you skip a required step.</p></header>
+
+<p><a class="v-btn" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-external"/></svg>Open the Cleaner app</a></p>
+
+<div class="v-card" id="turnover-before">
+<h3 class="v-card-title">Before you start</h3>
+<ul>
+<li>Sign in with your own name and PIN. Never share your PIN.</li>
+<li>Do not clear your browser data. The app saves your draft on your phone.</li>
+<li>The app says "Phase 1 of 5" to "Phase 5 of 5". This page says Phase 0 to Phase 4. They are the same screens.</li>
+</ul>
+</div>
+
+<ol class="v-steps" id="turnover-phases" start="0">
+<li id="turnover-phase-0"><strong>Phase 0 · Setup.</strong> <span class="v-chip time">30 seconds</span> Check that <strong>Turnover</strong> is chosen under <strong>Cleaning Type</strong>. Check the <strong>Cleaning date</strong>. Open <strong>Which stay is this report for?</strong> and choose the stay. Tap <strong>Next →</strong>.</li>
+<li id="turnover-phase-1"><strong>Phase 1 · Document.</strong> <span class="v-chip">5 photos or more</span> <span class="v-chip">2 meter photos</span> Do this before you touch anything. Use <strong>Capture Photo</strong>. Aim for 10 to 12 photos: bedroom, living area, kitchen, appliances, bathroom, entrance. Type both meter readings: electric (kWh) and water (m³). Tap <strong>Add Photo</strong> under each meter. Tick <strong>Meter readings match the photos</strong>. Tap <strong>All Clear</strong> or <strong>Found Something</strong>. If you found something, write it in <strong>Describe what you found</strong>. Tap <strong>Next →</strong>.</li>
+<li id="turnover-phase-2"><strong>Phase 2 · Arrive &amp; Prep.</strong> Open the windows. Test the appliances. Look for damage. Check the key card is on its keychain. Strip the bed and towels. Pre-treat stains. Bag the used linen. Pre-spray the toilet, shower, stove and microwave. Do not scrub yet. Tap <strong>▶ Start Timer</strong>. <span class="v-chip time">10 min</span> Keep the app open while it runs.</li>
+<li id="turnover-phase-3"><strong>Phase 3 · Clean.</strong> <span class="v-chip">2 kitchen photos or more</span> Clean the bedroom first. Then the kitchen and bathroom. Under <strong>Kitchen &amp; Bathroom Photos</strong>, show the utensil drawer, the dish rack and the cookware. Tap <strong>Open Supply Log</strong>. Add what you used, then tap <strong>Save Usage</strong>. Used nothing? Tap <strong>Nothing used this session</strong>. You cannot go on without one of these. Spent your own money for the unit? Tap <strong>＋ Add an expense</strong>.</li>
+<li id="turnover-phase-4"><strong>Phase 4 · Finish.</strong> <span class="v-chip">5 after photos or more</span> Do the <strong>Final Cleaning</strong> tasks: vacuum, mop toward the door, wipe the balcony, walk through as the guest, charge the vacuum. Answer every <strong>Confirm &amp; Leave</strong> item (below). Take 12 to 14 after-cleaning photos. Tap <strong>Submit ✓</strong>. In <strong>Submit report?</strong>, tap <strong>Submit ✓</strong> again. Wait for <strong>Report Submitted</strong>.</li>
+</ol>
+
+<details class="v-more" id="turnover-types"><summary>Other cleaning types</summary>
+<p><strong>Mid-Stay:</strong> a light refresh while the guest stays. Meters are optional. You need 4 photos before and 4 after.</p>
+<p><strong>Deep Clean:</strong> the same as a Turnover. The last guest name is not required.</p>
+<p><strong>Emergency:</strong> write an <strong>Issue description</strong>. Meters, photos and guest name are not required.</p>
+<p>The app may offer <strong>Submit without meter photos, just this once</strong>. Use it only if you cannot go back. The next report needs the photos.</p>
+</details>
+
+<div class="v-card" id="turnover-confirm">
+<h3 class="v-card-title">Confirm &amp; Leave</h3>
+<p>These are the last checks in Phase 4. For each one, tap <strong>Confirmed</strong>. If something is wrong, tap <strong>Issue Found</strong> and write what. You cannot submit until every item is answered.</p>
+<ul>
+<li><strong>Aircon at 24°C.</strong> The fridge is cold.</li>
+<li><strong>Utensil set complete.</strong> Count it against the list in the app.</li>
+<li><strong>EcoFlow at 100%.</strong> If it is lower, leave it charging until it is full.</li>
+<li><strong>Key card and guest code.</strong> The card opens the door. The code opens the lock.</li>
+<li><strong>Smart lock battery.</strong> A dim keypad or a beep means low.</li>
+<li><strong>SmartLife, last.</strong> After you lock up, open SmartLife. Tap <strong>Smart</strong>, then <strong>Automations</strong>. Switch on <strong>Waiting for Check In</strong>. If it will not stay on, tap <strong>Issue Found</strong>.</li>
+</ul>
+<aside class="v-callout tip"><p>Before you leave, put both remotes and the key card (on its keychain) on the wooden tray. The tray is on the TV cabinet, below the TV, beside the vase. The app does not ask for this.</p></aside>
+<p><button type="button" class="v-btn ghost" data-guide="ac-guide">Aircon guide</button> <button type="button" class="v-btn ghost" data-guide="ecoflow-river">EcoFlow guide</button></p>
+<aside class="v-callout warn"><p><strong>Power &amp; Safety card.</strong> Guest arrives today before 2 PM: fridge and water heater ON, lights OFF. Guest arrives later, or no guest today: everything OFF, water heater breaker OFF, WiFi and camera circuits ON. Not sure about the fridge? Ask Lloyd or Marifel before you leave. Then tick <strong>Final power &amp; safety check</strong>.</p></aside>
+</div>
+
+<div class="v-card warn" id="turnover-no-send">
+<h3 class="v-card-title">If the app will not send</h3>
+<p>The app saves your draft on your phone. With no signal it says <strong>No signal — report saved, will retry when connected</strong>. If you already tapped <strong>Submit ✓</strong>, it sends again by itself when the signal returns.</p>
+<ol class="v-steps">
+<li><strong>Keep the app open.</strong> Wait for <strong>Report Submitted</strong>.</li>
+<li><strong>Tap ↺ Retry if the button shows it.</strong> Tap once, then wait.</li>
+<li><strong>If you closed the app, open it again.</strong> Tap <strong>Resume ↺</strong> on <strong>Resume session?</strong>. Then tap <strong>Submit ✓</strong>.</li>
+<li><strong>Still failing?</strong> Write in the OPS group. Do not clear your browser data.</li>
+</ol>
+<p>Your draft has no time limit. It stays until you submit or tap <strong>Start fresh</strong>. A photo marked <strong>Failed — tap to retry</strong>: tap it.</p>
+</div>
+
+<div class="v-card" id="turnover-paid">
+<h3 class="v-card-title">How you get paid</h3>
+<p>When the office has paid your fees, a card comes to the OPS Telegram group. There are two kinds.</p>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">🧹 Cleaning Fees Settled</div><div class="v-tg-body">Your cleaning fees are paid.</div><div class="v-tg-btns"><span class="v-tg-btn">✅ Acknowledge Payment</span></div><p class="v-tg-note"><strong>Acknowledge Payment:</strong> tells the office you got it. Nothing else changes.</p></div>
+<p>This is the usual card. Tap <strong>Acknowledge Payment</strong> when you have the money.</p>
+<p>Sometimes the office sends a <strong>Payment Ready</strong> card instead:</p>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">🧹 Payment Ready — Honey</div><div class="v-tg-body">Date · Turnover<br>Guest: Sample Guest<br>Fee: the amount due<br>Tap below to confirm you received this payment.</div><div class="v-tg-btns"><span class="v-tg-btn danger">✅ Received Payment</span></div><p class="v-tg-note"><strong>Received Payment:</strong> books your fee. You cannot undo it.</p></div>
+<p><strong>Get your money first.</strong> Then tap <strong>Received Payment</strong>. Only you know you have it. <span class="v-chip danger">books the fee</span> Tapped by mistake? Tell Marifel or Lloyd at once.</p>
+</div>
+
+<p>Next: <a class="v-btn ghost" href="#standard-look">See the standard look</a> <a class="v-btn ghost" href="#maps">Turnover at a glance</a></p>
 </section>
 <!-- /V25:turnover -->
 <!-- V25:standard-look -->
 <section class="content-section v25" id="standard-look" aria-labelledby="standard-look-h">
-<header class="v-head"><h2 id="standard-look-h">The standard look</h2><p class="v-sub">This page is being written.</p></header>
+<header class="v-head"><h2 id="standard-look-h">The standard look</h2><p class="v-sub">This is how a finished unit looks. Compare each area with its photo.</p></header>
+
+<h3 id="standard-look-bed">Bed</h3>
+<figure class="v-photo"><img src="img/standard/bed.webp" alt="The made bed with tight white sheets and the pillows in a neat row." loading="lazy" width="1000" height="667"><figcaption>The made bed, ready for the guest.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Pull the sheets tight. No bumps or folds. Tuck in all sides.</li><li>Plump every pillow. Put them in a straight, neat row.</li><li>No stains on any sheet or pillowcase.</li></ol></aside>
+
+<h3 id="standard-look-room">Room</h3>
+<figure class="v-photo"><img src="img/standard/room.webp" alt="The bedroom with the made bed, the sofa, the coffee table and the floor lamp, all tidy." loading="lazy" width="1000" height="667"><figcaption>The bed, sofa, coffee table and floor lamp.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Dust from the top down: fan, shelves, bedside tables and skirting boards.</li><li>Disinfect the touch points: light switches, door handles, remotes and bedside lamps.</li><li>Room items are straight. Mirrors have zero streaks.</li></ol></aside>
+
+<h3 id="standard-look-living">Living area</h3>
+<figure class="v-photo"><img src="img/standard/living.webp" alt="The living area with the sofa, the bar counter and the kitchenette, clean and tidy." loading="lazy" width="1000" height="667"><figcaption>The sofa, the bar counter and the kitchenette.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Vacuum first, then mop. Work toward the door.</li><li>No bad smell. Check the sofa too.</li><li>Walk through as the guest. Look for fingerprints, dust and smudges.</li></ol></aside>
+
+<h3 id="standard-look-tv-wall">TV wall</h3>
+<figure class="v-photo"><img src="img/standard/tv-wall.webp" alt="The TV wall with the TV, the clock, the mirror, a vase of white flowers and the wooden TV cabinet below." loading="lazy" width="667" height="1000"><figcaption>The TV, the clock, the mirror and the cabinet.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The TV unit is dusted.</li><li>The mirror is polished with a dry microfibre cloth. No streaks.</li><li>Water a plant only if the soil is completely dry. Push a finger 2 cm into the soil. Not sure? Skip it.</li></ol></aside>
+
+<h3 id="standard-look-remote-tray">Remote tray</h3>
+<figure class="v-photo"><img src="img/standard/remote-tray.webp" alt="The wooden tray on the TV cabinet, beside the flower vase and the reed diffuser, with the aircon remote on it." loading="lazy" width="1000" height="666"><figcaption>The wooden tray, beside the flower vase.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Both remotes (aircon and TV) are on the wooden tray, wiped clean.</li><li>The key card is on its keychain, on the same tray.</li><li>The aircon is set to 24°C before you leave.</li></ol></aside>
+
+<h3 id="standard-look-kitchen">Kitchen</h3>
+<figure class="v-photo"><img src="img/standard/kitchen.webp" alt="The kitchen with the induction cooker, the dish rack, the glasses and the microwave shelf, clean and in order." loading="lazy" width="1000" height="667"><figcaption>The induction cooker, the dish rack, the glasses and the shelf.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The dishes are washed. The stove is degreased.</li><li>The utensil set is complete. Count it against the list in the Cleaner app.</li><li>Flag anything missing, chipped or broken.</li></ol></aside>
+
+<h3 id="standard-look-kitchen-shelf">Kitchen shelf</h3>
+<figure class="v-photo"><img src="img/standard/kitchen-shelf.webp" alt="The kitchen shelf with the microwave, the coffee and tea box with two mugs, two water bottles, the rice cooker and the kettle." loading="lazy" width="1000" height="667"><figcaption>The microwave, the coffee and tea box, the rice cooker and the kettle.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The microwave (inside and door), the kettle and the rice cooker are clean inside and outside.</li><li>The basics are restocked, such as coffee. A guest should never have to ask.</li><li>Count the mugs against the list in the app. Flag any that are chipped or missing.</li></ol></aside>
+
+<h3 id="standard-look-sink">Sink</h3>
+<figure class="v-photo"><img src="img/standard/sink.webp" alt="The kitchen sink with the hand soap, the dish soap and the sponge holder, and the dish rack beside it." loading="lazy" width="1000" height="667"><figcaption>The sink, with soap and a fresh sponge.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The sink is scrubbed. The faucet shines. The counters are wiped dry.</li><li>The dishwashing sponge is a fresh one.</li><li>Soap and dish soap are refilled to the standard level.</li></ol></aside>
+
+<h3 id="standard-look-bathroom">Bathroom</h3>
+<figure class="v-photo"><img src="img/standard/bathroom.webp" alt="The bathroom with rolled white towels on the shelf above the toilet, the shampoo and body wash bottles, and the toilet paper holder." loading="lazy" width="667" height="1000"><figcaption>The bathroom, with towels, soap and toilet paper.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The toilet, shower and sink are scrubbed, rinsed and dry.</li><li>Smell-check the toilet. Flush more than once. Wipe the vent.</li><li>Shampoo, soap and toilet paper are refilled to the standard level.</li></ol></aside>
+
+<h3 id="standard-look-towels">Towels</h3>
+<figure class="v-photo"><img src="img/standard/towels.webp" alt="Rolled white towels on the bathroom shelf, with a small hanging plant beside them." loading="lazy" width="620" height="320"><figcaption>Fresh towels, rolled neatly on the shelf.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Every towel is fresh and has no stains. You pre-treated stains before the wash.</li><li>All used towels and sheets are bagged. No used linen is left out.</li><li>The towels are folded neatly, as in the photo.</li></ol></aside>
+
+<h3 id="standard-look-laundry">Laundry corner</h3>
+<figure class="v-photo"><img src="img/standard/laundry.webp" alt="The laundry corner with the washing machine, the garment steamer on its stand with a hanger, and a bin." loading="lazy" width="667" height="1000"><figcaption>The washing machine, the garment steamer and the bin.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>The washing machine is reset. The drum is empty. The door is open.</li><li>The cloth steamer is reset. The tank is empty. The cord is coiled. It is back in its spot.</li><li>Count the wardrobe hangers. You need at least 8. If there are fewer, flag it.</li></ol></aside>
+
+<h3 id="standard-look-entrance">Entrance</h3>
+<figure class="v-photo"><img src="img/standard/entrance.webp" alt="The front of the unit from the street, with the fence, the yellow gate, two plants and a mailbox." loading="lazy" width="1000" height="667"><figcaption>The front of the unit, seen from the street.</figcaption></figure>
+<aside class="v-callout tip"><p><strong>Check these 3 things</strong></p><ol><li>Take the Entrance photo from the street. Show the gate and the front of the unit.</li><li>Windows are latched and the door is locked.</li><li>The key card opens the door. The guest code opens the lock.</li></ol></aside>
+
+<p><a class="v-btn ghost" href="#turnover">Back to the turnover steps</a></p>
 </section>
 <!-- /V25:standard-look -->
 <!-- V25:office -->
-<section class="content-section v25" id="office" aria-labelledby="office-h">
-<header class="v-head"><h2 id="office-h">Office</h2><p class="v-sub">This page is being written.</p></header>
+<section class="content-section v25 office-only" id="office" aria-labelledby="office-h">
+<header class="v-head"><h2 id="office-h">Office</h2><p class="v-sub">The rules you quote, your tasks in the admin dashboard, and what to do when Cassy hands you a guest.</p></header>
+
+<div class="v-tasks">
+<a class="v-task" href="#office-policy"><svg class="ic"><use href="#i-sop"/></svg><strong>Quote a rule</strong><span>Fees, times, refunds</span></a>
+<a class="v-task" href="#office-dashboard"><svg class="ic"><use href="#i-chart"/></svg><strong>Use the dashboard</strong><span>12 tasks</span></a>
+<a class="v-task" href="#office-journey"><svg class="ic"><use href="#i-booking"/></svg><strong>Follow a guest</strong><span>Inquiry to review</span></a>
+<a class="v-task" href="#office-handoff"><svg class="ic"><use href="#i-concierge"/></svg><strong>Answer a handoff</strong><span>Cassy needs you</span></a>
+<a class="v-task" href="#templates"><svg class="ic"><use href="#i-message"/></svg><strong>Copy a message</strong><span>Templates</span></a>
+</div>
+
+<div class="v-card" id="office-policy">
+<h3 class="v-card-title">The rules guests read on the booking site</h3>
+<p>Say what the booking site says. If unsure, check the site.</p>
+<table class="v-table">
+<thead><tr><th>Rule</th><th>What guests are told</th></tr></thead>
+<tbody>
+<tr><td data-label="Rule">Reservation fee</td><td data-label="What guests are told">50% of the stay, once the payment is checked.</td></tr>
+<tr><td data-label="Rule">Check-in under 5 days away</td><td data-label="What guests are told">Full payment only.</td></tr>
+<tr><td data-label="Rule">Hold</td><td data-label="What guests are told">5 or more days out: dates held 24 hours for the fee. Then released, nothing owed.</td></tr>
+<tr><td data-label="Rule">Balance and deposit</td><td data-label="What guests are told">Balance plus PHP 1,000 refundable deposit, due at least a day before check-in.</td></tr>
+<tr><td data-label="Rule">Cancel 5 or more days before</td><td data-label="What guests are told">Reservation fee refunded in full.</td></tr>
+<tr><td data-label="Rule">Cancel under 5 days before</td><td data-label="What guests are told">Reservation fee kept.</td></tr>
+<tr><td data-label="Rule">Check-in</td><td data-label="What guests are told"><span class="v-chip time">2:00 PM</span> Before noon: PHP 100 an hour if the calendar allows.</td></tr>
+<tr><td data-label="Rule">Check-out</td><td data-label="What guests are told"><span class="v-chip time">12:00 noon</span> A late check-out may be possible. The guest must ask.</td></tr>
+<tr><td data-label="Rule">Stay</td><td data-label="What guests are told">1 night minimum. Up to 3 guests. Cleaning included.</td></tr>
+<tr><td data-label="Rule">Airbnb bookings</td><td data-label="What guests are told">Airbnb's own cancellation policy. No cash deposit.</td></tr>
+</tbody>
+</table>
+<aside class="v-callout danger"><p><strong>Never promise a refund or a discount. Lloyd decides.</strong> Tell the guest the host will look at it. Then ask Lloyd.</p></aside>
+</div>
+
+<h3 id="office-dashboard">What you do in the admin dashboard</h3>
+<p>The admin dashboard is the record for bookings, payments, stock and cleaning. If a Telegram card and the dashboard disagree, the dashboard is right. Tell Lloyd.</p>
+
+<div class="v-card">
+<h3 class="v-card-title">1. Sign in</h3>
+<ol class="v-steps">
+<li><strong>Type Your name</strong> and your <strong>4-digit PIN</strong>.</li>
+<li><strong>Tap Sign in.</strong> You land on <strong>Today</strong>.</li>
+<li><strong>To leave,</strong> open the <strong>Account menu</strong>, tap <strong>Sign out</strong>.</li>
+</ol>
+<aside class="v-callout note"><p>"No 2FA" and "two-factor" are old text. Ignore them.</p></aside>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">2. See what needs attention</h3>
+<ol class="v-steps">
+<li><strong>Open Today.</strong> Read <strong>Property readiness</strong>, <strong>What needs attention</strong>, <strong>Low stock</strong>.</li>
+<li><strong>Tap Open</strong> on an item to act on it.</li>
+</ol>
+<aside class="v-callout note"><p>A red box means the data did not load. It does not mean all is clear.</p></aside>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">3. Confirm a direct booking <span class="v-chip danger">Messages the guest. No undo.</span></h3>
+<ol class="v-steps">
+<li><strong>Check the money</strong> in your GCash or bank app. The receipt photo is not proof.</li>
+<li><strong>Open Finance, Review queue.</strong> Under <strong>Payment evidence comparisons</strong> type a <strong>Reason</strong>, tap <strong>Approve</strong>.</li>
+<li><strong>Open Bookings, Inquiries.</strong> Tap <strong>Confirm</strong>, then <strong>Confirm</strong> in the window.</li>
+</ol>
+<p>In Telegram, tap <strong>Confirm booking</strong> on the receipt card in the Finance group. "Those dates are no longer available or this decision already exists" means nothing changed.</p>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">4. Decline a request <span class="v-chip danger">Final</span></h3>
+<ol class="v-steps">
+<li><strong>Open Finance, Review queue.</strong> Type a <strong>Reason</strong>, tap <strong>Reject</strong>.</li>
+<li><strong>Open Bookings, Inquiries.</strong> Tap <strong>Decline</strong>, then <strong>Decline</strong> in the window.</li>
+<li><strong>Write to the guest</strong> in Messenger. The dashboard does not.</li>
+</ol>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">5. Read a cleaning report</h3>
+<ol class="v-steps">
+<li><strong>Open Operations, Cleaning log.</strong> Tap the date under <strong>Cleaned</strong>.</li>
+<li><strong>Read</strong> meters, photos, checklist, and urgent notes in red.</li>
+<li><strong>Type a reason.</strong> Tap <strong>Mark reviewed</strong> or <strong>Needs follow-up</strong>.</li>
+<li><strong>Set Outcome:</strong> <strong>Ready for arrival</strong> or <strong>Not ready</strong>. Tap <strong>Record for</strong>. This sets the badge on Today.</li>
+</ol>
+<p><strong>Override: ready despite blockers</strong> needs a written reason. It ignores open work orders.</p>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">6. Flag a wrong meter reading <span class="v-chip undo">Undo for 8 seconds</span></h3>
+<ol class="v-steps">
+<li><strong>In the report,</strong> pick a <strong>Meter flag</strong> on that row.</li>
+<li><strong>Type a reason.</strong> Tap <strong>Review</strong>. The number is flagged, not edited.</li>
+</ol>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">7. Cancel a direct booking <span class="v-chip danger">Messages the guest. No undo.</span></h3>
+<ol class="v-steps">
+<li><strong>Open the booking</strong> from <strong>Bookings</strong>. Tap <strong>Cancel booking</strong>.</li>
+<li><strong>Type a Reason.</strong> Tap <strong>Cancel booking</strong> again. <strong>Keep booking</strong> backs out.</li>
+</ol>
+<aside class="v-callout warn"><p>This frees the dates and tells the guest. It makes no refund. Apply the 5-day rule and ask Lloyd. It works only on direct bookings.</p></aside>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">8. Find a booking, guest or report</h3>
+<ol class="v-steps">
+<li><strong>Tap Search or jump to...</strong> or press Ctrl and K.</li>
+<li><strong>Type 2 letters or more.</strong> Tap a result.</li>
+<li><strong>Who is in on a date?</strong> Open <strong>Bookings, Calendar</strong>. Read only.</li>
+</ol>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">9. Update stock <span class="v-chip undo">Undo for 8 seconds</span></h3>
+<ol class="v-steps">
+<li><strong>Open Inventory, Stock.</strong> Tap the item.</li>
+<li><strong>Goods arrived:</strong> fill <strong>Packs</strong>, <strong>Cost per pack</strong>, <strong>Supplier</strong>, <strong>Date</strong> under <strong>Receive stock</strong>. Tap <strong>Record receipt</strong> once.</li>
+<li><strong>Wrong quantity:</strong> fill <strong>Change</strong> and <strong>Reason</strong> under <strong>Adjust</strong>. Tap <strong>Record adjustment</strong>.</li>
+</ol>
+<p>Receiving does not post the expense to Finance. Record that separately. On <strong>Counts</strong>, <strong>Confirm</strong> sets the stock and has no undo.</p>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">10. Log a repair or a notice <span class="v-chip undo">Undo for 8 seconds</span></h3>
+<ol class="v-steps">
+<li><strong>Repair:</strong> open <strong>Operations, Work orders</strong>. Tap <strong>New work order</strong>, type a title.</li>
+<li><strong>Tick Blocks the next arrival</strong> if guests cannot stay. Tap <strong>Save</strong>.</li>
+<li><strong>Warning:</strong> open <strong>Notices</strong>, tap <strong>New notice</strong>. Fill <strong>Title</strong>, <strong>Type</strong>, <strong>Audience</strong>, <strong>Expires</strong>. Tap <strong>Save</strong>.</li>
+</ol>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">11. Follow up a guest <span class="v-chip undo">Undo for 8 seconds</span></h3>
+<ol class="v-steps">
+<li><strong>Open Guests, Follow-ups.</strong> Tap <strong>New follow-up</strong>.</li>
+<li><strong>Fill Title, Purpose, Priority, Due.</strong> Tap <strong>Save</strong>.</li>
+</ol>
+<aside class="v-callout danger"><p>Never screenshot a guest record that shows an ID. The <strong>Messenger handoffs</strong> tab is history only.</p></aside>
+</div>
+
+<div class="v-card">
+<h3 class="v-card-title">12. Pay the cleaner <span class="v-chip danger">Posts money. No undo.</span></h3>
+<ol class="v-steps">
+<li><strong>Pay Honey first,</strong> outside the app.</li>
+<li><strong>Send /payclean</strong> in the Finance group. Tap the clean.</li>
+<li><strong>Check the amount.</strong> Tap <strong>Mark Paid</strong>, or <strong>Edit amount</strong> and type the number.</li>
+<li><strong>Send /notifyclean.</strong> Honey taps <strong>Acknowledge Payment</strong> in the OPS group.</li>
+</ol>
+<p>To see what is owed: <strong>Operations, Cleaning log</strong>, <strong>Fees</strong>, <strong>Unpaid</strong>.</p>
+</div>
+
+<h3 id="office-journey">A guest from inquiry to review</h3>
+<p>For <strong>direct</strong> bookings these messages go out by themselves, on Messenger if the guest wrote in the last 23 hours, else by e-mail. If one cannot send, its OPS card says "not sent". Tap <strong>Show as text</strong>, copy, and send it yourself. <strong>Airbnb</strong> guests get no system messages. Write to them in Airbnb.</p>
+<table class="v-table">
+<thead><tr><th>Stage</th><th>Automatic message</th><th>You</th></tr></thead>
+<tbody>
+<tr><td data-label="Stage">Inquiry</td><td data-label="Automatic message">Cassy answers first on Messenger.</td><td data-label="You">Answer what she hands over. Use <a href="#templates">Inquiry Response</a>.</td></tr>
+<tr><td data-label="Stage">Booking</td><td data-label="Automatic message">Cards in the Finance group. Airbnb bookings arrive by themselves.</td><td data-label="You">Check the money. Confirm or decline (tasks 3, 4).</td></tr>
+<tr><td data-label="Stage">Payment</td><td data-label="Automatic message">Message 1, Confirmation: right after you confirm. A dashboard confirm goes at the next hourly run.</td><td data-label="You">A hold-expired card offers <strong>Show as text</strong> and <strong>Revise</strong>. Nothing is sent.</td></tr>
+<tr><td data-label="Stage">Pre-arrival</td><td data-label="Automatic message">Message 2: 2 days before check-in, 15:00 to 21:00. Skipped if you confirmed less than 2 days before. Message 3, the door code, is never sent by the system.</td><td data-label="You">On the <strong>DOOR CODE READY TO SEND</strong> card, check the balance and deposit. Set a new code in the lock app. Tap <strong>Show as text</strong>, type the code in, send it yourself.</td></tr>
+<tr><td data-label="Stage">Stay</td><td data-label="Automatic message">Message 4, mid-stay refresh: stays of 5 nights or more, day 4 (day 3 for 5 or 6 nights), 15:00 to 21:00.</td><td data-label="You">Answer handoff cards (below).</td></tr>
+<tr><td data-label="Stage">Check-out</td><td data-label="Automatic message">Message 5.1: 09:00 to 12:00 on check-out day.</td><td data-label="You">Read the cleaning report (task 5). The deposit goes back when the inspection finds no problem. Ask Lloyd before holding any back.</td></tr>
+<tr><td data-label="Stage">Review</td><td data-label="Automatic message">Message 5.2: 16:00 to 22:00 on check-out day. Held back if a complaint, a safety report or an open work order exists. The card then says to write personally.</td><td data-label="You">Reply to a good review with the <a href="#templates">Thank You</a> template.</td></tr>
+</tbody>
+</table>
+
+<div class="v-card">
+<h3 class="v-card-title">Rules of thumb</h3>
+<ul>
+<li><span class="v-chip">Do</span> Reply to an inquiry within 15 minutes. Use the guest's name.</li>
+<li><span class="v-chip">Do</span> Answer a problem within 5 minutes: "Thank you for letting me know. I'm on it." Then write down photos, date, time and what you did.</li>
+<li><span class="v-chip danger">Don't</span> Give a one-word answer. Never ignore a question.</li>
+<li><span class="v-chip danger">Don't</span> Admit liability. Do not promise a refund or a discount.</li>
+<li><span class="v-chip danger">Don't</span> Send check-in details too early. It is a security risk.</li>
+<li><span class="v-chip danger">Don't</span> Pressure a guest for a 5-star review. Keep the ask gentle and optional.</li>
+</ul>
+</div>
+
+<h3 id="office-handoff">When Cassy hands a guest to you</h3>
+<p>Cassy hands over a payment, refund, cancellation, complaint, safety or door problem, a special request, or anything she is unsure of. A card arrives in the OPS group.</p>
+<div class="v-tg" data-group="OPS">
+<div class="v-tg-head">💬 GUEST · handoff · payment · 3:41 PM</div>
+<div class="v-tg-body">🛎 Guest needs the host (payment)
+Guest: Sample Guest (Messenger account)
+&gt; I sent the payment but I did not get any confirmation yet.
+
+Option 1: Thank you, Sample Guest. We are checking your payment now and will confirm your booking here shortly.
+Option 2: Hello Sample Guest, thank you for your payment. We will check it today and send your confirmation.
+
+Tap an option to send it to the guest, or reply to this message to write your own. #CH-SAMPLE</div>
+<div class="v-tg-btns"><span class="v-tg-btn danger">Send option 1</span><span class="v-tg-btn danger">Send option 2</span><span class="v-tg-btn">✍️ Write my own</span></div>
+<p class="v-tg-note"><strong>Send option 1 or 2:</strong> goes to the guest on Messenger at once, signed with your first name and Cascade Hideaway. The handoff closes.</p>
+</div>
+<ol class="v-steps">
+<li><strong>Read the guest's words,</strong> then Option 1 and Option 2.</li>
+<li><strong>Tap Send option 1 or 2</strong> if one fits. <span class="v-chip danger">Messages the guest at once. No undo.</span></li>
+<li><strong>Or tap Write my own.</strong> Reply to the card that ends in <strong>#CH-</strong>. Your words go to the guest.</li>
+<li><strong>Check the card changed.</strong> "Already handled" means someone else replied.</li>
+</ol>
+<aside class="v-callout warn"><p>Anyone in the OPS group can tap. Read the option first. If Messenger refuses, the card says so. Tap again in a minute.</p></aside>
+<ul>
+<li><span class="v-chip">Do</span> For a payment question, look in the Finance group and the dashboard. OPS shows no money. Tell the guest the host will check.</li>
+<li><span class="v-chip danger">Don't</span> Give a door code in chat until you match the guest's name to a stay on the calendar.</li>
+<li><span class="v-chip">Do</span> Treat a red <strong>ALERT</strong> card as urgent. It also reaches the Finance group and the host inbox. Answer the guest at once and tell Lloyd. If anyone is in danger, they call the emergency number first.</li>
+<li><span class="v-chip">Do</span> Expect Cassy to keep answering. If you type in the Facebook Page inbox, she pauses on that chat for 2 hours.</li>
+</ul>
+<p>Past handoffs: <strong>Guests, Messenger handoffs</strong>. More on Cassy: <a href="#telegram">Telegram and Cassy</a>.</p>
 </section>
 <!-- /V25:office -->
 <!-- V25:templates -->
-<section class="content-section v25" id="templates" aria-labelledby="templates-h">
-<header class="v-head"><h2 id="templates-h">Templates</h2><p class="v-sub">This page is being written.</p></header>
+<section class="content-section v25 office-only" id="templates" aria-labelledby="templates-h">
+<header class="v-head"><h2 id="templates-h">Message templates</h2><p class="v-sub">Copy a message, replace [Guest Name], and send it.</p></header>
+<aside class="v-callout note"><p>Direct guests already get the confirmation, arrival, check-out and thank-you messages by themselves. See <a href="#office-journey">A guest from inquiry to review</a>. Cassy can also draft a reply in Telegram. See <a href="#telegram">Telegram and Cassy</a>.</p></aside>
+<aside class="v-callout warn"><p>Replace <strong>[Guest Name]</strong> before you send. Never promise a refund or a discount. Lloyd decides.</p></aside>
+
+<div class="v-card" id="templates-inquiry">
+<h3 class="v-card-title">Inquiry Response</h3>
+<p><strong>When to use:</strong> A guest asks if dates are free and the calendar shows they are. Check the calendar first.</p>
+<div class="v-copy" data-copy="Hi [Guest Name]! 🌿&#10;&#10;Thank you for your interest in Cascade Hideaway. Your requested dates are available.&#10;&#10;Let me know if you have any questions! We'd love to welcome you soon. ✨"><span>Copy message</span><code>Hi [Guest Name]! 🌿
+
+Thank you for your interest in Cascade Hideaway. Your requested dates are available.
+
+Let me know if you have any questions! We'd love to welcome you soon. ✨</code></div>
+</div>
+
+<div class="v-card" id="templates-location">
+<h3 class="v-card-title">Location Inquiry</h3>
+<p><strong>When to use:</strong> A guest asks where the unit is, before booking.</p>
+<div class="v-copy" data-copy="Hi [Guest Name]!&#10;&#10;Cascade Hideaway is located inside Bria Homes Subdivision in Conel Rd, General Santos City.&#10;&#10;For easy navigation, you can search for &quot;Bria Homes General Santos&quot; on Google Maps or Waze. Once you enter the main gate, our unit is just a short drive away. We will provide the specific block and lot number in your pre-arrival message.&#10;&#10;Let us know if you need more detailed directions! 🌿"><span>Copy message</span><code>Hi [Guest Name]!
+
+Cascade Hideaway is located inside Bria Homes Subdivision in Conel Rd, General Santos City.
+
+For easy navigation, you can search for "Bria Homes General Santos" on Google Maps or Waze. Once you enter the main gate, our unit is just a short drive away. We will provide the specific block and lot number in your pre-arrival message.
+
+Let us know if you need more detailed directions! 🌿</code></div>
+</div>
+
+<div class="v-card" id="templates-early-inquiry">
+<h3 class="v-card-title">Early Check-in Inquiry</h3>
+<p><strong>When to use:</strong> A guest asks to arrive before 2:00 PM. The booking site lists early check-in before noon at PHP 100 an hour when the calendar allows.</p>
+<div class="v-copy" data-copy="Hi [Guest Name], thanks for asking!&#10;&#10;Our standard check-in is at 2:00 PM. We will do our best to accommodate an earlier time if the schedule allows, and we'll confirm with you as soon as our cleaning team certifies the unit is ready to our 5-star standard.&#10;&#10;I'll make a note of your request and message you on the morning of your check-in with an update! 🌿"><span>Copy message</span><code>Hi [Guest Name], thanks for asking!
+
+Our standard check-in is at 2:00 PM. We will do our best to accommodate an earlier time if the schedule allows, and we'll confirm with you as soon as our cleaning team certifies the unit is ready to our 5-star standard.
+
+I'll make a note of your request and message you on the morning of your check-in with an update! 🌿</code></div>
+</div>
+
+<div class="v-card" id="templates-extension">
+<h3 class="v-card-title">Stay Extension Request</h3>
+<p><strong>When to use:</strong> An Airbnb guest wants more nights and the calendar is free. The "app request" wording is for Airbnb. For a direct guest, tell Lloyd first: the dashboard has no amend button.</p>
+<div class="v-copy" data-copy="Hi [Guest Name], we'd love to have you stay longer!&#10;&#10;I've checked the calendar, and the unit is available for the extra nights. I will send a reservation alteration request through the app for you to approve.&#10;&#10;So happy you're enjoying your stay! ✨"><span>Copy message</span><code>Hi [Guest Name], we'd love to have you stay longer!
+
+I've checked the calendar, and the unit is available for the extra nights. I will send a reservation alteration request through the app for you to approve.
+
+So happy you're enjoying your stay! ✨</code></div>
+</div>
+
+<div class="v-card" id="templates-add-guest">
+<h3 class="v-card-title">Additional Guest (Max 3)</h3>
+<p><strong>When to use:</strong> A guest wants to add people. Up to 3 guests stay overnight. Day visitors are welcome if the guest tells us first.</p>
+<div class="v-copy" data-copy="Hi [Guest Name],&#10;&#10;Thanks for letting us know. Our studio can comfortably accommodate a maximum of 3 adults.&#10;&#10;Please update the guest count on your reservation so we can prepare enough towels and amenities for everyone.&#10;&#10;Let me know if you need any help with that! 🌿"><span>Copy message</span><code>Hi [Guest Name],
+
+Thanks for letting us know. Our studio can comfortably accommodate a maximum of 3 adults.
+
+Please update the guest count on your reservation so we can prepare enough towels and amenities for everyone.
+
+Let me know if you need any help with that! 🌿</code></div>
+</div>
+
+<div class="v-card" id="templates-pet">
+<h3 class="v-card-title">Pet Inquiry</h3>
+<p><strong>When to use:</strong> A guest asks to bring a pet.</p>
+<div class="v-copy" data-copy="Hi [Guest Name],&#10;&#10;Thank you for asking about your furry friend!&#10;&#10;Unfortunately, at this time we are not able to accommodate pets in our studio to ensure the space is allergen-free for all our guests.&#10;&#10;We appreciate your understanding and hope we can still welcome you!"><span>Copy message</span><code>Hi [Guest Name],
+
+Thank you for asking about your furry friend!
+
+Unfortunately, at this time we are not able to accommodate pets in our studio to ensure the space is allergen-free for all our guests.
+
+We appreciate your understanding and hope we can still welcome you!</code></div>
+</div>
+
+<div class="v-card" id="templates-cancel">
+<h3 class="v-card-title">Cancellation Request</h3>
+<p><strong>When to use:</strong> A guest cancels. It states the published 5-day rule. For any exception, Lloyd decides.</p>
+<div class="v-copy" data-copy="Hi [Guest Name],&#10;&#10;We're sorry to hear you need to cancel.&#10;&#10;If you booked with us directly: your reservation fee is refunded in full when you cancel 5 or more days before check-in. Inside 5 days it is retained, as it has been holding your dates against other enquiries. Nothing else is owed — the balance and the PHP 1,000 deposit only fall due a day before check-in.&#10;&#10;If you booked through Airbnb or another platform: please start the cancellation there, and the refund will follow the policy shown on that listing.&#10;&#10;We hope to have the opportunity to host you in the future."><span>Copy message</span><code>Hi [Guest Name],
+
+We're sorry to hear you need to cancel.
+
+If you booked with us directly: your reservation fee is refunded in full when you cancel 5 or more days before check-in. Inside 5 days it is retained, as it has been holding your dates against other enquiries. Nothing else is owed — the balance and the PHP 1,000 deposit only fall due a day before check-in.
+
+If you booked through Airbnb or another platform: please start the cancellation there, and the refund will follow the policy shown on that listing.
+
+We hope to have the opportunity to host you in the future.</code></div>
+</div>
+
+<div class="v-card" id="templates-post1">
+<h3 class="v-card-title">Post-Stay Thanks (Simple)</h3>
+<p><strong>When to use:</strong> Thanking an Airbnb guest after check-out, or a direct guest if message 5.2 was held back.</p>
+<div class="v-copy" data-copy="Maraming salamat po for choosing Cascade Hideaway, [Guest Name]! 🌿&#10;&#10;It was a pleasure hosting you. We hope you had a restful stay and a safe journey onward.&#10;&#10;We hope to welcome you back soon! 🙏"><span>Copy message</span><code>Maraming salamat po for choosing Cascade Hideaway, [Guest Name]! 🌿
+
+It was a pleasure hosting you. We hope you had a restful stay and a safe journey onward.
+
+We hope to welcome you back soon! 🙏</code></div>
+</div>
+
+<div class="v-card" id="templates-post2">
+<h3 class="v-card-title">Post-Stay Thanks (With Review Ask)</h3>
+<p><strong>When to use:</strong> Same as above, with a gentle ask for a review. Keep it optional.</p>
+<div class="v-copy" data-copy="Hi [Guest Name],&#10;&#10;Thank you again for staying with us! It was a pleasure to host you.&#10;&#10;If you have a moment, a short review of your stay would mean the world to our small team and helps future travelers discover us.&#10;&#10;Safe travels, and we hope to see you again! ✨"><span>Copy message</span><code>Hi [Guest Name],
+
+Thank you again for staying with us! It was a pleasure to host you.
+
+If you have a moment, a short review of your stay would mean the world to our small team and helps future travelers discover us.
+
+Safe travels, and we hope to see you again! ✨</code></div>
+</div>
+
+<div class="v-card" id="templates-thanks">
+<h3 class="v-card-title">Thank You Message (After Positive Review)</h3>
+<p><strong>When to use:</strong> A guest left a good review.</p>
+<div class="v-copy" data-copy="Hi [Guest Name],&#10;&#10;Thank you so much for your kind words and the wonderful review! We're thrilled to hear you enjoyed your stay.&#10;&#10;It was truly a pleasure hosting you, and your feedback is incredibly valuable to us. We look forward to welcoming you back anytime! 🌿"><span>Copy message</span><code>Hi [Guest Name],
+
+Thank you so much for your kind words and the wonderful review! We're thrilled to hear you enjoyed your stay.
+
+It was truly a pleasure hosting you, and your feedback is incredibly valuable to us. We look forward to welcoming you back anytime! 🌿</code></div>
+</div>
+
 </section>
 <!-- /V25:templates -->
 <!-- V25:telegram -->
 <section class="content-section v25" id="telegram" aria-labelledby="telegram-h">
-<header class="v-head"><h2 id="telegram-h">Telegram &amp; Cassy</h2><p class="v-sub">This page is being written.</p></header>
+<header class="v-head"><h2 id="telegram-h">Telegram &amp; Cassy</h2><p class="v-sub">Read the cards, ask Cassy, and know which buttons you must not tap by mistake.</p></header>
+
+<div class="v-card" id="telegram-quick">
+<h3 class="v-card-title">Quick guide</h3>
+<p><strong>Two groups.</strong> <strong>OPS</strong> is for the house, guests and cleaning: Honey, Marifel and Lloyd. <strong>Finance</strong> is for money: Marifel and Lloyd. Cassy, our assistant, is in both.</p>
+<p><strong>Ask Cassy.</strong> Type <code>/cassy</code> and your question. Or start your message with <strong>cassy</strong>. A plain message is ignored. A reply to a card is not a question to Cassy.</p>
+<div class="v-chat"><p class="me">/cassy where is the aircon remote?</p><p class="bot">On the wooden tray on the TV cabinet, below the TV, beside the flower vase. The tray also has the TV remote and the key card.</p></div>
+<div class="v-chat"><p class="me">/cassy who arrives this week?</p><p class="bot">Cassy lists the arrivals with date and guest first name.</p></div>
+<div class="v-chat"><p class="me">/cassy house aircon</p><p class="bot">Cassy gives the house how-to for the aircon.</p></div>
+<p><strong>Two danger taps in OPS.</strong></p>
+<p><span class="v-chip danger">Send option 1 / 2</span> messages the guest at once. You cannot undo it.</p>
+<p><span class="v-chip danger">Received Payment</span> books the cleaner fee. Tap only when you have the money.</p>
+<p><strong>Read the first line of a card.</strong> 🟢 is normal. 🟡 means look today. 🔴 <strong>ALERT</strong> means act now and tell Lloyd. Then read the line that starts with <strong>Do:</strong>.</p>
+<p>If Cassy answers a different question, ask again: <code>/cassy house</code> and the topic. Tell Lloyd if it is still wrong.</p>
+</div>
+
+<h3 id="telegram-groups">The two groups</h3>
+<table class="v-table">
+<thead><tr><th>Group</th><th>Who</th><th>What arrives</th></tr></thead>
+<tbody>
+<tr><td data-label="Group"><strong>OPS</strong></td><td data-label="Who">Honey, Marifel, Lloyd</td><td data-label="What arrives">Daily plan, guest messages that need you, cleaning reports, fee cards, power and rain notices, stock.</td></tr>
+<tr class="office-only"><td data-label="Group"><strong>Finance</strong></td><td data-label="Who">Marifel, Lloyd</td><td data-label="What arrives">Booking receipts, expenses, cleaner fees to pay, refunds, system checks.</td></tr>
+</tbody>
+</table>
+<aside class="v-callout note"><p>OPS never shows guest money. Cleaner fee cards show the fee, because Honey needs it.</p></aside>
+<p>The bot ignores every other chat. Type <code>/menu</code> to see the buttons for your group.</p>
+<aside class="v-callout warn"><p>Four taps work only for Lloyd and Marifel: <strong>Confirm booking</strong> or <strong>Decline</strong>, <strong>Apply</strong> on a stock count, <strong>Known, stop reminding</strong>, and the blocked-date answers. Honey does not need them. If a button says your account is not mapped, nothing happened. Tell Lloyd.</p></aside>
+
+<h3 id="telegram-cassy">Asking Cassy</h3>
+<ol class="v-steps">
+<li><strong>Type <code>/cassy</code> and your full question.</strong> This works in both groups. It is the safe habit.</li>
+<li><strong>Or tap Ask Cassy.</strong> Cassy asks you to reply to her message. Type your question as that reply.</li>
+<li><strong>Or start with the word cassy.</strong> Example: <code>cassy house parking</code>.</li>
+</ol>
+<p>Cassy answers in the language you used: English, Tagalog or Bisaya. An answer is one decision line, up to five short lines, then a <strong>Do:</strong> line.</p>
+<h4 id="telegram-cassy-ways">Other ways to reach her</h4>
+<table class="v-table">
+<thead><tr><th>Use</th><th>Type</th><th>What you get</th></tr></thead>
+<tbody>
+<tr><td data-label="Use">House how-to</td><td data-label="Type"><code>/cassy house aircon</code></td><td data-label="What you get">Only the house facts. Best for "how do I..." and "where is...".</td></tr>
+<tr><td data-label="Use">Harder question</td><td data-label="Type"><code>/deep your question</code></td><td data-label="What you get">A deeper answer. There is a daily limit. After it, she says she used the standard answer.</td></tr>
+<tr><td data-label="Use">Reply to a guest</td><td data-label="Type"><code>/draft</code> and paste the guest text</td><td data-label="What you get">A reply in our voice with a risk note. Long-press to copy. Paste it in Messenger or Airbnb yourself.</td></tr>
+<tr><td data-label="Use">Guest sent a screenshot</td><td data-label="Type">Send the screenshot with the caption <code>cassy draft</code></td><td data-label="What you get">The same draft.</td></tr>
+<tr><td data-label="Use">Change a draft</td><td data-label="Type">Tap <strong>Revise</strong> on the card</td><td data-label="What you get">Cassy rewrites it. Nothing is sent.</td></tr>
+</tbody>
+</table>
+<p>Cassy only reads and answers. She never sends anything to a guest. She does not know door codes or payment numbers. She uses only the last 30 minutes of chat, so she does not repeat an old answer. Ask a full question each time.</p>
+<h4 id="telegram-cassy-ops">What she can do in OPS</h4>
+<ul class="v-check" id="telegram-cassy-ops-list">
+<li><label><input type="checkbox"> She reads arrivals, departures, who is in the house, and the next free night.</label></li>
+<li><label><input type="checkbox"> She reads stock, guest history and the house facts.</label></li>
+<li><label><input type="checkbox"> She can prepare a notice (brownout, holiday, reminder). It is saved only when you tap <strong>Save</strong>.</label></li>
+<li><label><input type="checkbox"> She hides money in OPS. She cannot confirm a booking, change a rate or open a door.</label></li>
+</ul>
+<div class="office-only">
+<h4 id="telegram-cassy-finance">What she can do in Finance</h4>
+<p>She can do all of the OPS list, and show money. She can also prepare an expense card. Nothing is saved until someone taps the button. She cannot look up past expenses.</p>
+<table class="v-table">
+<thead><tr><th>To do this</th><th>Type in Finance</th></tr></thead>
+<tbody>
+<tr><td data-label="To do this">Teach a house fact</td><td data-label="Type in Finance"><code>cassy teach: the topic and the fact</code></td></tr>
+<tr><td data-label="To do this">Edit a house fact</td><td data-label="Type in Finance"><code>cassy edit topic: the new text</code></td></tr>
+<tr><td data-label="To do this">Retire a house fact</td><td data-label="Type in Finance"><code>cassy retire topic</code></td></tr>
+</tbody>
+</table>
+<p>Cassy shows a card. Tap <strong>Save it</strong>. The fact is live in about 10 minutes. Guests may be told public facts, so never write door codes, payment numbers or logins in a fact.</p>
+</div>
+
+<h3 id="telegram-cards">Cards you will see</h3>
+<p>A card starts with a colour and a title. It ends with <strong>Do:</strong>, your one job. A line that starts with 📨 is a ready message. Tap <strong>Show as text</strong>, then long-press to copy. Tap <strong>Revise</strong> to change it.</p>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">🟢 DAILY · Fri 2 Oct</div><div class="v-tg-body">📥 Arriving today: Sample Guest, 2 PM. 📤 Departing: none. 🌤 No rain. Do: prepare the unit.</div><div class="v-tg-btns"><span class="v-tg-btn">Inventory</span></div><p class="v-tg-note">The day plan, at 08:00. On a quiet day there is no card.</p></div>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">💬 GUEST · handoff</div><div class="v-tg-body">Sample Guest asks about early check-in. Two reply options are shown.</div><div class="v-tg-btns"><span class="v-tg-btn danger">Send option 1</span><span class="v-tg-btn danger">Send option 2</span><span class="v-tg-btn">Write my own</span></div><p class="v-tg-note"><strong>Send option 1 or 2:</strong> sends the reply to the guest now, with your name. No undo. For your own words, tap <strong>Write my own</strong> and reply to the card. That also goes to the guest.</p></div>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">🧹 Payment Ready - Honey</div><div class="v-tg-body">Cleaning fee for Sample Guest turnover. Amount shown on the card.</div><div class="v-tg-btns"><span class="v-tg-btn danger">Received Payment</span></div><p class="v-tg-note"><strong>Received Payment:</strong> books the fee as paid. Tap only when the money is in your hand.</p></div>
+<div class="v-tg" data-group="OPS"><div class="v-tg-head">🔴 ALERT · missed cleaning</div><div class="v-tg-body">No cleaning report for yesterday's check-out.</div><p class="v-tg-note">Check the clean was done. Then send the report in the Cleaner app.</p></div>
+
+<h4 id="telegram-cards-ops">Cards in OPS</h4>
+<table class="v-table">
+<thead><tr><th>First line</th><th>Meaning</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td data-label="First line">🟢 DAILY or 🟡 ATTENTION, date</td><td data-label="Meaning">Today: arrivals, departures, guests in the house, stock out, ID missing, weather.</td><td data-label="What to do">Read the <strong>Do:</strong> line.</td></tr>
+<tr><td data-label="First line">📋 WEEKLY (Monday)</td><td data-label="Meaning">The week: arrivals, low stock, open work, guests waiting over a day.</td><td data-label="What to do">Answer the waiting guest first.</td></tr>
+<tr><td data-label="First line">🏠 NEW BOOKING</td><td data-label="Meaning">A new Airbnb booking.</td><td data-label="What to do">Prepare for check-in. For a returning guest, copy the welcome-back text.</td></tr>
+<tr><td data-label="First line">💬 GUEST · handoff</td><td data-label="Meaning">A guest needs the host. Safety or access ones show 🔴 ALERT.</td><td data-label="What to do">Pick an option or write your own. <span class="v-chip danger">Messages the guest</span></td></tr>
+<tr><td data-label="First line">💬 GUEST · confirmation, pre-arrival, mid-stay, check-out reminder</td><td data-label="Meaning">The system sent a scheduled message to the guest. If it says "not sent", it failed.</td><td data-label="What to do">If not sent, send the text by hand.</td></tr>
+<tr><td data-label="First line">🧹 CLEANING · report</td><td data-label="Meaning">A cleaning checklist was submitted.</td><td data-label="What to do">Read the issues flagged.</td></tr>
+<tr><td data-label="First line">🧹 CLEANING · work order</td><td data-label="Meaning">An urgent cleaner note became a work order.</td><td data-label="What to do">Tell Lloyd. He closes it.</td></tr>
+<tr><td data-label="First line">🧹 Cleaning Fees Settled</td><td data-label="Meaning">The office paid your fees.</td><td data-label="What to do">Tap <strong>Acknowledge Payment</strong>. It only confirms you got it.</td></tr>
+<tr><td data-label="First line">🔴 ALERT · turnover unresolved</td><td data-label="Meaning">A turnover problem is still open after 2 days.</td><td data-label="What to do">Check the unit is ready.</td></tr>
+<tr><td data-label="First line">🚩 or 👀 Meter photo</td><td data-label="Meaning">A meter photo is unreadable or not a meter.</td><td data-label="What to do">Take it again at the next sign-in.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · rain</td><td data-label="Meaning">Rain is likely while a guest arrives or leaves.</td><td data-label="What to do">Keep an umbrella ready. Tell the guest and the cleaner.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · brownout</td><td data-label="Meaning">A power cut notice for our feeder was found.</td><td data-label="What to do">Charge the EcoFlow the day before. Keep the emergency light ready.</td></tr>
+<tr><td data-label="First line">⚡ Power interruption affecting Cascade</td><td data-label="Meaning">Cassy read a power notice photo.</td><td data-label="What to do">Tap <strong>Save</strong> to add it, or <strong>Cancel</strong>.</td></tr>
+<tr><td data-label="First line">🔴 ALERT · checklist error</td><td data-label="Meaning">The Cleaner app had an error.</td><td data-label="What to do">Tell Lloyd what you were doing.</td></tr>
+</tbody>
+</table>
+<p>To add a power cut yourself, type <code>/brownout</code> with the date and time. It is saved at once. You can also send a photo of the notice with words like "brownout" in the caption.</p>
+
+<div class="office-only">
+<h4 id="telegram-cards-finance">Cards in Finance</h4>
+<div class="v-tg" data-group="Finance"><div class="v-tg-head">🧾 FINANCE · receipt</div><div class="v-tg-body">Sample Guest paid for CH-SAMPLE. The card shows what the AI read and any shortage.</div><div class="v-tg-btns"><span class="v-tg-btn danger">Confirm booking</span><span class="v-tg-btn danger">Decline</span></div><p class="v-tg-note"><strong>Confirm booking:</strong> confirms the booking and messages the guest. First check the money is in GCash or Maya. No undo from Telegram. Lloyd and Marifel only.</p></div>
+<table class="v-table">
+<thead><tr><th>First line</th><th>Meaning</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td data-label="First line">🏠 NEW BOOKING · Direct, HOLD</td><td data-label="Meaning">A guest asked to book. The hold lasts 24 hours.</td><td data-label="What to do">Wait for the receipt card.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · receipt waiting</td><td data-label="Meaning">A receipt waited 2 to 3 hours.</td><td data-label="What to do">Scroll up to the receipt card.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · hold expired</td><td data-label="Meaning">An unpaid hold was released.</td><td data-label="What to do">Send the guest the ready line, or restore it in the dashboard.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · payments overdue</td><td data-label="Meaning">A payout is 2 or more days late, or a deposit is missing.</td><td data-label="What to do">Check Airbnb Earnings. Message the guest.</td></tr>
+<tr><td data-label="First line">🟡 ATTENTION · blocked date</td><td data-label="Meaning">Airbnb has a block with no booking behind it.</td><td data-label="What to do">Answer with a button: maintenance or owner, a direct booking, or unblock.</td></tr>
+<tr><td data-label="First line">🧾 FINANCE · cleaning fee</td><td data-label="Meaning">A complete report. The fee is due.</td><td data-label="What to do">Type <code>/payclean</code>.</td></tr>
+<tr><td data-label="First line">🔑 DOOR CODE READY TO SEND</td><td data-label="Meaning">An offer to send the door code. It never shows the code.</td><td data-label="What to do">Set a new code in the lock app. Copy the text. Type the code yourself.</td></tr>
+<tr><td data-label="First line">🔴 ALERT or 🟡 ATTENTION · system check</td><td data-label="Meaning">The system found a problem.</td><td data-label="What to do">Follow the <strong>Do:</strong> line. <strong>Known, stop reminding</strong> silences it.</td></tr>
+<tr><td data-label="First line">⚠️ A scheduled job has stopped</td><td data-label="Meaning">An automatic job went quiet.</td><td data-label="What to do">Tell Lloyd.</td></tr>
+<tr><td data-label="First line">📋 WEEKLY (Monday)</td><td data-label="Meaning">Receipts waiting, overdue payouts, questions Cassy could not answer.</td><td data-label="What to do">Chase the overdue payout first.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="telegram-danger">Danger taps and undo</h3>
+<table class="v-table">
+<thead><tr><th>Tap</th><th>Group</th><th>What it does</th><th>Undo</th></tr></thead>
+<tbody>
+<tr><td data-label="Tap"><strong>Send option 1 / 2</strong></td><td data-label="Group">OPS</td><td data-label="What it does">Messages the guest at once, with your name.</td><td data-label="Undo"><span class="v-chip danger">No</span></td></tr>
+<tr><td data-label="Tap"><strong>Write my own</strong>, then reply</td><td data-label="Group">OPS</td><td data-label="What it does">Your text goes to the guest.</td><td data-label="Undo"><span class="v-chip danger">No</span></td></tr>
+<tr><td data-label="Tap"><strong>Received Payment</strong></td><td data-label="Group">OPS</td><td data-label="What it does">Books the cleaner fee as paid.</td><td data-label="Undo"><span class="v-chip danger">Ask Lloyd</span></td></tr>
+<tr><td data-label="Tap"><strong>Acknowledge Payment</strong></td><td data-label="Group">OPS</td><td data-label="What it does">Only confirms you got your fees. Nothing is booked.</td><td data-label="Undo">Harmless</td></tr>
+<tr><td data-label="Tap"><strong>Save</strong> a notice</td><td data-label="Group">OPS</td><td data-label="What it does">Adds a brownout, holiday or reminder to the board.</td><td data-label="Undo">Ask Lloyd</td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Confirm booking</strong></td><td data-label="Group">Finance</td><td data-label="What it does">Confirms the booking and messages the guest.</td><td data-label="Undo"><span class="v-chip danger">No</span></td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Decline</strong></td><td data-label="Group">Finance</td><td data-label="What it does">Cancels the request and tells the guest.</td><td data-label="Undo"><span class="v-chip danger">No</span></td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Confirm</strong> or <strong>Log it</strong> on an expense or refund</td><td data-label="Group">Finance</td><td data-label="What it does">Saves the expense. A refund is saved, but the guest is not messaged.</td><td data-label="Undo"><span class="v-chip undo">/void REF</span></td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Mark Paid</strong></td><td data-label="Group">Finance</td><td data-label="What it does">Books the cleaner fee and marks the clean paid.</td><td data-label="Undo">Ask Lloyd</td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Update stock</strong> or <strong>Apply</strong></td><td data-label="Group">Finance</td><td data-label="What it does">Changes the stock numbers.</td><td data-label="Undo"><span class="v-chip undo">Count again</span></td></tr>
+<tr class="office-only"><td data-label="Tap"><strong>Save it</strong> on a house fact</td><td data-label="Group">Finance</td><td data-label="What it does">Cassy uses the fact in 10 minutes. Guests may hear public facts.</td><td data-label="Undo"><span class="v-chip undo">Retire it</span></td></tr>
+<tr class="office-only"><td data-label="Tap"><code>/void REF</code></td><td data-label="Group">Finance</td><td data-label="What it does">Voids a record at once. There is no confirm card.</td><td data-label="Undo"><span class="v-chip danger">No</span></td></tr>
+</tbody>
+</table>
+<aside class="v-callout danger"><p>Never tap <strong>Send option</strong> or <strong>Received Payment</strong> unless you are sure. In Finance, read the amount before you tap a button that saves money.</p></aside>
+
+<h3 id="telegram-timeline">Daily and weekly timeline</h3>
+<p>Times are Manila time.</p>
+<table class="v-table">
+<thead><tr><th>When</th><th>What arrives</th><th>Group</th></tr></thead>
+<tbody>
+<tr><td data-label="When"><span class="v-chip time">07:30</span></td><td data-label="What arrives">Meter photo check. A card only if a photo is wrong.</td><td data-label="Group">OPS</td></tr>
+<tr><td data-label="When"><span class="v-chip time">07:45</span></td><td data-label="What arrives">Daily system check.</td><td data-label="Group">Finance</td></tr>
+<tr><td data-label="When"><span class="v-chip time">08:00</span></td><td data-label="What arrives">Daily plan. On Monday the weekly card comes first. Missed-cleaning alert and turnover check also run now.</td><td data-label="Group">OPS</td></tr>
+<tr class="office-only"><td data-label="When"><span class="v-chip time">08:00 Mon</span></td><td data-label="What arrives">Weekly money card.</td><td data-label="Group">Finance</td></tr>
+<tr class="office-only"><td data-label="When"><span class="v-chip time">08:30</span></td><td data-label="What arrives">Payment watch: day 2, day 5, then weekly.</td><td data-label="Group">Finance</td></tr>
+<tr><td data-label="When"><span class="v-chip time">Every 2 hours, 06:00 to 20:00</span></td><td data-label="What arrives">Rain check. A card only when rain is likely, once a day.</td><td data-label="Group">OPS</td></tr>
+<tr><td data-label="When"><span class="v-chip time">Every hour</span></td><td data-label="What arrives">Scheduled guest messages and power notice watch.</td><td data-label="Group">OPS</td></tr>
+<tr><td data-label="When"><span class="v-chip time">Every 15 minutes</span></td><td data-label="What arrives">New Airbnb bookings and blocked dates.</td><td data-label="Group">OPS and Finance</td></tr>
+<tr><td data-label="When">Any time</td><td data-label="What arrives">Guest messages, cleaning reports, fee cards, receipts, errors.</td><td data-label="Group">Both</td></tr>
+</tbody>
+</table>
+
+<h3 id="telegram-commands">Commands</h3>
+<table class="v-table">
+<thead><tr><th>Type</th><th>What it does</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td data-label="Type"><code>/menu</code></td><td data-label="What it does">Shows the buttons.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/keyboard</code></td><td data-label="What it does">Shows the always-on buttons at the bottom.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/cassy question</code></td><td data-label="What it does">Asks Cassy.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/deep question</code></td><td data-label="What it does">A deeper answer, with a daily limit.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/draft guest text</code></td><td data-label="What it does">A reply to copy. Nothing is sent.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/stock</code></td><td data-label="What it does">Low stock. <code>/stock all</code> shows everything.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/inventory</code></td><td data-label="What it does">The full inventory.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/notices</code></td><td data-label="What it does">Brownouts, holidays and reminders.</td><td data-label="Where">Both</td></tr>
+<tr><td data-label="Type"><code>/brownout</code>, <code>/holiday</code>, <code>/event</code>, <code>/reminder</code></td><td data-label="What it does">Adds a notice with a date. It is saved at once.</td><td data-label="Where">Both</td></tr>
+<tr class="office-only"><td data-label="Type">A message that starts with a number, such as <code>250 supplies Puregold</code></td><td data-label="What it does">Starts an expense card.</td><td data-label="Where">Finance</td></tr>
+<tr class="office-only"><td data-label="Type"><code>/log</code>, <code>/purchase</code>, <code>/refund</code></td><td data-label="What it does">Log an expense, a purchase or a refund.</td><td data-label="Where">Finance</td></tr>
+<tr class="office-only"><td data-label="Type"><code>/payclean</code>, <code>/manualclean</code>, <code>/notifyclean</code></td><td data-label="What it does">Pay a cleaning fee, add one by hand, or send the fee card.</td><td data-label="Where">Finance</td></tr>
+<tr class="office-only"><td data-label="Type"><code>/count</code></td><td data-label="What it does">Starts a stock count. OPS tells you to use Finance.</td><td data-label="Where">Finance</td></tr>
+<tr class="office-only"><td data-label="Type"><code>/summary</code>, <code>/status</code>, <code>/datahealth</code></td><td data-label="What it does">Reports and health checks.</td><td data-label="Where">Finance</td></tr>
+<tr class="office-only"><td data-label="Type"><code>/void REF</code></td><td data-label="What it does">Voids a record at once.</td><td data-label="Where">Finance</td></tr>
+</tbody>
+</table>
+<p>Weather, Calendar and Turnover are menu buttons, not commands. In OPS, a command that is not allowed is ignored without a message.</p>
+
+<h3 id="telegram-wrong">When Cassy gets it wrong</h3>
+<ol class="v-steps">
+<li><strong>Ask again with the full question.</strong> Use <code>/cassy house</code> and the topic for a how-to, for example <code>/cassy house aircon</code>.</li>
+<li><strong>Do not reply to a card to ask her.</strong> The bot only says to ask Cassy by name.</li>
+<li><strong>Tell Lloyd.</strong> Send a screenshot and the time. He fixes the house fact or the bot.</li>
+</ol>
+<aside class="v-callout tip"><p>Cassy does not know door codes or payment numbers. Ask Lloyd for those.</p></aside>
 </section>
 <!-- /V25:telegram -->
 <!-- V25:help -->
 <section class="content-section v25" id="help" aria-labelledby="help-h">
-<header class="v-head"><h2 id="help-h">Help</h2><p class="v-sub">This page is being written.</p></header>
+  <header class="v-head">
+    <h2 id="help-h">Help</h2>
+    <p class="v-sub">Something is wrong. Pick what you see.</p>
+  </header>
+
+  <aside class="v-callout tip">
+    <p>Before you ask for help, take a photo or screenshot. Write the time and what you were doing.</p>
+  </aside>
+
+  <div class="v-tasks">
+    <a class="v-task" href="#help-danger"><svg class="ic"><use href="#i-crisis"/></svg><strong>Danger to people</strong><span>911 first</span></a>
+    <a class="v-task" href="#help-locked-out"><svg class="ic"><use href="#i-lock"/></svg><strong>Guest is locked out</strong><span>Keypad not responding</span></a>
+    <a class="v-task" href="#help-power"><svg class="ic"><use href="#i-battery"/></svg><strong>Power is out</strong><span>Brownout steps</span></a>
+    <a class="v-task" href="#help-aircon-wifi-water"><svg class="ic"><use href="#i-aircon"/></svg><strong>Aircon, Wi-Fi or water</strong><span>First checks</span></a>
+    <a class="v-task" href="#help-damage"><svg class="ic"><use href="#i-wrench"/></svg><strong>Damage or a lost item</strong><span>Photo, report, tell the office</span></a>
+    <a class="v-task" href="#help-app-send"><svg class="ic"><use href="#i-check"/></svg><strong>The Cleaner app will not send</strong><span>Your draft is saved</span></a>
+    <a class="v-task" href="#help-complaint"><svg class="ic"><use href="#i-message"/></svg><strong>A guest complains</strong><span>Listen, then tell the office</span></a>
+    <a class="v-task" href="#help-telegram-card"><svg class="ic"><use href="#i-concierge"/></svg><strong>A Telegram card I do not understand</strong><span>Read the Do: line</span></a>
+  </div>
+
+  <div class="v-card danger">
+    <h3 class="v-card-title" id="help-danger">Danger to people</h3>
+    <ol class="v-steps">
+      <li><strong>Call 911.</strong> Do this first, before anything else.</li>
+      <li><strong>Fire:</strong> call the Bureau of Fire Protection on <strong>160</strong>.</li>
+      <li><strong>Get yourself and any guest to a safe place.</strong></li>
+      <li><strong>Then tell Lloyd.</strong> Write what happened and the time in the OPS group.</li>
+    </ol>
+    <p><span class="v-chip danger">Tell</span> Lloyd, then Marifel.</p>
+  </div>
+
+  <div class="v-card warn">
+    <h3 class="v-card-title" id="help-locked-out">Guest is locked out or the keypad does not respond</h3>
+    <ol class="v-steps">
+      <li><strong>Tell Marifel or Lloyd right away.</strong> The host must act now.</li>
+      <li><strong>Do not give a door code.</strong> Every guest gets a new code. Only the host sends it.</li>
+      <li><strong>Ask the guest for the booking name and the check-in date.</strong> The host checks who they are.</li>
+      <li><strong>Tell the guest to message us.</strong> We will get them in.</li>
+    </ol>
+    <aside class="v-callout danger"><p>If anyone is in danger, tell them to call 911.</p></aside>
+    <p><span class="v-chip danger">Tell</span> Marifel or Lloyd.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="help-power">Power is out or a brownout is coming</h3>
+    <p>A brownout is a planned power cut. A notice appears in the OPS group. Near the door, the main breaker is on your left as you face out. The emergency light is on top of the fridge. The EcoFlow is near the TV unit.</p>
+    <p><strong>The OPS group warned us (planned):</strong></p>
+    <ol class="v-steps">
+      <li><strong>Charge the EcoFlow to full the day before.</strong> Keep the emergency light close.</li>
+      <li><strong>Use the EcoFlow for phones, lights, a fan and the router only.</strong></li>
+      <li><strong>Never run the aircon or the water heater on it.</strong> It will overload.</li>
+      <li><strong>Write in OPS that you checked the unit and the EcoFlow.</strong> Add the time.</li>
+      <li><strong>When power returns, plug the EcoFlow in again.</strong> Check the fridge is cold.</li>
+    </ol>
+    <p><strong>Nobody warned us:</strong></p>
+    <ol class="v-steps">
+      <li><strong>Write in OPS now.</strong> Give the time, what you see, and if a guest is inside.</li>
+      <li><strong>Use the EcoFlow for phones, lights, a fan and the router only.</strong></li>
+      <li><strong>A guest is inside?</strong> Ask Marifel or Lloyd what to tell the guest. Wait for the answer.</li>
+      <li><strong>Wait until the power is steady</strong> before you switch appliances back on.</li>
+      <li><strong>When power returns, check the fridge is cold.</strong> Plug the EcoFlow in and tell OPS it is back.</li>
+    </ol>
+    <details class="v-more">
+      <summary>More detail: EcoFlow battery level</summary>
+      <ul>
+        <li>60 to 100%: safe for a long time.</li>
+        <li>20 to 60%: essentials only. Phone charging and one light.</li>
+        <li>Below 20%: phones only. Keep what is left for an emergency.</li>
+      </ul>
+    </details>
+    <p><span class="v-chip">Tell</span> The OPS group. Then Lloyd if no notice was posted.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="help-aircon-wifi-water">Aircon, Wi-Fi or water problem</h3>
+    <p><strong>Aircon does not cool</strong></p>
+    <ol class="v-steps">
+      <li><strong>Find the remote.</strong> It is on the wooden tray on the TV cabinet, below the TV, beside the vase.</li>
+      <li><strong>Check the setting.</strong> After a turnover, the aircon stays at 24 C. A guest is comfortable at 26 C on COOL, fan AUTO.</li>
+      <li><strong>Check if the whole area has no power or water.</strong> Tell the office what you see.</li>
+    </ol>
+    <p><strong>Wi-Fi is down</strong></p>
+    <ol class="v-steps">
+      <li><strong>Unplug the router for 60 seconds.</strong> Then plug it in again.</li>
+      <li><strong>Still down?</strong> Tell the office. They check the internet provider for an area outage and update the guest.</li>
+    </ol>
+    <p><strong>Water or plumbing</strong></p>
+    <ol class="v-steps">
+      <li><strong>Never switch the water heater on if the water supply is off.</strong> It will burn out.</li>
+      <li><strong>The toilet flush or a drain misbehaves?</strong> Tell the office. Toilet paper goes in the bin beside the toilet, not down the bowl.</li>
+    </ol>
+    <p><span class="v-chip">Tell</span> Marifel or Lloyd. If a guest is waiting, the office writes to them within 15 minutes.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="help-damage">Damage, or a lost item found</h3>
+    <ol class="v-steps">
+      <li><strong>Take a photo before you clean.</strong> Show the damage or where you found the item.</li>
+      <li><strong>Report it in the Cleaner app.</strong> Add a note in the issues section.</li>
+      <li><strong>Do not throw anything away.</strong> Keep a lost item safe.</li>
+      <li><strong>Tell the office.</strong> The office decides what happens next.</li>
+    </ol>
+    <p><span class="v-chip">Tell</span> Marifel or Lloyd.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="help-app-send">The Cleaner app will not send</h3>
+    <ol class="v-steps">
+      <li><strong>Read the warnings on the Submit screen.</strong> They say what is missing: an issue note, a photo that did not upload, or the timer.</li>
+      <li><strong>Check your signal.</strong> Move to a better place or use Wi-Fi.</li>
+      <li><strong>Do not clear your browser data.</strong> Your draft is saved on the phone.</li>
+      <li><strong>Wait for the signal.</strong> The app shows "No signal - report saved, will retry when connected". It sends again by itself. If it does not, tap <strong>Submit ✓</strong> once.</li>
+      <li><strong>Still stuck after two tries?</strong> Take a screenshot. Tell Lloyd.</li>
+    </ol>
+    <p><span class="v-chip">Tell</span> Lloyd. Tell Marifel if a meter photo is the problem.</p>
+  </div>
+
+  <div class="v-card warn">
+    <h3 class="v-card-title" id="help-complaint">A guest complains or asks for money back</h3>
+    <ol class="v-steps">
+      <li><strong>Listen. Be kind and calm.</strong> Do not argue.</li>
+      <li><strong>Do not promise a refund, a discount or another room.</strong> Only the office decides.</li>
+      <li><strong>Tell Marifel or Lloyd.</strong> Write what the guest said and the time.</li>
+      <li><strong>Tell the guest the office will answer.</strong></li>
+    </ol>
+    <p><span class="v-chip danger">Tell</span> Marifel or Lloyd.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="help-telegram-card">A Telegram card I do not understand</h3>
+    <ol class="v-steps">
+      <li><strong>Read the first line.</strong> Green is normal. Yellow means look today. Red ALERT means act now.</li>
+      <li><strong>Read the line that starts with Do:</strong> That is your one job.</li>
+      <li><strong>Do not tap a button you do not understand.</strong> <strong>Send option 1</strong>, <strong>Send option 2</strong> and <strong>Received Payment</strong> cannot be undone.</li>
+      <li><strong>A button says "not mapped"?</strong> Nothing happened. Tell Lloyd.</li>
+    </ol>
+    <p>More on cards and Cassy: <a href="#telegram">Telegram &amp; Cassy</a>.</p>
+    <p><span class="v-chip">Tell</span> Lloyd.</p>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title">The map</h3>
+    <p>See who to tell on one page: <a href="#maps">Maps, Something is wrong</a>.</p>
+    <a class="v-btn ghost" href="#maps"><svg class="ic"><use href="#i-map"/></svg>Open the maps</a>
+  </div>
 </section>
 <!-- /V25:help -->
 <!-- V25:lookup -->
 <section class="content-section v25" id="lookup" aria-labelledby="lookup-h">
-<header class="v-head"><h2 id="lookup-h">Look up</h2><p class="v-sub">This page is being written.</p></header>
+  <header class="v-head">
+    <h2 id="lookup-h">Look up</h2>
+    <p class="v-sub">Guides for the appliances, and a few training videos.</p>
+  </header>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="lookup-guides">Appliance guides</h3>
+    <p>The remotes and the key card are on the wooden tray on the TV cabinet, below the TV, beside the vase.</p>
+    <div class="v-tasks">
+      <button type="button" class="v-btn ghost" data-guide="ac-guide"><svg class="ic"><use href="#i-aircon"/></svg>Aircon remote</button>
+      <button type="button" class="v-btn ghost" data-guide="tv-remote"><svg class="ic"><use href="#i-tv"/></svg>TV remote</button>
+      <button type="button" class="v-btn ghost" data-guide="ecoflow-river"><svg class="ic"><use href="#i-battery"/></svg>EcoFlow River</button>
+      <button type="button" class="v-btn ghost" data-guide="water-heater"><svg class="ic"><use href="#i-shower"/></svg>Water heater</button>
+      <button type="button" class="v-btn ghost" data-guide="induction-cooker"><svg class="ic"><use href="#i-cooker"/></svg>Induction cooker</button>
+      <button type="button" class="v-btn ghost" data-guide="washing-machine"><svg class="ic"><use href="#i-clean"/></svg>Washing machine</button>
+    </div>
+    <p>More guides open in a full page:</p>
+    <div class="v-tasks">
+      <a class="v-btn ghost" data-viewer="Smart Lock" href="https://cascadereservations-del.github.io/lockifi-manual/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-lock"/></svg>Smart Lock</a>
+      <a class="v-btn ghost" data-viewer="Air Purifier" href="https://cascadereservations-del.github.io/air-purifier/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-air"/></svg>Air Purifier</a>
+      <a class="v-btn ghost" data-viewer="Iron Guide" href="https://cascadereservations-del.github.io/iron-guide/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-iron"/></svg>Garment steamer</a>
+      <a class="v-btn ghost" data-viewer="Dust Mite Vac" href="https://cascadereservations-del.github.io/Dust-Mite/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-vacuum"/></svg>Dust Mite Vac</a>
+      <a class="v-btn ghost" data-viewer="5-Star Mandate" href="https://cascadereservations-del.github.io/5-Star-Mandate/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-star"/></svg>5-Star Mandate</a>
+    </div>
+    <aside class="v-callout note">
+      <p>Office: in a guide, tap <strong>Copy for guest</strong> to send the guest text. Some guides also have a poster to share.</p>
+    </aside>
+  </div>
+
+  <div class="office-only">
+    <div class="v-card">
+      <h3 class="v-card-title" id="lookup-guest-pages">What guests see</h3>
+      <div class="v-tasks">
+        <a class="v-btn ghost" data-viewer="Welcome Guide" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-guide"/></svg>Welcome Guide</a>
+        <a class="v-btn ghost" data-viewer="Nearby POIs" href="https://cascadereservations-del.github.io/Nearby-POIS/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-map"/></svg>Nearby places</a>
+        <a class="v-btn ghost" data-viewer="Dining Map" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-dining"/></svg>Dining map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title" id="lookup-videos">Training videos</h3>
+    <p>Eight short videos. The Cleaner app is the standard. If a video and the app disagree, follow the app.</p>
+    <table class="v-table">
+      <thead><tr><th>Video</th><th>Use it for</th><th>Open</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Video">How to Clean Your Airbnb - A Walkthrough</td><td data-label="Use it for">Order of work: dry to wet, kitchen and bathroom.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=tM8793FdA0g" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">Hotel Bed Corners (fast demo)</td><td data-label="Use it for">Tight hospital corners.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=ZYwXds5HrU8" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">Tight, Wrinkle-free Finish</td><td data-label="Use it for">Smooth sheets and a neat duvet.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=G3dIEdDi0uM" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">Toilet Cleaning Like a Pro (Filipino)</td><td data-label="Use it for">Top to bottom, outside to inside.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=4T7lyhObHf0" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">Wrinkle Removal with Steam</td><td data-label="Use it for">Using the garment steamer safely.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=GCpD3jAblkw" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">Laundry Sorting &amp; Stain Pre-Treat 101</td><td data-label="Use it for">Stained linen before the wash.</td><td data-label="Open"><a href="https://www.youtube.com/watch?v=0jQAr2iplP0" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">How to Easily Remove Burns from Nonstick Pans</td><td data-label="Use it for">Burnt coated pans. Do not scratch the coating.</td><td data-label="Open"><a href="http://www.youtube.com/watch?v=KwKKJrsp5KY" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+        <tr><td data-label="Video">How to clean a burnt stainless steel pan</td><td data-label="Use it for">Burnt steel pans.</td><td data-label="Open"><a href="http://www.youtube.com/watch?v=S21NuLW8O4E" target="_blank" rel="noopener">Open on YouTube</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="v-card">
+    <h3 class="v-card-title">Unit map</h3>
+    <a class="v-btn" href="#maps"><svg class="ic"><use href="#i-map"/></svg>Where things are in the unit</a>
+  </div>
 </section>
 <!-- /V25:lookup -->
 <section class="content-section" id="maps">
