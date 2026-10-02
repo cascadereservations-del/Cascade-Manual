@@ -6,6 +6,7 @@
 <title>Cascade Hideaway — Operations Manual</title>
 <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
 <meta name="referrer" content="no-referrer"/>
+<link rel="icon" href="data:,"/>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -35,6 +36,9 @@
    Full design system. Built for hospitality operations.
    ═══════════════════════════════════════════════════════ */
 /* v24.2 changelog: AA-safe bronze text, Back button, Maps page, card summaries, cleaning steps, remote tray location. */
+/* v25.0 changelog: one staff manual. Bottom bar (phone) and grouped sidebar (desktop); Today, Turnover, The standard look, Office, Templates,
+   Telegram & Cassy, Help, Look up; Business = Costing + Pricing; retired pages open their replacement (alias table); office-only role class;
+   Welcome Guide components on the Manual tokens (v-card, v-steps, v-callout, v-chip, v-tasks, v-check, v-tg, v-chat, v-photo, v-copy, v-more, v-table, v-btn). */
 
 /* ── Tokens ───────────────────────────────────────────── */
 :root {
@@ -2082,7 +2086,7 @@ details.more[open] summary::before{content:"\25BE\00a0"}
 
 /* Home button: same look as the search button, hidden on the Dashboard itself. */
 .topbar-search-btn.home-btn { width: 44px; padding: 0; justify-content: center; }
-html[data-page="dashboard"] .home-btn { display: none; }
+html[data-page="today"] .home-btn { display: none; }
 
 /* One button: 44px tall, 18px icon, 8px gap, never wraps. */
 .ch-btn {
@@ -2266,6 +2270,355 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
   .dash-group .quick-link-card:hover,
   .dash-group .quick-link-card:active { transform: none !important; }
 }
+
+/* ══ v25.0 shell: bottom bar, grouped sidebar, components ══ */
+:root {
+  --tabbar-h:   60px;
+  --r-pill:     999px;
+  --bronze-num: #8F6418;  /* big step numerals: bronze, 3:1+ on every v25 surface */
+  --warn:       #B7791F;  /* warn rule (not text) */
+}
+
+/* Roles. office-only: hidden from staff; the owner and admin see it. The Look up slot is for staff only. */
+body.staff-user .office-only { display: none !important; }
+.bb-staff-only { display: none !important; }
+body.staff-user .bb-staff-only { display: flex !important; }
+
+/* Sidebar: groups as headings, 44 px rows */
+.nav-link { min-height: 44px; }
+.nav-group + .nav-group { margin-top: 6px; }
+
+/* Phone top bar: one slim row (brand, Home, search) */
+.mobile-topbar { padding: max(8px, env(safe-area-inset-top, 0px)) 12px 8px 16px; }
+.mobile-topbar-row { margin-bottom: 0; }
+
+/* Bottom bar (phone and tablet) */
+.bottom-bar { display: none; }
+.bb-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: var(--tabbar-h);
+  padding: 6px 2px;
+  color: var(--text-2);
+  text-decoration: none;
+  font-family: var(--font-b);
+  font-size: .7rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: .01em;
+  -webkit-tap-highlight-color: transparent;
+}
+.bb-link span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bb-link .ch-ico { width: 24px; height: 24px; transition: color var(--t-fast); }
+.bb-link.bb-active { color: var(--text-heading); }
+.bb-link.bb-active .ch-ico { color: var(--bronze-ink); stroke-width: 2; }
+.bb-link.bb-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 32px;
+  height: 3px;
+  margin-left: -16px;
+  border-radius: 0 0 3px 3px;
+  background: var(--bronze);
+}
+.bb-link:focus-visible { outline-offset: -4px; }
+@media (max-width: 1023px) {
+  .bottom-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 0 4px env(safe-area-inset-bottom, 0px);
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 16px rgba(28,16,6,.06);
+  }
+  #content-host,
+  #main-content > .content-section { padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + 28px); }
+  #app-footer { display: none; }
+  .ch-toast { bottom: calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Links to a spot inside a page land below the sticky top bar */
+.content-section [id] { scroll-margin-top: 84px; }
+
+/* ── Page shell ── */
+.content-section.v25 { max-width: 920px; }
+.content-section.v25 > * + * { margin-top: 16px; }
+.v-head { position: relative; margin: 0 0 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.v-head::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 48px; height: 2px; background: var(--bronze); }
+.v-head h2 { font-family: var(--font-d); font-size: 2.1rem; font-weight: 600; line-height: 1.1; letter-spacing: -.01em; color: var(--text-heading); }
+@media (min-width: 641px) { .v-head h2 { font-size: 2.5rem; } }
+.v-sub { margin-top: 6px; font-family: var(--font-b); font-size: 1rem; line-height: 1.5; color: var(--text-2); }
+.v-head.has-back { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.content-section.v25 > .v-head + * { margin-top: 0; }
+.v-greet { font-family: var(--font-d); font-style: italic; font-size: 1.3rem; line-height: 1.35; color: var(--bronze-ink); }
+.content-section.v25 > .v-greet { margin: -6px 0 18px; }
+
+/* Prose inside v25 pages (Tailwind's reset removes list markers) */
+.v25 p { line-height: 1.6; }
+.v25 :is(ul, ol):not([class]) { padding-left: 1.3rem; }
+.v25 ul:not([class]) { list-style: disc; }
+.v25 ol:not([class]) { list-style: decimal; }
+.v25 :is(ul, ol):not([class]) > li + li { margin-top: 4px; }
+.v25 a:not([class]) { color: var(--bronze-ink); text-decoration: underline; text-underline-offset: 3px; }
+.v25 strong { font-weight: 700; color: var(--text-heading); }
+.v25 code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .92em; padding: .05em .35em; border-radius: 4px; background: var(--accent-soft); }
+.v25 :is(.v-card, .v-callout, .v-more) > * + * { margin-top: 10px; }
+
+/* Content icons (sprite ids from #ch-icons) */
+svg.ic { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 1. Card with the gold top rule */
+.v-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 18px 18px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-xs);
+}
+.v-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--bronze)); }
+.v-card.warn { background: #FCF5E3; }
+.v-card.warn::before { background: var(--warn); }
+.v-card.danger { background: #FCF1EE; border-color: rgba(185,28,28,.25); }
+.v-card.danger::before { background: var(--danger); }
+.content-section .v-card > .v-card-title {
+  margin: 0;
+  font-family: var(--font-d);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-heading) !important;
+}
+.content-section .v-card.danger > .v-card-title { color: #8E1B1B !important; }
+
+/* 2. Big-numeral steps */
+.v-steps { list-style: none; margin: 0; padding: 0; counter-reset: v-step; }
+.v-steps > li { counter-increment: v-step; position: relative; min-height: 60px; padding: 14px 0 14px 56px; line-height: 1.55; border-top: 1px solid var(--border); }
+.v-steps > li:first-child { border-top: 0; padding-top: 4px; }
+.v-steps > li::before {
+  content: counter(v-step);
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 44px;
+  text-align: center;
+  font-family: var(--font-d);
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+  color: var(--bronze-num);
+}
+.v-steps > li:first-child::before { top: -2px; }
+.v-steps > li > strong:first-child { display: block; margin-bottom: 2px; font-size: 1.02rem; }
+
+/* 3. Callouts */
+.v-callout { display: block; padding: 14px 16px; border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--r-md); background: var(--surface); line-height: 1.55; }
+.v-callout.tip { border-left-color: var(--bronze); background: #FAF3E2; }
+.v-callout.note { border-left-color: var(--border-strong); background: var(--surface-raised); }
+.v-callout.warn { border-left-color: var(--warn); background: #FCF3DC; }
+.v-callout.danger { border-left-color: var(--danger); background: #FCEDEA; color: #5A1A12; }
+.v-callout.danger strong { color: #7F1D1D; }
+
+/* 4. Chips */
+.v-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  padding: 2px 10px;
+  border: 1px solid rgba(201,150,58,.42);
+  border-radius: var(--r-pill);
+  background: rgba(201,150,58,.13);
+  color: var(--bronze-ink);
+  font-family: var(--font-b);
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.v-chip.danger { border-color: rgba(185,28,28,.35); background: rgba(185,28,28,.08); color: #9B1C1C; }
+.v-chip.undo { border-color: rgba(46,125,95,.38); background: rgba(46,125,95,.09); color: #1F5C45; }
+.v-chip.time { border-color: var(--border-strong); background: var(--surface-raised); color: var(--text-1); letter-spacing: 0; text-transform: none; font-variant-numeric: tabular-nums; }
+
+/* 5. Task grid: "I need to..." */
+.v-tasks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.v-task {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  height: 100%;
+  min-height: 44px;
+  padding: 16px 14px 14px;
+  overflow: hidden;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-xs);
+  color: var(--text-1);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
+}
+.v-task::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--bronze)); }
+.v-task:hover { border-color: var(--bronze); box-shadow: var(--sh-sm); }
+.v-task:active { transform: scale(.98); }
+.v-task .ic { width: 28px; height: 28px; margin-bottom: 2px; stroke-width: 1.6; color: var(--bronze-ink); }
+.v-task strong { font-size: .98rem; font-weight: 700; line-height: 1.25; color: var(--text-heading); }
+.v-task span { font-size: .82rem; line-height: 1.35; color: var(--text-2); }
+
+/* 6. Checklist (ticks saved on the device) */
+.v-check { list-style: none; margin: 0; padding: 0; overflow: hidden; background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.v-check > li + li { border-top: 1px solid var(--border); }
+.v-check label { display: flex; align-items: flex-start; gap: 12px; min-height: 52px; padding: 14px 16px; line-height: 1.45; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.v-check input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: #FFFDF8 center / 14px no-repeat;
+  cursor: pointer;
+  transition: background-color var(--t-fast), border-color var(--t-fast);
+}
+.v-check input[type="checkbox"]:checked {
+  border-color: var(--success);
+  background-color: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+.v-check input[type="checkbox"]:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+.v-check li:has(input:checked) label { color: var(--text-2); }
+
+/* 7. Telegram card replica (static, dark like the app) */
+.v-tg { position: relative; padding: 32px 12px 12px; overflow: hidden; border-radius: var(--r-lg); background: #0E1621; color: #E9EEF2; }
+.v-tg::before { content: attr(data-group) " group"; position: absolute; top: 11px; left: 14px; font: 700 .68rem/1 var(--font-b); letter-spacing: .08em; text-transform: uppercase; color: #8FA6BA; }
+.v-tg:not([data-group])::before { content: 'Telegram'; }
+.v-tg-head, .v-tg-body { max-width: 520px; background: #182533; }
+.v-tg-head { padding: 10px 12px 2px; border-radius: 12px 12px 0 0; font-size: .85rem; font-weight: 700; line-height: 1.4; color: #6AB3F3; }
+.v-tg-body { padding: 4px 12px 10px; border-radius: 0 0 12px 12px; font-size: .88rem; line-height: 1.5; color: #E9EEF2; overflow-wrap: anywhere; }
+.v-tg-body:first-child { padding-top: 10px; border-radius: 12px; }
+.v-tg-btns { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; max-width: 520px; margin-top: 6px; }
+.v-tg-btn { display: flex; align-items: center; justify-content: center; min-height: 40px; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.1); color: #fff; font-size: .82rem; font-weight: 600; line-height: 1.25; text-align: center; }
+.v-tg-btn.danger { background: rgba(229,72,77,.28); color: #FFD9D7; box-shadow: inset 0 0 0 1px rgba(229,72,77,.6); }
+.v-tg-note { margin: 0 -12px; padding: 12px 14px; background: var(--surface-raised); color: var(--text-1); font-size: .9rem; line-height: 1.5; border-top: 1px solid var(--border); }
+.v-tg-note strong { color: var(--text-heading); }
+:is(.v-tg-btns, .v-tg-body, .v-tg-head) + .v-tg-note { margin-top: 12px; }
+.v-tg-note:last-child { margin-bottom: -12px; }
+
+/* 8. Chat bubbles */
+.v-chat { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.v-chat p { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: .92rem; line-height: 1.45; overflow-wrap: anywhere; }
+.v-chat .me { align-self: flex-end; border-bottom-right-radius: 4px; background: var(--mahogany); color: var(--cream); }
+.v-chat .bot { align-self: flex-start; border-bottom-left-radius: 4px; background: var(--surface-raised); border: 1px solid var(--border); color: var(--text-1); }
+
+/* 9. Photo */
+.v-photo { margin: 0; }
+.v-photo img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+.v-photo figcaption { margin-top: 8px; font-size: .85rem; line-height: 1.45; color: var(--text-2); }
+
+/* 10. Tap to copy: the whole card is the button */
+.v-copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 12px 96px 12px 16px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-raised);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.v-copy:hover { border-color: var(--bronze); }
+.v-copy > span { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+.v-copy > code { padding: 0; background: none; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .95rem; color: var(--text-1); white-space: pre-wrap; overflow-wrap: anywhere; }
+.v-copy::after { content: 'Tap to copy'; position: absolute; top: 13px; right: 14px; font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--bronze-ink); }
+.v-copy.copied { border-style: solid; border-color: var(--success); background: rgba(46,125,95,.06); }
+.v-copy.copied::after { content: 'Copied'; color: var(--success); }
+
+/* 11. More detail */
+.v-more { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--r-md); }
+.v-more > summary { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; list-style: none; cursor: pointer; font-size: .9rem; font-weight: 600; color: var(--bronze-ink); }
+.v-more > summary::-webkit-details-marker { display: none; }
+.v-more > summary::before { content: ''; flex-shrink: 0; width: 8px; height: 8px; margin-left: 2px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform var(--t-fast); }
+.v-more[open] > summary::before { transform: rotate(45deg); }
+.v-more > :not(summary) { padding-left: 14px; padding-right: 14px; }
+.v-more > :is(ul, ol):not([class]) { padding-left: 2.2rem; }
+.v-more[open] { padding-bottom: 14px; }
+
+/* 12. Table; under 600 px each row becomes a card, labels from td[data-label] */
+.v-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--r-md); font-size: .9rem; }
+.v-table th { padding: 10px 12px; text-align: left; background: var(--surface); border-bottom: 1px solid var(--border); font-size: .74rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text-2); }
+.v-table td { padding: 10px 12px; vertical-align: top; line-height: 1.45; border-bottom: 1px solid var(--border); }
+.v-table tbody tr:last-child td { border-bottom: 0; }
+@media (max-width: 599px) {
+  .v-table, .v-table tbody, .v-table tr { display: block; width: 100%; }
+  .v-table { overflow: visible; background: none; border: 0; }
+  .v-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .v-table tr { margin-bottom: 10px; overflow: hidden; background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--r-md); }
+  .v-table td { display: grid; grid-template-columns: minmax(84px, 36%) minmax(0, 1fr); gap: 10px; border-bottom: 0 !important; }
+  .v-table td + td { border-top: 1px solid var(--border); }
+  .v-table td::before { content: attr(data-label); padding-top: 2px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--text-2); }
+  .v-table td:not([data-label]) { grid-template-columns: minmax(0, 1fr); }
+  .v-table td:not([data-label])::before { display: none; }
+}
+
+/* 13. Buttons and app links: 44 px, 18 px icon, 8 px gap */
+.v-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 2px 6px 2px 0;
+  padding: 10px 18px;
+  border: 1.5px solid var(--mahogany);
+  border-radius: var(--r-md);
+  background: var(--mahogany);
+  color: var(--cream);
+  font-family: var(--font-b);
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.v-btn:hover { background: var(--walnut); border-color: var(--walnut); color: var(--cream); }
+.v-btn .ic { width: 18px; height: 18px; }
+.v-btn.ghost { background: transparent; border-color: var(--border-strong); color: var(--bronze-ink); }
+.v-btn.ghost:hover { background: var(--accent-soft); border-color: var(--bronze); color: var(--bronze-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .v-task, .v-task:active { transform: none !important; transition: none; }
+}
 </style>
 
 </head>
@@ -2400,75 +2753,65 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
       </div>
     </div>
 
-    <div class="sidebar-nav-scroll">
-      <!-- OPERATIONS -->
+    <nav class="sidebar-nav-scroll" aria-label="Manual sections">
       <div class="nav-group">
-        <div class="nav-group-label">Operations</div>
-        <a class="nav-link" href="#dashboard">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-home"/></svg>Dashboard
+        <a class="nav-link" href="#today">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg>Today
+        </a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Turnover</div>
+        <a class="nav-link" href="#turnover">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clean"/></svg>Turnover
+        </a>
+        <a class="nav-link" href="#standard-look">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-star"/></svg>The standard look
+        </a>
+      </div>
+      <div class="nav-group office-only">
+        <div class="nav-group-label">Office</div>
+        <a class="nav-link office-only" href="#office">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-people"/></svg>Office
+        </a>
+        <a class="nav-link office-only" href="#templates">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-copy"/></svg>Templates
+        </a>
+      </div>
+      <div class="nav-group">
+        <a class="nav-link" href="#telegram">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-message"/></svg>Telegram &amp; Cassy
+        </a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Help</div>
+        <a class="nav-link" href="#help">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-crisis"/></svg>Help
         </a>
         <a class="nav-link" href="#maps">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-map"/></svg>Maps
-        </a>
-        <a class="nav-link" href="#sops">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-sop"/></svg>Guest Journey SOPs
-        </a>
-        <a class="nav-link" href="#cleaning">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-clean"/></svg>Cleaning Checklist
-        </a>
-        <a class="nav-link" href="#videos">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-video"/></svg>Video Resources
-        </a>
-        <a class="nav-link" href="#playbook">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-crisis"/></svg>Crisis Playbook
-        </a>
-        <a class="nav-link" href="#maintenance">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-wrench"/></svg>Maintenance Log
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg>Maps
         </a>
       </div>
-
-      <!-- COMMUNICATION -->
       <div class="nav-group">
-        <div class="nav-group-label">Communication</div>
-        <a class="nav-link owner-only" href="#messages">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-message"/></svg>Message Hub
-        </a>
-        <a class="nav-link" href="#concierge">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-concierge"/></svg>AI Concierge
-        </a>
-        <a class="nav-link owner-only" href="#guest-guide">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-guide"/></svg>Guest-Facing Guide
+        <a class="nav-link" href="#lookup">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-guide"/></svg>Look up
         </a>
       </div>
-
-      <!-- BUSINESS -->
       <div class="nav-group owner-only">
-        <div class="nav-group-label">Business</div>
-        <a class="nav-link owner-only" href="#costing">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-cost"/></svg>Cost &amp; Profitability
-        </a>
-        <a class="nav-link owner-only" href="#pricing">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-pricing"/></svg>Pricing Strategy
+        <div class="nav-group-label">Owner</div>
+        <a class="nav-link owner-only" href="#business">
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>Business
         </a>
         <a class="nav-link owner-only" href="#info">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-info"/></svg>Important Info
-        </a>
-        <a class="nav-link owner-only" href="#finance">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-finance"/></svg>Finance
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-info"/></svg>Info
         </a>
       </div>
-
-      <!-- SYSTEM -->
       <div class="nav-group admin-only">
-        <div class="nav-group-label">System</div>
-        <a class="nav-link admin-only" href="#access-log">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-log"/></svg>Access Log
-        </a>
+        <div class="nav-group-label">Admin</div>
         <a class="nav-link admin-only" href="#account-settings">
-          <svg class="ch-ico nav-icon" viewBox="0 0 24 24"><use href="#i-access"/></svg>Account Settings
+          <svg class="ch-ico nav-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-access"/></svg>Account settings
         </a>
       </div>
-    </div>
+    </nav>
 
     <div class="sidebar-footer">
       <div id="user-badge">
@@ -2507,7 +2850,7 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
           <span class="role-dot"></span>
           <span id="topbar-role-text">Loading…</span>
         </div>
-        <span class="topbar-version">v24.2</span>
+        <span class="topbar-version">v25.0</span>
       </div>
     </div>
 
@@ -2524,142 +2867,50 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
           </button>
         </div>
       </div>
-      <nav class="pill-nav" id="pill-nav">
-        <a class="pill-link" href="#dashboard">Dashboard</a>
-        <a class="pill-link" href="#maps">Maps</a>
-        <a class="pill-link" href="#sops">SOPs</a>
-        <a class="pill-link owner-only" href="#messages">Messages</a>
-        <a class="pill-link" href="#concierge">Concierge</a>
-        <a class="pill-link owner-only" href="#guest-guide">Guide</a>
-        <a class="pill-link" href="#cleaning">Cleaning</a>
-        <a class="pill-link" href="#videos">Videos</a>
-        <a class="pill-link owner-only" href="#costing">Costing</a>
-        <a class="pill-link owner-only" href="#pricing">Pricing</a>
-        <a class="pill-link" href="#playbook">Playbook</a>
-        <a class="pill-link" href="#maintenance">Maintenance</a>
-        <a class="pill-link owner-only" href="#info">Info</a>
-        <a class="pill-link owner-only" href="#finance">Finance</a>
-        <a class="pill-link admin-only" href="#access-log">Access Log</a>
-        <a class="pill-link admin-only" href="#account-settings">Account</a>
-      </nav>
     </div>
 
     <!-- Content sections injected here -->
 <div id="content-host">
-<section class="content-section" id="dashboard">
-<div class="section-header">
-  <div>
-    <h2>Dashboard</h2>
-    <p>Your hospitality command centre for Cascade Hideaway.</p>
-  </div>
-</div>
-<div class="promise-card my-0 mb-8">
-<h3>"Hotel Comfort, Home Warmth"</h3>
-<p>This is our guiding promise. Every action, message, and detail should reflect this philosophy — warm, calm, confident, and elegantly Filipino hospitality.</p>
-</div>
-
-<!-- GROUP 1: Daily Operations -->
-<div class="dash-group">
-  <div class="dash-label">Daily Operations</div>
-  <div class="daily-ops-grid">
-    <a class="quick-link-card daily-ops-primary" href="https://cascadereservations-del.github.io/Stay_At_CascadeGSC/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-booking"/></svg>
-      <div>Direct Booking</div>
-      <div class="ql-sub">Open site ↗</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tile-clean"/></svg>
-      <div class="text-xs">Cleaning App</div><div class="ql-sub">Checklist, photos, report</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/CH_Inventory/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-box"/></svg>
-      <div class="text-xs">Inventory</div><div class="ql-sub">Supplies and stock</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/cascade-admin-dashboard/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>
-      <div class="text-xs">Admin DB</div><div class="ql-sub">Admin tools, sign in</div>
-    </a>
-  </div>
-</div>
-
-<div class="dash-divider"></div>
-
-<!-- GROUP 2: Guest-Facing -->
-<div class="dash-group">
-  <div class="dash-label">Guest-Facing</div>
-  <div class="guest-grid">
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" rel="noopener noreferrer" target="_blank" data-viewer="Welcome Guide">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-guide-tile"/></svg><div class="text-xs">Welcome Guide</div><div class="ql-sub">What guests see</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Nearby-POIS/" rel="noopener noreferrer" target="_blank" data-viewer="Nearby POIs">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Nearby POIs</div><div class="ql-sub">Places near the unit</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" rel="noopener noreferrer" target="_blank" data-viewer="Dining Map">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dining"/></svg><div class="text-xs">Dining Map</div><div class="ql-sub">Where to eat nearby</div>
-    </a>
-    <a class="quick-link-card owner-only" href="#finance">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coins"/></svg><div class="text-xs">Finance</div><div class="ql-sub">Payouts and ledger</div>
-    </a>
-  </div>
-</div>
-
-<div class="dash-divider"></div>
-
-<!-- GROUP 3: Training & Appliance Guides -->
-<div class="dash-group">
-  <div class="dash-label">Training &amp; Guides</div>
-  <div class="training-grid">
-    <a class="quick-link-card" href="#maps">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-map"/></svg><div class="text-xs">Maps</div><div class="ql-sub">Find any page or thing</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/5-Star-Mandate/" rel="noopener noreferrer" target="_blank" data-viewer="5-Star Mandate">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-star"/></svg><div class="text-xs">5-Star Mandate</div><div class="ql-sub">Training guide</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/lockifi-manual/" rel="noopener noreferrer" target="_blank" data-viewer="Smart Lock">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg><div class="text-xs">Smart Lock</div><div class="ql-sub">PIN and key card</div>
-    </a>
-    <button class="quick-link-card" data-guide="ecoflow-river">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-battery"/></svg><div class="text-xs">EcoFlow River</div><div class="ql-sub">Power, battery, recharging</div>
-    </button>
-    <button class="quick-link-card" data-guide="ac-guide">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-aircon"/></svg><div class="text-xs">Aircon Remote</div><div class="ql-sub">Location, settings, modes</div>
-    </button>
-    <button class="quick-link-card" data-guide="tv-remote">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div class="text-xs">TV Remote</div><div class="ql-sub">Location, controls, streaming</div>
-    </button>
-    <button class="quick-link-card" data-guide="water-heater">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shower"/></svg><div class="text-xs">Water Heater</div><div class="ql-sub">Switch, lights, turnover</div>
-    </button>
-    <button class="quick-link-card" data-guide="induction-cooker">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cooker"/></svg><div class="text-xs">Induction Cooker</div><div class="ql-sub">Cookware and power levels</div>
-    </button>
-    <button class="quick-link-card" data-guide="washing-machine">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clean"/></svg><div class="text-xs">Washing Machine</div><div class="ql-sub">Faucet valve, poster</div>
-    </button>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/air-purifier/" rel="noopener noreferrer" target="_blank" data-viewer="Air Purifier">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-air"/></svg><div class="text-xs">Air Purifier</div><div class="ql-sub">Guest and turnover use</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/Dust-Mite/" rel="noopener noreferrer" target="_blank" data-viewer="Dust Mite Vac">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vacuum"/></svg><div class="text-xs">Dust Mite Vac</div><div class="ql-sub">Vacuum how-to guide</div>
-    </a>
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/iron-guide/" rel="noopener noreferrer" target="_blank" data-viewer="Iron Guide">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-iron"/></svg><div class="text-xs">Iron Guide</div><div class="ql-sub">Iron how-to guide</div>
-    </a>
-  </div>
-</div>
-
-<!-- GROUP 4: Admin (admin-only) -->
-<div class="dash-group admin-only">
-  <div class="dash-divider" style="margin-top:0"></div>
-  <div class="dash-label">Admin</div>
-  <div class="guest-grid">
-    <a class="quick-link-card" href="https://cascadereservations-del.github.io/CASCADE-EMPLOYEE/" rel="noopener noreferrer" target="_blank">
-      <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-people"/></svg><div class="text-xs">Employee DB</div><div class="ql-sub">Staff records</div>
-    </a>
-  </div>
-</div>
-
+<!-- V25:today -->
+<section class="content-section v25" id="today" aria-labelledby="today-h">
+<header class="v-head"><h2 id="today-h">Today</h2><p class="v-sub">This page is being written.</p></header>
 </section>
+<!-- /V25:today -->
+<!-- V25:turnover -->
+<section class="content-section v25" id="turnover" aria-labelledby="turnover-h">
+<header class="v-head"><h2 id="turnover-h">Turnover</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:turnover -->
+<!-- V25:standard-look -->
+<section class="content-section v25" id="standard-look" aria-labelledby="standard-look-h">
+<header class="v-head"><h2 id="standard-look-h">The standard look</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:standard-look -->
+<!-- V25:office -->
+<section class="content-section v25" id="office" aria-labelledby="office-h">
+<header class="v-head"><h2 id="office-h">Office</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:office -->
+<!-- V25:templates -->
+<section class="content-section v25" id="templates" aria-labelledby="templates-h">
+<header class="v-head"><h2 id="templates-h">Templates</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:templates -->
+<!-- V25:telegram -->
+<section class="content-section v25" id="telegram" aria-labelledby="telegram-h">
+<header class="v-head"><h2 id="telegram-h">Telegram &amp; Cassy</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:telegram -->
+<!-- V25:help -->
+<section class="content-section v25" id="help" aria-labelledby="help-h">
+<header class="v-head"><h2 id="help-h">Help</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:help -->
+<!-- V25:lookup -->
+<section class="content-section v25" id="lookup" aria-labelledby="lookup-h">
+<header class="v-head"><h2 id="lookup-h">Look up</h2><p class="v-sub">This page is being written.</p></header>
+</section>
+<!-- /V25:lookup -->
 <section class="content-section" id="maps">
 <div class="section-header">
   <div>
@@ -2671,9 +2922,9 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
 <figure class="mindmap" id="map-manual">
 <h3>Manual map</h3>
 <p class="instructional-note mb-4">Every page of this manual, grouped by the job you are doing.</p>
-<svg xmlns="http://www.w3.org/2000/svg" class="mm-map manual-map-manual" viewBox="0 0 360 1286" role="group" aria-labelledby="manual-map-manual-title manual-map-manual-desc" preserveAspectRatio="xMidYMin slice">
+<svg xmlns="http://www.w3.org/2000/svg" class="mm-map manual-map-manual" viewBox="0 0 360 1220" role="group" aria-labelledby="manual-map-manual-title manual-map-manual-desc" preserveAspectRatio="xMidYMin slice">
 <title id="manual-map-manual-title">Operations Manual map</title>
-<desc id="manual-map-manual-desc">The Operations Manual pages in four groups: Operations, Communication, Business and System. Tap a page to open it.</desc>
+<desc id="manual-map-manual-desc">The Operations Manual pages by group: Today, Turnover, Telegram and Cassy, Help, Office, Owner and Admin. Tap a page to open it.</desc>
 <style>
 .mm-map{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
 .mm-map text{font-family:var(--font-b,'Raleway',system-ui,sans-serif);font-size:13px;font-weight:500;font-variant-numeric:lining-nums;fill:var(--text-heading,#2E1F12)}
@@ -2696,14 +2947,17 @@ a.copy-button { max-width: 100%; white-space: normal; text-align: center; line-h
 .mm-map a.mm-node:hover rect,.mm-map a.mm-node:focus-visible rect{stroke:var(--bronze-ink,var(--bronze,#765110));stroke-width:2.5}
 </style>
 <style>
-body.owner-user .manual-map-manual{aspect-ratio:360/1100}
-body.staff-user .manual-map-manual{aspect-ratio:360/682}
+body.owner-user .manual-map-manual{aspect-ratio:360/1094}
+body.staff-user .manual-map-manual{aspect-ratio:360/738}
 </style>
 <g class="mm-node mm-root"><rect x="12" y="10" width="336" height="62" rx="10"/><text class="mm-h" x="26" y="38">Operations Manual</text><text class="mm-small" x="26" y="58">Tap a page to open it</text></g>
-<g><path class="mm-line" d="M26 72V110H40"/><g class="mm-node mm-branch"><rect x="40" y="90" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="115">Operations</text></g><path class="mm-line" d="M54 130V165H66"/><a class="mm-node" href="#dashboard" aria-label="Dashboard: Start page and quick links"><rect x="66" y="140" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="160">Dashboard</text><text class="mm-d" x="78" y="177">Start page and quick links</text><path class="mm-chev" d="M328 160l6 5l-6 5"/></a><path class="mm-line" d="M54 165V225H66"/><a class="mm-node" href="#sops" aria-label="Guest Journey SOPs: 5-star guest service steps"><rect x="66" y="200" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="220">Guest Journey SOPs</text><text class="mm-d" x="78" y="237">5-star guest service steps</text><path class="mm-chev" d="M328 220l6 5l-6 5"/></a><path class="mm-line" d="M54 225V285H66"/><a class="mm-node" href="#cleaning" aria-label="Cleaning Checklist: Turnover standards and app link"><rect x="66" y="260" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="280">Cleaning Checklist</text><text class="mm-d" x="78" y="297">Turnover standards and app link</text><path class="mm-chev" d="M328 280l6 5l-6 5"/></a><path class="mm-line" d="M54 285V345H66"/><a class="mm-node" href="#videos" aria-label="Video Resources: Short training videos"><rect x="66" y="320" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="340">Video Resources</text><text class="mm-d" x="78" y="357">Short training videos</text><path class="mm-chev" d="M328 340l6 5l-6 5"/></a><path class="mm-line" d="M54 345V405H66"/><a class="mm-node" href="#playbook" aria-label="Crisis Playbook: Steps for guest problems"><rect x="66" y="380" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="400">Crisis Playbook</text><text class="mm-d" x="78" y="417">Steps for guest problems</text><path class="mm-chev" d="M328 400l6 5l-6 5"/></a><path class="mm-line" d="M54 405V465H66"/><a class="mm-node" href="#maintenance" aria-label="Maintenance Log: Maintenance tracker and reminders"><rect x="66" y="440" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="460">Maintenance Log</text><text class="mm-d" x="78" y="477">Maintenance tracker and reminders</text><path class="mm-chev" d="M328 460l6 5l-6 5"/></a><path class="mm-line" d="M54 465V525H66"/><a class="mm-node" href="#maps" aria-label="Maps: Quick picture guides"><rect x="66" y="500" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="520">Maps</text><text class="mm-d" x="78" y="537">Quick picture guides</text><path class="mm-chev" d="M328 520l6 5l-6 5"/></a></g>
-<g><path class="mm-line" d="M26 110V588H40"/><g class="mm-node mm-branch"><rect x="40" y="568" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="593">Communication</text></g><path class="mm-line" d="M54 608V643H66"/><a class="mm-node" href="#concierge" aria-label="AI Concierge: AI helper for writing replies"><rect x="66" y="618" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="638">AI Concierge</text><text class="mm-d" x="78" y="655">AI helper for writing replies</text><path class="mm-chev" d="M328 638l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 643V703H66"/><a class="mm-node owner-only" href="#messages" aria-label="Message Hub: Ready-to-copy guest messages"><rect x="66" y="678" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="698">Message Hub</text><text class="mm-d" x="78" y="715">Ready-to-copy guest messages</text><path class="mm-chev" d="M328 698l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 703V763H66"/><a class="mm-node owner-only" href="#guest-guide" aria-label="Guest-Facing Guide: What guests see"><rect x="66" y="738" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="758">Guest-Facing Guide</text><text class="mm-d" x="78" y="775">What guests see</text><path class="mm-chev" d="M328 758l6 5l-6 5"/></a></g>
-<g class="owner-only"><path class="mm-line" d="M26 588V826H40"/><g class="mm-node mm-branch"><rect x="40" y="806" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="831">Business</text></g><path class="mm-line owner-only" d="M54 846V881H66"/><a class="mm-node owner-only" href="#costing" aria-label="Cost &amp; Profitability: Cost per booking, breakeven"><rect x="66" y="856" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="876">Cost &amp; Profitability</text><text class="mm-d" x="78" y="893">Cost per booking, breakeven</text><path class="mm-chev" d="M328 876l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 881V941H66"/><a class="mm-node owner-only" href="#pricing" aria-label="Pricing Strategy: Rates built from your costs"><rect x="66" y="916" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="936">Pricing Strategy</text><text class="mm-d" x="78" y="953">Rates built from your costs</text><path class="mm-chev" d="M328 936l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 941V1001H66"/><a class="mm-node owner-only" href="#info" aria-label="Important Info: Contacts and property details"><rect x="66" y="976" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="996">Important Info</text><text class="mm-d" x="78" y="1013">Contacts and property details</text><path class="mm-chev" d="M328 996l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 1001V1061H66"/><a class="mm-node owner-only" href="#finance" aria-label="Finance: Revenue and expense records"><rect x="66" y="1036" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1056">Finance</text><text class="mm-d" x="78" y="1073">Revenue and expense records</text><path class="mm-chev" d="M328 1056l6 5l-6 5"/></a></g>
-<g class="admin-only"><path class="mm-line" d="M26 826V1124H40"/><g class="mm-node mm-branch"><rect x="40" y="1104" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1129">System</text></g><path class="mm-line admin-only" d="M54 1144V1179H66"/><a class="mm-node admin-only" href="#access-log" aria-label="Access Log: Who opened the Manual"><rect x="66" y="1154" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1174">Access Log</text><text class="mm-d" x="78" y="1191">Who opened the Manual</text><path class="mm-chev" d="M328 1174l6 5l-6 5"/></a><path class="mm-line admin-only" d="M54 1179V1239H66"/><a class="mm-node admin-only" href="#account-settings" aria-label="Account Settings: Who can open what"><rect x="66" y="1214" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1234">Account Settings</text><text class="mm-d" x="78" y="1251">Who can open what</text><path class="mm-chev" d="M328 1234l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 72V110H40"/><g class="mm-node mm-branch"><rect x="40" y="90" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="115">Today</text></g><path class="mm-line" d="M54 130V165H66"/><a class="mm-node" href="#today" aria-label="Today: Start here: what to do today"><rect x="66" y="140" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="160">Today</text><text class="mm-d" x="78" y="177">Start here: what to do today</text><path class="mm-chev" d="M328 160l6 5l-6 5"/></a><path class="mm-line" d="M54 165V225H66"/><a class="mm-node" href="#lookup" aria-label="Look up: Appliance guides and videos"><rect x="66" y="200" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="220">Look up</text><text class="mm-d" x="78" y="237">Appliance guides and videos</text><path class="mm-chev" d="M328 220l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 110V288H40"/><g class="mm-node mm-branch"><rect x="40" y="268" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="293">Turnover</text></g><path class="mm-line" d="M54 308V343H66"/><a class="mm-node" href="#turnover" aria-label="Turnover: The Cleaner app, Phase 0 to 4"><rect x="66" y="318" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="338">Turnover</text><text class="mm-d" x="78" y="355">The Cleaner app, Phase 0 to 4</text><path class="mm-chev" d="M328 338l6 5l-6 5"/></a><path class="mm-line" d="M54 343V403H66"/><a class="mm-node" href="#standard-look" aria-label="The standard look: What a finished unit looks like"><rect x="66" y="378" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="398">The standard look</text><text class="mm-d" x="78" y="415">What a finished unit looks like</text><path class="mm-chev" d="M328 398l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 288V466H40"/><g class="mm-node mm-branch"><rect x="40" y="446" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="471">Telegram &amp; Cassy</text></g><path class="mm-line" d="M54 486V521H66"/><a class="mm-node" href="#telegram" aria-label="Telegram &amp; Cassy: The two groups, the cards, Cassy"><rect x="66" y="496" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="516">Telegram &amp; Cassy</text><text class="mm-d" x="78" y="533">The two groups, the cards, Cassy</text><path class="mm-chev" d="M328 516l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 466V584H40"/><g class="mm-node mm-branch"><rect x="40" y="564" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="589">Help</text></g><path class="mm-line" d="M54 604V639H66"/><a class="mm-node" href="#help" aria-label="Help: Something is wrong: what to do"><rect x="66" y="614" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="634">Help</text><text class="mm-d" x="78" y="651">Something is wrong: what to do</text><path class="mm-chev" d="M328 634l6 5l-6 5"/></a><path class="mm-line" d="M54 639V699H66"/><a class="mm-node" href="#maps" aria-label="Maps: These picture maps"><rect x="66" y="674" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="694">Maps</text><text class="mm-d" x="78" y="711">These picture maps</text><path class="mm-chev" d="M328 694l6 5l-6 5"/></a></g>
+<g class="office-only"><path class="mm-line" d="M26 584V762H40"/><g class="mm-node mm-branch"><rect x="40" y="742" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="767">Office</text></g><path class="mm-line office-only" d="M54 782V817H66"/><a class="mm-node office-only" href="#office" aria-label="Office: Policies, guests and the task list"><rect x="66" y="792" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="812">Office</text><text class="mm-d" x="78" y="829">Policies, guests and the task list</text><path class="mm-chev" d="M328 812l6 5l-6 5"/></a><path class="mm-line office-only" d="M54 817V877H66"/><a class="mm-node office-only" href="#templates" aria-label="Templates: Ready-to-copy guest messages"><rect x="66" y="852" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="872">Templates</text><text class="mm-d" x="78" y="889">Ready-to-copy guest messages</text><path class="mm-chev" d="M328 872l6 5l-6 5"/></a></g>
+<g class="owner-only"><path class="mm-line" d="M26 762V940H40"/><g class="mm-node mm-branch"><rect x="40" y="920" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="945">Owner</text></g><path class="mm-line owner-only" d="M54 960V995H66"/><a class="mm-node owner-only" href="#business" aria-label="Business: Costs, break-even and pricing"><rect x="66" y="970" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="990">Business</text><text class="mm-d" x="78" y="1007">Costs, break-even and pricing</text><path class="mm-chev" d="M328 990l6 5l-6 5"/></a><path class="mm-line owner-only" d="M54 995V1055H66"/><a class="mm-node owner-only" href="#info" aria-label="Info: Contacts and property details"><rect x="66" y="1030" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1050">Info</text><text class="mm-d" x="78" y="1067">Contacts and property details</text><path class="mm-chev" d="M328 1050l6 5l-6 5"/></a></g>
+<g class="admin-only"><path class="mm-line" d="M26 940V1118H40"/><g class="mm-node mm-branch"><rect x="40" y="1098" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1123">Admin</text></g><path class="mm-line admin-only" d="M54 1138V1173H66"/><a class="mm-node admin-only" href="#account-settings" aria-label="Account settings: Who can open what"><rect x="66" y="1148" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1168">Account settings</text><text class="mm-d" x="78" y="1185">Who can open what</text><path class="mm-chev" d="M328 1168l6 5l-6 5"/></a></g>
 </svg>
 </figure>
 <figure class="mindmap" id="map-turnover">
@@ -2711,7 +2965,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/682}
 <p class="instructional-note mb-4">The turnover steps in order, from entry to the last photos.</p>
 <svg xmlns="http://www.w3.org/2000/svg" class="mm-map manual-map-turnover" viewBox="0 0 360 756" role="group" aria-labelledby="manual-map-turnover-title manual-map-turnover-desc">
 <title id="manual-map-turnover-title">Turnover at a glance</title>
-<desc id="manual-map-turnover-desc">The Cleaner app from Phase 0 to Phase 4, then Submit, with what each screen needs. Phases link to the Cleaning Checklist page.</desc>
+<desc id="manual-map-turnover-desc">The Cleaner app from Phase 0 to Phase 4, then Submit, with what each screen needs. Phases link to the Turnover page.</desc>
 <style>
 .mm-map{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
 .mm-map text{font-family:var(--font-b,'Raleway',system-ui,sans-serif);font-size:13px;font-weight:500;font-variant-numeric:lining-nums;fill:var(--text-heading,#2E1F12)}
@@ -2735,22 +2989,22 @@ body.staff-user .manual-map-manual{aspect-ratio:360/682}
 </style>
 <a class="mm-node mm-root" href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" target="_blank" rel="noopener" aria-label="Turnover at a glance. Open the Cleaner app, opens in a new tab"><rect x="12" y="10" width="336" height="62" rx="10"/><text class="mm-h" x="26" y="38">Turnover at a glance</text><text class="mm-small" x="26" y="58">Tap to open the Cleaner app</text><path class="mm-chev" d="M327 36l6 5l-6 5"/></a>
 <path class="mm-line" d="M180 72V86"/><path class="mm-arrow" d="M174 85h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Phase 0: Setup. About 30 seconds. Cleaning type, date and guest stay. Open the Cleaning Checklist"><rect x="12" y="94" width="336" height="67" rx="10"/><text class="mm-t" x="52" y="114">Phase 0: Setup</text><text class="mm-d" x="52" y="131">About 30 seconds</text><text class="mm-d" x="52" y="148">Cleaning type, date and guest stay</text><path class="mm-chev" d="M328 122.5l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Phase 0: Setup. About 30 seconds. Cleaning type, date and guest stay. Open the Turnover page"><rect x="12" y="94" width="336" height="67" rx="10"/><text class="mm-t" x="52" y="114">Phase 0: Setup</text><text class="mm-d" x="52" y="131">About 30 seconds</text><text class="mm-d" x="52" y="148">Cleaning type, date and guest stay</text><path class="mm-chev" d="M328 122.5l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="109" r="11"/><text class="mm-badge-t" x="30" y="114">0</text>
 <path class="mm-line" d="M180 161V175"/><path class="mm-arrow" d="M174 174h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Phase 1: Document. Before you touch anything. At least 5 photos (10 to 12 is better). Electric and water meter readings. A photo of each meter. All Clear or Found Something. Open the Cleaning Checklist"><rect x="12" y="183" width="336" height="118" rx="10"/><text class="mm-t" x="52" y="203">Phase 1: Document</text><text class="mm-d" x="52" y="220">Before you touch anything</text><text class="mm-d" x="52" y="237">At least 5 photos (10 to 12 is better)</text><text class="mm-d" x="52" y="254">Electric and water meter readings</text><text class="mm-d" x="52" y="271">A photo of each meter</text><text class="mm-d" x="52" y="288">All Clear or Found Something</text><path class="mm-chev" d="M328 237l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Phase 1: Document. Before you touch anything. At least 5 photos (10 to 12 is better). Electric and water meter readings. A photo of each meter. All Clear or Found Something. Open the Turnover page"><rect x="12" y="183" width="336" height="118" rx="10"/><text class="mm-t" x="52" y="203">Phase 1: Document</text><text class="mm-d" x="52" y="220">Before you touch anything</text><text class="mm-d" x="52" y="237">At least 5 photos (10 to 12 is better)</text><text class="mm-d" x="52" y="254">Electric and water meter readings</text><text class="mm-d" x="52" y="271">A photo of each meter</text><text class="mm-d" x="52" y="288">All Clear or Found Something</text><path class="mm-chev" d="M328 237l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="198" r="11"/><text class="mm-badge-t" x="30" y="203">1</text>
 <path class="mm-line" d="M180 301V315"/><path class="mm-arrow" d="M174 314h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Phase 2: Arrive &amp; Prep. Open up and check the unit. Spray chemicals, then start the timer. Key card is on its keychain. Open the Cleaning Checklist"><rect x="12" y="323" width="336" height="84" rx="10"/><text class="mm-t" x="52" y="343">Phase 2: Arrive &amp; Prep</text><text class="mm-d" x="52" y="360">Open up and check the unit</text><text class="mm-d" x="52" y="377">Spray chemicals, then start the timer</text><text class="mm-d" x="52" y="394">Key card is on its keychain</text><path class="mm-chev" d="M328 360l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Phase 2: Arrive &amp; Prep. Open up and check the unit. Spray chemicals, then start the timer. Key card is on its keychain. Open the Turnover page"><rect x="12" y="323" width="336" height="84" rx="10"/><text class="mm-t" x="52" y="343">Phase 2: Arrive &amp; Prep</text><text class="mm-d" x="52" y="360">Open up and check the unit</text><text class="mm-d" x="52" y="377">Spray chemicals, then start the timer</text><text class="mm-d" x="52" y="394">Key card is on its keychain</text><path class="mm-chev" d="M328 360l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="338" r="11"/><text class="mm-badge-t" x="30" y="343">2</text>
 <path class="mm-line" d="M180 407V421"/><path class="mm-arrow" d="M174 420h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Phase 3: Clean. Bedroom first, then kitchen and bath. At least 2 kitchen photos. Supply log saved, or Nothing used. Open the Cleaning Checklist"><rect x="12" y="429" width="336" height="84" rx="10"/><text class="mm-t" x="52" y="449">Phase 3: Clean</text><text class="mm-d" x="52" y="466">Bedroom first, then kitchen and bath</text><text class="mm-d" x="52" y="483">At least 2 kitchen photos</text><text class="mm-d" x="52" y="500">Supply log saved, or Nothing used</text><path class="mm-chev" d="M328 466l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Phase 3: Clean. Bedroom first, then kitchen and bath. At least 2 kitchen photos. Supply log saved, or Nothing used. Open the Turnover page"><rect x="12" y="429" width="336" height="84" rx="10"/><text class="mm-t" x="52" y="449">Phase 3: Clean</text><text class="mm-d" x="52" y="466">Bedroom first, then kitchen and bath</text><text class="mm-d" x="52" y="483">At least 2 kitchen photos</text><text class="mm-d" x="52" y="500">Supply log saved, or Nothing used</text><path class="mm-chev" d="M328 466l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="444" r="11"/><text class="mm-badge-t" x="30" y="449">3</text>
 <path class="mm-line" d="M180 513V527"/><path class="mm-arrow" d="M174 526h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Phase 4: Finish. Answer every Confirm &amp; Leave item. AC at 24°C, fridge cold, EcoFlow 100%. Key card and guest code open the door. At least 5 after-clean photos. (12 to 14 is better). Open the Cleaning Checklist"><rect x="12" y="535" width="336" height="118" rx="10"/><text class="mm-t" x="52" y="555">Phase 4: Finish</text><text class="mm-d" x="52" y="572">Answer every Confirm &amp; Leave item</text><text class="mm-d" x="52" y="589">AC at 24°C, fridge cold, EcoFlow 100%</text><text class="mm-d" x="52" y="606">Key card and guest code open the door</text><text class="mm-d" x="52" y="623">At least 5 after-clean photos</text><text class="mm-d" x="52" y="640">(12 to 14 is better)</text><path class="mm-chev" d="M328 589l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Phase 4: Finish. Answer every Confirm &amp; Leave item. AC at 24°C, fridge cold, EcoFlow 100%. Key card and guest code open the door. At least 5 after-clean photos. (12 to 14 is better). Open the Turnover page"><rect x="12" y="535" width="336" height="118" rx="10"/><text class="mm-t" x="52" y="555">Phase 4: Finish</text><text class="mm-d" x="52" y="572">Answer every Confirm &amp; Leave item</text><text class="mm-d" x="52" y="589">AC at 24°C, fridge cold, EcoFlow 100%</text><text class="mm-d" x="52" y="606">Key card and guest code open the door</text><text class="mm-d" x="52" y="623">At least 5 after-clean photos</text><text class="mm-d" x="52" y="640">(12 to 14 is better)</text><path class="mm-chev" d="M328 589l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="550" r="11"/><text class="mm-badge-t" x="30" y="555">4</text>
 <path class="mm-line" d="M180 653V667"/><path class="mm-arrow" d="M174 666h12l-6 8z"/>
-<a class="mm-node" href="#cleaning" aria-label="Submit. Tap Submit, then confirm in the box. Wait for Report Submitted. Open the Cleaning Checklist"><rect x="12" y="675" width="336" height="67" rx="10"/><text class="mm-t" x="52" y="695">Submit</text><text class="mm-d" x="52" y="712">Tap Submit, then confirm in the box</text><text class="mm-d" x="52" y="729">Wait for Report Submitted</text><path class="mm-chev" d="M328 703.5l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Submit. Tap Submit, then confirm in the box. Wait for Report Submitted. Open the Turnover page"><rect x="12" y="675" width="336" height="67" rx="10"/><text class="mm-t" x="52" y="695">Submit</text><text class="mm-d" x="52" y="712">Tap Submit, then confirm in the box</text><text class="mm-d" x="52" y="729">Wait for Report Submitted</text><path class="mm-chev" d="M328 703.5l6 5l-6 5"/></a>
 <circle class="mm-badge" cx="30" cy="690" r="11"/><path class="mm-small" d="M25 690l4 4l7-8" style="fill:none;stroke:#1C1006;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"/>
 </svg>
 </figure>
@@ -2788,7 +3042,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/682}
 <g><path class="mm-line" d="M26 664V782H40"/><g class="mm-node mm-branch"><rect x="40" y="762" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="787">Wardrobe cabinet</text></g><path class="mm-line" d="M54 802V837H66"/><g class="mm-node"><rect x="66" y="812" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="832">Garment steamer</text><text class="mm-d" x="78" y="849">In the wardrobe cabinet</text></g><path class="mm-line" d="M54 837V897H66"/><g class="mm-node"><rect x="66" y="872" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="892">Hangers</text><text class="mm-d" x="78" y="909">In the wardrobe cabinet</text></g></g>
 <g><path class="mm-line" d="M26 782V960H40"/><g class="mm-node mm-branch"><rect x="40" y="940" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="965">Bed</text></g><path class="mm-line" d="M54 980V1015H66"/><g class="mm-node"><rect x="66" y="990" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1010">Single pull-out bed</text><text class="mm-d" x="78" y="1027">Stored under the queen bed</text></g></g>
 <path class="mm-line" d="M26 960V1087H40"/>
-<a class="mm-node" href="#cleaning" aria-label="Turnover. Open the Cleaning Checklist"><rect x="40" y="1062" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="1082">Turnover</text><text class="mm-d" x="52" y="1099">Open the Cleaning Checklist</text><path class="mm-chev" d="M328 1082l6 5l-6 5"/></a>
+<a class="mm-node" href="#turnover" aria-label="Turnover. Open the Turnover page"><rect x="40" y="1062" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="1082">Turnover</text><text class="mm-d" x="52" y="1099">Open the Turnover page</text><path class="mm-chev" d="M328 1082l6 5l-6 5"/></a>
 </svg>
 </figure>
 <figure class="mindmap" id="map-problem">
@@ -2819,1473 +3073,20 @@ body.staff-user .manual-map-manual{aspect-ratio:360/682}
 .mm-map a.mm-node:hover rect,.mm-map a.mm-node:focus-visible rect{stroke:var(--bronze-ink,var(--bronze,#765110));stroke-width:2.5}
 </style>
 <g class="mm-node mm-root"><rect x="12" y="10" width="336" height="62" rx="10"/><text class="mm-h" x="26" y="38">Something is wrong</text><text class="mm-small" x="26" y="58">Who to tell, and how</text></g>
-<g><path class="mm-line" d="M26 72V115H40"/><g class="mm-node mm-branch"><rect x="40" y="90" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="110">Emergency</text><text class="mm-d" x="52" y="127">Danger to people</text></g><path class="mm-line" d="M54 140V175H66"/><g class="mm-node"><rect x="66" y="150" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="170">Call 911</text><text class="mm-d" x="78" y="187">Any danger to people</text></g><path class="mm-line" d="M54 175V235H66"/><g class="mm-node"><rect x="66" y="210" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="230">Fire: call 160</text><text class="mm-d" x="78" y="247">For a fire</text></g><path class="mm-line" d="M54 235V295H66"/><g class="mm-node"><rect x="66" y="270" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="290">Then tell Lloyd</text><text class="mm-d" x="78" y="307">Say what happened</text></g><path class="mm-line" d="M54 295V355H66"/><a class="mm-node" href="#playbook" aria-label="Crisis Playbook. Plans for every emergency"><rect x="66" y="330" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="350">Crisis Playbook</text><text class="mm-d" x="78" y="367">Plans for every emergency</text><path class="mm-chev" d="M328 350l6 5l-6 5"/></a></g>
-<g><path class="mm-line" d="M26 115V423H40"/><g class="mm-node mm-branch"><rect x="40" y="398" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="418">Guest problem</text><text class="mm-d" x="52" y="435">Wi-Fi, aircon or water</text></g><path class="mm-line" d="M54 448V483H66"/><g class="mm-node"><rect x="66" y="458" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="478">Reply to the guest in 15 minutes</text><text class="mm-d" x="78" y="495">Say who is coming to fix it</text></g><path class="mm-line" d="M54 483V543H66"/><g class="mm-node"><rect x="66" y="518" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="538">Tell the OPS group</text><text class="mm-d" x="78" y="555">Write the time and what you see</text></g><path class="mm-line" d="M54 543V603H66"/><g class="mm-node"><rect x="66" y="578" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="598">Wi-Fi: unplug the router</text><text class="mm-d" x="78" y="615">Wait 60 seconds, plug it back in</text></g><path class="mm-line" d="M54 603V663H66"/><g class="mm-node"><rect x="66" y="638" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="658">Not fixed in 3 to 4 hours</text><text class="mm-d" x="78" y="675">The office decides what to offer</text></g><path class="mm-line" d="M54 663V723H66"/><a class="mm-node" href="#playbook" aria-label="Crisis Playbook. A/C, water and Wi-Fi steps"><rect x="66" y="698" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="718">Crisis Playbook</text><text class="mm-d" x="78" y="735">A/C, water and Wi-Fi steps</text><path class="mm-chev" d="M328 718l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 72V115H40"/><g class="mm-node mm-branch"><rect x="40" y="90" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="110">Emergency</text><text class="mm-d" x="52" y="127">Danger to people</text></g><path class="mm-line" d="M54 140V175H66"/><g class="mm-node"><rect x="66" y="150" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="170">Call 911</text><text class="mm-d" x="78" y="187">Any danger to people</text></g><path class="mm-line" d="M54 175V235H66"/><g class="mm-node"><rect x="66" y="210" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="230">Fire: call 160</text><text class="mm-d" x="78" y="247">For a fire</text></g><path class="mm-line" d="M54 235V295H66"/><g class="mm-node"><rect x="66" y="270" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="290">Then tell Lloyd</text><text class="mm-d" x="78" y="307">Tell him what happened</text></g><path class="mm-line" d="M54 295V355H66"/><a class="mm-node" href="#help" aria-label="Help. What to do, step by step"><rect x="66" y="330" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="350">Help</text><text class="mm-d" x="78" y="367">What to do, step by step</text><path class="mm-chev" d="M328 350l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 115V423H40"/><g class="mm-node mm-branch"><rect x="40" y="398" width="308" height="50" rx="10"/><text class="mm-t" x="52" y="418">Guest problem</text><text class="mm-d" x="52" y="435">Wi-Fi, aircon or water</text></g><path class="mm-line" d="M54 448V483H66"/><g class="mm-node"><rect x="66" y="458" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="478">Reply to the guest in 15 minutes</text><text class="mm-d" x="78" y="495">Say who is coming to fix it</text></g><path class="mm-line" d="M54 483V543H66"/><g class="mm-node"><rect x="66" y="518" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="538">Tell the OPS group</text><text class="mm-d" x="78" y="555">Write the time and what you see</text></g><path class="mm-line" d="M54 543V603H66"/><g class="mm-node"><rect x="66" y="578" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="598">Wi-Fi: unplug the router</text><text class="mm-d" x="78" y="615">Wait 60 seconds, plug it back in</text></g><path class="mm-line" d="M54 603V663H66"/><g class="mm-node"><rect x="66" y="638" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="658">Not fixed in 3 to 4 hours</text><text class="mm-d" x="78" y="675">The office decides what to offer</text></g><path class="mm-line" d="M54 663V723H66"/><a class="mm-node" href="#help" aria-label="Help. A/C, water and Wi-Fi steps"><rect x="66" y="698" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="718">Help</text><text class="mm-d" x="78" y="735">A/C, water and Wi-Fi steps</text><path class="mm-chev" d="M328 718l6 5l-6 5"/></a></g>
 <g><path class="mm-line" d="M26 423V786H40"/><g class="mm-node mm-branch"><rect x="40" y="766" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="791">A guest cannot get in</text></g><path class="mm-line" d="M54 806V841H66"/><g class="mm-node"><rect x="66" y="816" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="836">Tell Marifel or Lloyd now</text><text class="mm-d" x="78" y="853">The host must act right away</text></g><path class="mm-line" d="M54 841V901H66"/><g class="mm-node"><rect x="66" y="876" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="896">Never give out a door code</text><text class="mm-d" x="78" y="913">Only the host sends it</text></g></g>
-<g><path class="mm-line" d="M26 786V964H40"/><g class="mm-node mm-branch"><rect x="40" y="944" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="969">The power is out</text></g><path class="mm-line" d="M54 984V1019H66"/><g class="mm-node"><rect x="66" y="994" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1014">Look in the OPS group</text><text class="mm-d" x="78" y="1031">A brownout notice means planned</text></g><path class="mm-line" d="M54 1019V1079H66"/><g class="mm-node"><rect x="66" y="1054" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1074">No notice: post it, tell Lloyd</text><text class="mm-d" x="78" y="1091">Write the time and what you see</text></g><path class="mm-line" d="M54 1079V1139H66"/><g class="mm-node"><rect x="66" y="1114" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1134">A guest is inside?</text><text class="mm-d" x="78" y="1151">Tell Marifel, who writes to them</text></g></g>
-<g><path class="mm-line" d="M26 964V1202H40"/><g class="mm-node mm-branch"><rect x="40" y="1182" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1207">Damage found</text></g><path class="mm-line" d="M54 1222V1257H66"/><g class="mm-node"><rect x="66" y="1232" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1252">Take a photo before you clean</text><text class="mm-d" x="78" y="1269">Report it right away</text></g><path class="mm-line" d="M54 1257V1317H66"/><g class="mm-node"><rect x="66" y="1292" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1312">Mark it in the Cleaner app</text><text class="mm-d" x="78" y="1329">Found Something, note and photo</text></g><path class="mm-line" d="M54 1317V1377H66"/><a class="mm-node" href="#cleaning" aria-label="Cleaning Checklist. Phase 1 steps"><rect x="66" y="1352" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1372">Cleaning Checklist</text><text class="mm-d" x="78" y="1389">Phase 1 steps</text><path class="mm-chev" d="M328 1372l6 5l-6 5"/></a></g>
-<g><path class="mm-line" d="M26 1202V1440H40"/><g class="mm-node mm-branch"><rect x="40" y="1420" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1445">App or report not sending</text></g><path class="mm-line" d="M54 1460V1495H66"/><g class="mm-node"><rect x="66" y="1470" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1490">Check your signal</text><text class="mm-d" x="78" y="1507">Keep the app open</text></g><path class="mm-line" d="M54 1495V1555H66"/><g class="mm-node"><rect x="66" y="1530" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1550">Do not clear browser data</text><text class="mm-d" x="78" y="1567">Your draft is saved</text></g><path class="mm-line" d="M54 1555V1615H66"/><g class="mm-node"><rect x="66" y="1590" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1610">Stuck after two tries?</text><text class="mm-d" x="78" y="1627">Send a screenshot to Lloyd</text></g><path class="mm-line" d="M54 1615V1675H66"/><a class="mm-node" href="#cleaning" aria-label="Cleaning Checklist. Open the Cleaner app"><rect x="66" y="1650" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1670">Cleaning Checklist</text><text class="mm-d" x="78" y="1687">Open the Cleaner app</text><path class="mm-chev" d="M328 1670l6 5l-6 5"/></a></g>
-<g><path class="mm-line" d="M26 1440V1738H40"/><g class="mm-node mm-branch"><rect x="40" y="1718" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1743">Money or booking question</text></g><path class="mm-line" d="M54 1758V1793H66"/><g class="mm-node"><rect x="66" y="1768" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1788">Bookings and payments</text><text class="mm-d" x="78" y="1805">Ask Marifel</text></g><path class="mm-line" d="M54 1793V1853H66"/><g class="mm-node"><rect x="66" y="1828" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1848">Prices and big decisions</text><text class="mm-d" x="78" y="1865">Ask the owner</text></g><path class="mm-line owner-only" d="M54 1853V1913H66"/><a class="mm-node owner-only" href="#messages" aria-label="Message Hub. Ready-to-copy guest messages"><rect x="66" y="1888" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1908">Message Hub</text><text class="mm-d" x="78" y="1925">Ready-to-copy guest messages</text><path class="mm-chev" d="M328 1908l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 786V964H40"/><g class="mm-node mm-branch"><rect x="40" y="944" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="969">The power is out</text></g><path class="mm-line" d="M54 984V1019H66"/><g class="mm-node"><rect x="66" y="994" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1014">Look in the OPS group</text><text class="mm-d" x="78" y="1031">A brownout notice means planned</text></g><path class="mm-line" d="M54 1019V1079H66"/><g class="mm-node"><rect x="66" y="1054" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1074">No notice: post it, tell Lloyd</text><text class="mm-d" x="78" y="1091">Write the time and what you see</text></g><path class="mm-line" d="M54 1079V1139H66"/><g class="mm-node"><rect x="66" y="1114" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1134">A guest is inside?</text><text class="mm-d" x="78" y="1151">Tell Marifel so she can write</text></g></g>
+<g><path class="mm-line" d="M26 964V1202H40"/><g class="mm-node mm-branch"><rect x="40" y="1182" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1207">Damage found</text></g><path class="mm-line" d="M54 1222V1257H66"/><g class="mm-node"><rect x="66" y="1232" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1252">Take a photo before you clean</text><text class="mm-d" x="78" y="1269">Report it right away</text></g><path class="mm-line" d="M54 1257V1317H66"/><g class="mm-node"><rect x="66" y="1292" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1312">Mark it in the Cleaner app</text><text class="mm-d" x="78" y="1329">Found Something, note and photo</text></g><path class="mm-line" d="M54 1317V1377H66"/><a class="mm-node" href="#turnover" aria-label="Turnover. Phase 1 steps"><rect x="66" y="1352" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1372">Turnover</text><text class="mm-d" x="78" y="1389">Phase 1 steps</text><path class="mm-chev" d="M328 1372l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 1202V1440H40"/><g class="mm-node mm-branch"><rect x="40" y="1420" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1445">App or report not sending</text></g><path class="mm-line" d="M54 1460V1495H66"/><g class="mm-node"><rect x="66" y="1470" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1490">Check your signal</text><text class="mm-d" x="78" y="1507">Keep the app open</text></g><path class="mm-line" d="M54 1495V1555H66"/><g class="mm-node"><rect x="66" y="1530" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1550">Do not clear browser data</text><text class="mm-d" x="78" y="1567">Your draft is saved</text></g><path class="mm-line" d="M54 1555V1615H66"/><g class="mm-node"><rect x="66" y="1590" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1610">Stuck after two tries?</text><text class="mm-d" x="78" y="1627">Send a screenshot to Lloyd</text></g><path class="mm-line" d="M54 1615V1675H66"/><a class="mm-node" href="#turnover" aria-label="Turnover. Open the Cleaner app"><rect x="66" y="1650" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1670">Turnover</text><text class="mm-d" x="78" y="1687">Open the Cleaner app</text><path class="mm-chev" d="M328 1670l6 5l-6 5"/></a></g>
+<g><path class="mm-line" d="M26 1440V1738H40"/><g class="mm-node mm-branch"><rect x="40" y="1718" width="308" height="40" rx="10"/><text class="mm-t" x="52" y="1743">Money or booking question</text></g><path class="mm-line" d="M54 1758V1793H66"/><g class="mm-node"><rect x="66" y="1768" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1788">Bookings and payments</text><text class="mm-d" x="78" y="1805">Ask Marifel</text></g><path class="mm-line" d="M54 1793V1853H66"/><g class="mm-node"><rect x="66" y="1828" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1848">Prices and big decisions</text><text class="mm-d" x="78" y="1865">Ask the owner</text></g><path class="mm-line office-only" d="M54 1853V1913H66"/><a class="mm-node office-only" href="#templates" aria-label="Templates. Ready-to-copy guest messages"><rect x="66" y="1888" width="282" height="50" rx="10"/><text class="mm-t" x="78" y="1908">Templates</text><text class="mm-d" x="78" y="1925">Ready-to-copy guest messages</text><path class="mm-chev" d="M328 1908l6 5l-6 5"/></a></g>
 </svg>
 </figure>
 </div>
 </section>
-<section class="content-section" id="sops">
-<div class="section-header">
-  <div>
-    <h2>Guest Journey SOPs</h2>
-    <p>The 5-star standard from first inquiry to post-stay review.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="space-y-10">
-<div>
-<h3 class="text-3xl font-bold mb-3 text-bronze">
-          1. Inquiry &amp; Booking: First Impressions
-         </h3>
-<p class="instructional-note mb-5 text-lg">
-          Be fast, friendly and helpful. Make guests feel welcome before they book.
-         </p>
-<ul class="list-none space-y-4">
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-do">
-<span class="font-bold text-bronze text-lg shrink-0">
-            Do:
-           </span>
-<span>
-            Respond within 15 minutes. Use the "Inquiry Response" template. Add the guest's name.
-           </span>
-</li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-dont">
-<span class="font-bold text-danger-red text-lg shrink-0">
-            Don't:
-           </span>
-<span>
-            Give one-word answers. Never ignore a question, even if the answer is in the listing.
-           </span>
-</li>
-</ul>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p class="text-base">
-           💡
-           <strong>
-            Pro Tip:
-           </strong>
-           If a guest seems hesitant, send a line like: "Let me know if you have any other questions at all, happy to help you plan your trip to GenSan! 🌿" It builds trust. It often secures the booking.
-          </p>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-3 text-bronze">
-          2. Pre-Arrival: Build Anticipation
-         </h3>
-<p class="instructional-note mb-5 text-lg">
-          Make check-in easy and secure. Give guests what they need before they ask.
-         </p>
-<ul class="list-none space-y-4">
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-do">
-<span class="font-bold text-bronze text-lg shrink-0">
-            Do:
-           </span>
-<span>
-            Send the "Pre-Arrival (T-24h)" message exactly 24 hours before check-in. Be consistent.
-           </span>
-</li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-dont">
-<span class="font-bold text-danger-red text-lg shrink-0">
-            Don't:
-           </span>
-<span>
-            Send check-in details too early (security risk) or too late (causes guest anxiety).
-           </span>
-</li>
-</ul>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p class="text-base">
-           💡
-           <strong>
-            Pro Tip:
-           </strong>
-           Run a final QC check (Wi-Fi speed, AC, TV) right before sending the pre-arrival message. It prevents 90% of arrival-day issues.
-          </p>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-3 text-bronze">
-          3. Post-Stay: A Gracious Farewell
-         </h3>
-<p class="instructional-note mb-5 text-lg">
-          Make checkout simple. Thank guests sincerely. A good last impression leads to good reviews.
-         </p>
-<ul class="list-none space-y-4">
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-do">
-<span class="font-bold text-bronze text-lg shrink-0">
-            Do:
-           </span>
-<span>
-            Send a "Post-Stay" message 2-3 hours after checkout. Add the guest's name.
-           </span>
-</li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-dont">
-<span class="font-bold text-danger-red text-lg shrink-0">
-            Don't:
-           </span>
-<span>
-            Pressure them for a 5-star review. The request must be gentle and optional.
-           </span>
-</li>
-</ul>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p class="text-base">
-           💡
-           <strong>
-            Pro Tip:
-           </strong>
-           If the guest left the place tidy, add a personal line like: "We truly appreciate you leaving the space so neat and tidy." The guest feels valued. A positive review is more likely.
-          </p>
-</div>
-</div>
-<div class="luxury-divider"></div>
-<div>
-<h3 class="text-3xl font-bold mb-3 text-bronze">4. Guest Screening: Protecting the Property</h3>
-<p class="instructional-note mb-5 text-lg">Review every guest before accepting. One bad booking can cost more than a month's revenue.</p>
-<ul class="list-none space-y-4">
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-dont"><span class="font-bold text-danger-red text-lg shrink-0">Flag if:</span><span>Any of these:<ul class="tight-list"><li>Fewer than 3 reviews</li><li>No profile photo</li><li>Asks for a discount outside Airbnb</li></ul>These are the highest-risk bookings. Decline politely.</span></li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-do"><span class="font-bold text-bronze text-lg shrink-0">Do:</span><span>Check review history for patterns. Ideal guests consistently earn "left the place clean" comments.</span></li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl row-dont"><span class="font-bold text-danger-red text-lg shrink-0">Don't:</span><span>Accept a suspicious booking to fill a vacancy. A vacant night costs ₱0. A problem guest costs thousands in damage, cleaning, and a bad public review.</span></li>
-</ul>
-</div>
-<div class="luxury-divider"></div>
-<div>
-<h3 class="text-3xl font-bold mb-3 text-bronze">5. Emergency &amp; Complaint Response</h3>
-<p class="instructional-note mb-5 text-lg">Stay calm. Act fast. Document everything. How you handle a problem often matters more than the problem itself.</p>
-<ul class="list-none space-y-4">
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Step 1:</span><span><strong>Acknowledge immediately.</strong> Reply within 5 minutes: "Thank you for letting me know. I'm on it." Never go silent.</span></li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Step 2:</span><span><strong>Assess and resolve.</strong> Fix AC, Wi-Fi and water issues within the hour. Offer a goodwill gesture (extra towels, late checkout). Do not admit liability.</span></li>
-<li class="flex items-start gap-4 p-4 bg-warm-cream rounded-xl"><span class="font-bold text-bronze text-lg shrink-0">Step 3:</span><span><strong>Document.</strong> Photos, date, time, resolution. If the guest escalates to Airbnb, your documentation is your defence.</span></li>
-</ul>
-<div class="pro-tip p-5 rounded-xl my-5"><p class="text-base">💡 <strong>Pro Tip:</strong> For unfair reviews, reply publicly within 48 hours. Stay calm and professional.</p><details class="more"><summary>More detail</summary><p class="text-base">Future guests read your replies. A gracious response signals a great host, not a defensive one.</p></details></div>
-</div>
-</div>
-</div>
-</section>
-<section class="content-section owner-only" id="messages">
-<div class="section-header">
-  <div>
-    <h2>Message Hub</h2>
-    <p>Ready-to-use templates for every guest interaction.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<p class="instructional-note mb-6 text-center text-lg">
-        Tap Copy to use a ready template for any situation.
-       </p>
-<div class="pro-tip p-6 rounded-xl my-6 text-center">
-<p class="text-lg mb-4">
-         🤖
-         <strong>
-          Let the Concierge draft it
-         </strong>
-</p>
-<p class="mb-6">
-         Use the "Cascade Concierge" GPT for personalized messages and Facebook captions.
-        </p>
-<a class="copy-button inline-block px-8 py-4 rounded-xl font-semibold text-lg" href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" rel="noopener noreferrer" target="_blank">
-         Open Cascade Concierge GPT
-        </a>
-</div>
-<div class="luxury-divider">
-</div>
-<div class="grid md:grid-cols-2 gap-6 mt-8">
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Inquiry Response
-         </h3>
-<pre class="message-template" id="template_inquiry">Hi [Guest Name]! 🌿
-
-Thank you for your interest in Cascade Hideaway. Your requested dates are available.
-
-Let me know if you have any questions! We'd love to welcome you soon. ✨</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_inquiry">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Location Inquiry
-         </h3>
-<pre class="message-template" id="template_location">Hi [Guest Name]!
-
-Cascade Hideaway is located inside Bria Homes Subdivision in Conel Rd, General Santos City.
-
-For easy navigation, you can search for "Bria Homes General Santos" on Google Maps or Waze. Once you enter the main gate, our unit is just a short drive away. We will provide the specific block and lot number in your pre-arrival message.
-
-Let us know if you need more detailed directions! 🌿</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_location">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Early Check-in Inquiry
-         </h3>
-<pre class="message-template" id="template_early_inquiry">Hi [Guest Name], thanks for asking!
-
-Our standard check-in is at 2:00 PM. We will do our best to accommodate an earlier time if the schedule allows, and we'll confirm with you as soon as our cleaning team certifies the unit is ready to our 5-star standard.
-
-I'll make a note of your request and message you on the morning of your check-in with an update! 🌿</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_early_inquiry">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Stay Extension Request
-         </h3>
-<pre class="message-template" id="template_extension">Hi [Guest Name], we'd love to have you stay longer!
-
-I've checked the calendar, and the unit is available for the extra nights. I will send a reservation alteration request through the app for you to approve.
-
-So happy you're enjoying your stay! ✨</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_extension">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Additional Guest (Max 3)
-         </h3>
-<pre class="message-template" id="template_add_guest">Hi [Guest Name],
-
-Thanks for letting us know. Our studio can comfortably accommodate a maximum of 3 adults.
-
-Please update the guest count on your reservation so we can prepare enough towels and amenities for everyone.
-
-Let me know if you need any help with that! 🌿</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_add_guest">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Pet Inquiry
-         </h3>
-<pre class="message-template" id="template_pet">Hi [Guest Name],
-
-Thank you for asking about your furry friend!
-
-Unfortunately, at this time we are not able to accommodate pets in our studio to ensure the space is allergen-free for all our guests.
-
-We appreciate your understanding and hope we can still welcome you!</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_pet">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Cancellation Request
-         </h3>
-<pre class="message-template" id="template_cancel">Hi [Guest Name],
-
-We're sorry to hear you need to cancel.
-
-If you booked with us directly: your reservation fee is refunded in full when you cancel 5 or more days before check-in. Inside 5 days it is retained, as it has been holding your dates against other enquiries. Nothing else is owed — the balance and the PHP 1,000 deposit only fall due a day before check-in.
-
-If you booked through Airbnb or another platform: please start the cancellation there, and the refund will follow the policy shown on that listing.
-
-We hope to have the opportunity to host you in the future.</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_cancel">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Post-Stay Thanks (Simple)
-         </h3>
-<pre class="message-template" id="template_post1">Maraming salamat po for choosing Cascade Hideaway, [Guest Name]! 🌿
-
-It was a pleasure hosting you. We hope you had a restful stay and a safe journey onward.
-
-We hope to welcome you back soon! 🙏</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_post1">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Post-Stay Thanks (With Review Ask)
-         </h3>
-<pre class="message-template" id="template_post2">Hi [Guest Name],
-
-Thank you again for staying with us! It was a pleasure to host you.
-
-If you have a moment, a short review of your stay would mean the world to our small team and helps future travelers discover us.
-
-Safe travels, and we hope to see you again! ✨</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_post2">
-          Copy
-         </button>
-</div>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe hover:shadow-lg transition-all">
-<h3 class="font-bold text-dark-bronze text-lg mb-2">
-          Thank You Message (After Positive Review)
-         </h3>
-<pre class="message-template" id="template_thanks">Hi [Guest Name],
-
-Thank you so much for your kind words and the wonderful review! We're thrilled to hear you enjoyed your stay.
-
-It was truly a pleasure hosting you, and your feedback is incredibly valuable to us. We look forward to welcoming you back anytime! 🌿</pre>
-<button class="copy-button mt-3 px-5 py-3 rounded-lg font-semibold" data-template-id="template_thanks">
-          Copy
-         </button>
-</div>
-</div>
-</div>
-</section>
-<section class="content-section" id="concierge">
-<div class="section-header">
-  <div>
-    <h2>AI Concierge</h2>
-    <p>Your AI assistant powered by Gemini 2.0 Flash.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<p class="text-xl text-center mb-8 instructional-note">
-        Your Digital Concierge and Brand Communication Partner
-       </p>
-<div class="promise-card p-8 rounded-2xl my-8">
-<h3 class="font-serif text-3xl text-dark-bronze mb-4 text-center">
-         "Meet Cascade Hideaway Concierge"
-        </h3>
-<p class="text-lg text-center max-w-4xl mx-auto leading-relaxed mb-6">
-         I am the official, AI-powered digital assistant for your boutique Airbnb. Think of me as your trained front-desk manager, guest relations officer, and marketing copywriter in one — available 24/7.
-        </p>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 mb-6">
-<div class="text-center p-4 bg-warm-cream rounded-xl">
-<div class="text-4xl font-bold text-bronze stat-number">
-           24/7
-          </div>
-<div class="text-sm mt-2">
-           Availability
-          </div>
-</div>
-<div class="text-center p-4 bg-warm-cream rounded-xl">
-<div class="text-4xl font-bold text-bronze stat-number">
-           500+
-          </div>
-<div class="text-sm mt-2">
-           Message Templates
-          </div>
-</div>
-<div class="text-center p-4 bg-warm-cream rounded-xl">
-<div class="text-4xl font-bold text-bronze stat-number">
-           5
-          </div>
-<div class="text-sm mt-2">
-           Core Capabilities
-          </div>
-</div>
-<div class="text-center p-4 bg-warm-cream rounded-xl">
-<div class="text-4xl font-bold text-bronze stat-number">
-           90%
-          </div>
-<div class="text-sm mt-2">
-           Time Savings
-          </div>
-</div>
-</div>
-<div class="text-center mt-6">
-<a class="copy-button inline-block px-8 py-4 rounded-xl font-semibold text-lg" href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" rel="noopener noreferrer" target="_blank">
-          Open Cascade Concierge GPT →
-         </a>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div class="my-12">
-<h3 class="text-3xl font-bold mb-6 text-bronze text-center">
-         ⚡ Quick Start Prompt Library
-        </h3>
-<p class="text-center mb-8 instructional-note">
-         Click any prompt card to copy and paste directly into the Cascade Concierge GPT
-        </p>
-<div class="grid md:grid-cols-2 gap-4">
-<div class="prompt-card p-5 rounded-xl" data-prompt="Draft a warm reply for an Airbnb inquiry asking about our location and nearby attractions in General Santos City.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            💬
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Location Inquiry Response
-            </h4>
-<p class="text-sm instructional-note">
-             Draft a warm reply for an inquiry about location
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Create a personalized post-checkout thank-you message for a couple who stayed 3 nights and left a positive review.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🙏
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Thank You Message
-            </h4>
-<p class="text-sm instructional-note">
-             Post-checkout gratitude for positive reviews
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Write a polite response to a Wi-Fi complaint, acknowledging the issue and providing a solution timeline.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🔧
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Issue Resolution
-            </h4>
-<p class="text-sm instructional-note">
-             Handle guest complaints gracefully
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Generate a pre-arrival message for a guest checking in tomorrow, including all essential information in a warm tone.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🔑
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Pre-Arrival Message
-            </h4>
-<p class="text-sm instructional-note">
-             Send check-in details 24 hours ahead
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Create a Facebook post highlighting our workspace and high-speed Wi-Fi for business travelers, with engaging captions and relevant hashtags.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            💼
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Business Traveler Post
-            </h4>
-<p class="text-sm instructional-note">
-             Promote workspace and connectivity
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Write a Facebook carousel post caption showcasing our 5-star amenities, with a call-to-action for weekend bookings.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            ✨
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Weekend Getaway Campaign
-            </h4>
-<p class="text-sm instructional-note">
-             Drive weekend bookings with compelling copy
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Generate an Instagram caption for a sunset photo at our property, emphasizing relaxation and the Philippine hospitality experience.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🌅
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Instagram Content
-            </h4>
-<p class="text-sm instructional-note">
-             Create engagement-optimized captions
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Create a monthly content calendar for Facebook with 8-12 post ideas targeting couples and business travelers in General Santos.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            📅
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Content Calendar
-            </h4>
-<p class="text-sm instructional-note">
-             Plan your month's marketing strategy
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Analyze our current messaging approach and suggest 3 improvements to increase booking conversion rates.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            📊
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Strategy Analysis
-            </h4>
-<p class="text-sm instructional-note">
-             Get optimization recommendations
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Create a Taglish response to a Filipino guest asking about local food recommendations near Cascade Hideaway.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🇵🇭
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Local Recommendations
-            </h4>
-<p class="text-sm instructional-note">
-             Taglish responses for Filipino guests
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Draft a service recovery message for a guest who experienced a minor issue with the AC, offering compensation and next-stay discount.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            🎁
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Service Recovery
-            </h4>
-<p class="text-sm instructional-note">
-             Turn issues into loyalty opportunities
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-<div class="prompt-card p-5 rounded-xl" data-prompt="Generate a script for following up with a guest who hasn't responded to our inquiry response after 24 hours.">
-<div class="flex items-start gap-3">
-<div class="text-3xl">
-            ⏰
-           </div>
-<div class="flex-1">
-<h4 class="font-bold text-dark-bronze mb-2">
-             Follow-Up Script
-            </h4>
-<p class="text-sm instructional-note">
-             Re-engage inactive inquiries
-            </p>
-</div>
-<button class="copy-button text-xs px-3 py-2 rounded-lg">
-            Copy
-           </button>
-</div>
-</div>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div class="space-y-4 my-12">
-<h3 class="text-3xl font-bold mb-6 text-bronze text-center">
-         🎯 My Core Capabilities
-        </h3>
-<div class="accordion-item">
-<button class="accordion-header p-6 rounded-2xl flex items-center justify-between" type="button" aria-expanded="false">
-<div class="flex items-center gap-4">
-<div class="text-5xl capability-icon">
-            💬
-           </div>
-<div>
-<h4 class="text-2xl font-bold">
-             Guest Communication Assistant
-            </h4>
-<p class="text-sm opacity-80 mt-1">
-             Draft, customize, and polish guest-ready messages instantly
-            </p>
-</div>
-</div>
-<div class="accordion-icon text-3xl">
-           ▼
-          </div>
-</button>
-<div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="accordion-content-inner">
-<div class="space-y-6">
-<div>
-<h5 class="text-xl font-bold mb-3 text-bronze">
-             What I Can Do:
-            </h5>
-<ul class="space-y-3 list-disc list-inside text-charcoal/90">
-<li>
-              Draft inquiry responses that are warm, professional, and conversion-optimized
-             </li>
-<li>
-              Create personalized check-in instructions with all essential details
-             </li>
-<li>
-              Generate mid-stay check-ins that feel sincere, not automated
-             </li>
-<li>
-              Craft post-stay thank-you messages with gentle review requests
-             </li>
-<li>
-              Handle special requests (early check-in, extra guests, amenity questions)
-             </li>
-</ul>
-</div>
-<div class="bg-warm-cream p-6 rounded-xl">
-<h5 class="text-lg font-bold mb-3">
-             Real-World Example:
-            </h5>
-<div class="space-y-3 text-sm">
-<div>
-<strong class="text-bronze">
-               Scenario:
-              </strong>
-              First-time guest from Manila asks about transportation options from the airport.
-             </div>
-<div>
-<strong class="text-bronze">
-               You Say:
-              </strong>
-              "How do I get to your place from GenSan airport?"
-             </div>
-<div class="bg-white p-4 rounded-lg border-2 border-bronze/30">
-<strong class="text-bronze">
-               AI Generates:
-              </strong>
-<br/>
-<em class="text-charcoal">
-               "Hi [Guest]! Great question! The easiest way is to book a Grab from the airport (about ₱250-300, 25 minutes). Alternatively, our partner transport service can pick you up for ₱350 - just let me know and I'll arrange it! Looking forward to welcoming you! 🌿"
-              </em>
-</div>
-<div class="text-xs instructional-note">
-<strong>
-               Time Saved:
-              </strong>
-              5-7 minutes per message × 20 inquiries/month =
-              <strong class="text-success-green">
-               100-140 minutes saved monthly
-              </strong>
-</div>
-</div>
-</div>
-<div>
-<h5 class="text-xl font-bold mb-3 text-bronze">
-             Best Practices:
-            </h5>
-<div class="grid md:grid-cols-2 gap-4">
-<div class="bg-success-green/10 p-4 rounded-lg border-2 border-success-green/30">
-<p class="font-bold text-success-green mb-2">
-               ✓ DO
-              </p>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-                Always specify guest context (first-time, returning, business, etc.)
-               </li>
-<li>
-                Review AI output before sending
-               </li>
-<li>
-                Add personal touches like emojis or local references
-               </li>
-</ul>
-</div>
-<div class="bg-danger-red/10 p-4 rounded-lg border-2 border-danger-red/30">
-<p class="font-bold text-danger-red mb-2">
-               ✗ DON'T
-              </p>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-                Send AI responses without reading them first
-               </li>
-<li>
-                Use overly formal language that doesn't match your brand
-               </li>
-<li>
-                Forget to personalize with guest names
-               </li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header p-6 rounded-2xl flex items-center justify-between" type="button" aria-expanded="false">
-<div class="flex items-center gap-4">
-<div class="text-5xl capability-icon">
-            📢
-           </div>
-<div>
-<h4 class="text-2xl font-bold">
-             Facebook &amp; Marketing Copywriter
-            </h4>
-<p class="text-sm opacity-80 mt-1">
-             Create ready-to-post social media content that drives bookings
-            </p>
-</div>
-</div>
-<div class="accordion-icon text-3xl">
-           ▼
-          </div>
-</button>
-<div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="accordion-content-inner">
-<div class="space-y-6">
-<div>
-<h5 class="text-xl font-bold mb-3 text-bronze">
-             Marketing Superpowers:
-            </h5>
-<ul class="space-y-3 list-disc list-inside text-charcoal/90">
-<li>
-              Create engaging Facebook posts with Calls-to-Action (CTAs) and hashtags
-             </li>
-<li>
-              Write Instagram captions optimized for engagement and storytelling
-             </li>
-<li>
-              Generate compelling Facebook Ad copy with targeting suggestions
-             </li>
-<li>
-              Create monthly content calendars with 8-12 post ideas
-             </li>
-<li>
-              Craft guest testimonial showcases and review highlights
-             </li>
-</ul>
-</div>
-<div class="bg-warm-cream p-6 rounded-xl">
-<h5 class="text-lg font-bold mb-3">
-             Content Calendar Example:
-            </h5>
-<div class="space-y-2 text-sm">
-<div>
-<strong class="text-bronze">
-               Week 1:
-              </strong>
-<span>
-               Property showcase (workspace, amenities)
-              </span>
-</div>
-<div>
-<strong class="text-bronze">
-               Week 2:
-              </strong>
-<span>
-               Guest testimonial feature + review highlights
-              </span>
-</div>
-<div>
-<strong class="text-bronze">
-               Week 3:
-              </strong>
-<span>
-               Local attraction spotlight (GenSan tourism)
-              </span>
-</div>
-<div>
-<strong class="text-bronze">
-               Week 4:
-              </strong>
-<span>
-               Special offer / weekend getaway promotion
-              </span>
-</div>
-</div>
-</div>
-<div class="grid md:grid-cols-2 gap-6">
-<div class="p-5 bg-white rounded-xl border-2 border-soft-taupe">
-<h6 class="font-bold mb-3">
-              Posting Schedule
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-<strong>
-                Frequency:
-               </strong>
-               2-3 posts per week
-              </li>
-<li>
-<strong>
-                Best Time:
-               </strong>
-               7-9 PM (GenSan timezone)
-              </li>
-<li>
-<strong>
-                Mix:
-               </strong>
-               60% value content, 40% promotional
-              </li>
-</ul>
-</div>
-<div class="p-5 bg-white rounded-xl border-2 border-soft-taupe">
-<h6 class="font-bold mb-3">
-              Engagement Tips
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Ask questions to drive comments
-              </li>
-<li>
-               Use local hashtags (#GenSan, #SouthCotabato)
-              </li>
-<li>
-               Share behind-the-scenes content
-              </li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header p-6 rounded-2xl flex items-center justify-between" type="button" aria-expanded="false">
-<div class="flex items-center gap-4">
-<div class="text-5xl capability-icon">
-            🧭
-           </div>
-<div>
-<h4 class="text-2xl font-bold">
-             Staff Operations &amp; Training Tool
-            </h4>
-<p class="text-sm opacity-80 mt-1">
-             Guide your team with SOPs and best practices
-            </p>
-</div>
-</div>
-<div class="accordion-icon text-3xl">
-           ▼
-          </div>
-</button>
-<div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="accordion-content-inner">
-<div class="space-y-6">
-<div class="grid md:grid-cols-2 gap-6">
-<div class="p-5 bg-warm-cream rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              For Hosts
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               SOP quick reference and reminders
-              </li>
-<li>
-               Check-in/checkout procedure guides
-              </li>
-<li>
-               Crisis management scripts
-              </li>
-<li>
-               Quality control checklists
-              </li>
-</ul>
-</div>
-<div class="p-5 bg-warm-cream rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              For Cleaning Team
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Cleaning sequence breakdowns
-              </li>
-<li>
-               Supply inventory management
-              </li>
-<li>
-               Quality standards explanations
-              </li>
-<li>
-               Photo documentation guidelines
-              </li>
-</ul>
-</div>
-</div>
-<div class="bg-white p-6 rounded-xl border-2 border-soft-taupe">
-<h5 class="font-bold mb-3">
-             Quick Reference Example:
-            </h5>
-<p class="text-sm mb-3">
-<strong>
-              Prompt:
-             </strong>
-             "Remind me of the 5-star turnover checklist"
-            </p>
-<div class="bg-warm-cream p-4 rounded-lg">
-<p class="text-sm font-bold mb-2">
-              AI Response:
-             </p>
-<ol class="text-sm space-y-1 list-decimal list-inside">
-<li>
-               Ventilate (open windows, 15 min)
-              </li>
-<li>
-               Deep clean bathroom (spray, scrub, polish)
-              </li>
-<li>
-               Kitchenette (dishes, degrease, sanitize)
-              </li>
-<li>
-               Make bed hotel-style (tight corners)
-              </li>
-<li>
-               Restock amenities (coffee, toiletries, towels)
-              </li>
-<li>
-               Final QC photos (at least 5 after-clean photos; aim for 12-14)
-              </li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header p-6 rounded-2xl flex items-center justify-between" type="button" aria-expanded="false">
-<div class="flex items-center gap-4">
-<div class="text-5xl capability-icon">
-            ⭐
-           </div>
-<div>
-<h4 class="text-2xl font-bold">
-             Guest Experience Optimization
-            </h4>
-<p class="text-sm opacity-80 mt-1">
-             Simulate scenarios and perfect your hospitality
-            </p>
-</div>
-</div>
-<div class="accordion-icon text-3xl">
-           ▼
-          </div>
-</button>
-<div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="accordion-content-inner">
-<div class="space-y-6">
-<p class="text-lg">
-            I can help you prepare for any guest situation by simulating scenarios and generating appropriate responses.
-           </p>
-<div class="grid md:grid-cols-3 gap-4">
-<div class="p-5 bg-warm-cream rounded-xl text-center">
-<div class="text-4xl mb-3">
-              🎭
-             </div>
-<h6 class="font-bold mb-2">
-              Scenario Planning
-             </h6>
-<p class="text-sm">
-              Practice handling difficult situations before they happen
-             </p>
-</div>
-<div class="p-5 bg-warm-cream rounded-xl text-center">
-<div class="text-4xl mb-3">
-              🔄
-             </div>
-<h6 class="font-bold mb-2">
-              Service Recovery
-             </h6>
-<p class="text-sm">
-              Turn complaints into loyalty opportunities with perfect responses
-             </p>
-</div>
-<div class="p-5 bg-warm-cream rounded-xl text-center">
-<div class="text-4xl mb-3">
-              💝
-             </div>
-<h6 class="font-bold mb-2">
-              VIP Treatment
-             </h6>
-<p class="text-sm">
-              Special touches for returning guests and celebrations
-             </p>
-</div>
-</div>
-<div class="bg-white p-6 rounded-xl border-2 border-success-green/30">
-<h5 class="font-bold mb-3 text-success-green">
-             Success Story:
-            </h5>
-<p class="text-sm italic">
-             "A guest complained about noise from construction nearby. Using the AI concierge's service recovery template, we acknowledged the issue, offered a complimentary late checkout, and sent a personalized apology gift. The guest upgraded their 3-star review to 5 stars and booked again!"
-            </p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header p-6 rounded-2xl flex items-center justify-between" type="button" aria-expanded="false">
-<div class="flex items-center gap-4">
-<div class="text-5xl capability-icon">
-            📊
-           </div>
-<div>
-<h4 class="text-2xl font-bold">
-             Marketing Strategy Partner
-            </h4>
-<p class="text-sm opacity-80 mt-1">
-             Data-driven insights for booking growth
-            </p>
-</div>
-</div>
-<div class="accordion-icon text-3xl">
-           ▼
-          </div>
-</button>
-<div class="accordion-content bg-warm-white rounded-b-2xl border-2 border-t-0 border-soft-taupe"><div class="accordion-content-inner">
-<div class="space-y-6">
-<div class="grid md:grid-cols-2 gap-6">
-<div class="capability-card p-6 rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              Content Planning
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Monthly content calendars
-              </li>
-<li>
-               Seasonal campaign ideas
-              </li>
-<li>
-               Theme-based posting strategies
-              </li>
-</ul>
-</div>
-<div class="capability-card p-6 rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              Ad Optimization
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Facebook Ad copy suggestions
-              </li>
-<li>
-               Targeting recommendations
-              </li>
-<li>
-               Budget allocation strategies
-              </li>
-</ul>
-</div>
-<div class="capability-card p-6 rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              Performance Analysis
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Review response analytics
-              </li>
-<li>
-               Booking pattern insights
-              </li>
-<li>
-               Competitive positioning
-              </li>
-</ul>
-</div>
-<div class="capability-card p-6 rounded-xl">
-<h6 class="font-bold text-bronze mb-3">
-              Growth Tactics
-             </h6>
-<ul class="text-sm space-y-2 list-disc list-inside">
-<li>
-               Referral program templates
-              </li>
-<li>
-               Loyalty incentive ideas
-              </li>
-<li>
-               Partnership opportunities
-              </li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="text-center mt-12">
-<div class="promise-card p-8 rounded-2xl">
-<h3 class="font-serif text-3xl text-dark-bronze mb-4">
-          Ready to Transform Your Operations?
-         </h3>
-<p class="text-lg mb-6 max-w-2xl mx-auto">
-          Join the future of hospitality management. Save 12+ hours per week while delivering even better guest experiences.
-         </p>
-<a class="copy-button inline-block px-10 py-5 rounded-xl font-semibold text-xl" href="https://chatgpt.com/g/g-68ea0f232b248191b03136c9ff7122d9-cascade-hideaway-concierge" rel="noopener noreferrer" target="_blank">
-          Launch Cascade Concierge Now →
-         </a>
-</div>
-</div>
-</div>
-</section>
-<section class="content-section owner-only" id="guest-guide">
-<div class="section-header">
-  <div>
-    <h2>Guest-Facing Guide</h2>
-    <p>What guests see — the Welcome Guide and direct booking site.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<p class="instructional-note mb-8 text-lg text-center">
-        A summary of essential information for guests, based on the online welcome book.
-       </p>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-        Welcome &amp; Access
-       </h3>
-<p>Welcome to Cascade Hideaway. To check in:</p>
-<ol class="tight-list">
-<li>Tap the smart lock keypad to wake it.</li>
-<li>Enter your <strong>PIN + #</strong>.</li>
-<li>The door will auto-lock behind you.</li>
-</ol>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p>
-         💡
-         <strong>
-          For Your Convenience:
-         </strong>
-         Inside, on the wooden tray on top of the TV cabinet (below the TV, beside the flower vase), you will find the access key card together with the TV and A/C remotes.
-        </p>
-<ul class="tight-list">
-<li>The card is on a keychain with the Cascade Hideaway logo.</li>
-<li>Tap the card on the keypad to unlock the door during your stay.</li>
-<li><strong>Please don't lose it.</strong> A replacement fee of ₱1,000 will be charged.</li>
-</ul>
-</div>
-<div class="luxury-divider my-8">
-</div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-        Amenities &amp; How-To's
-       </h3>
-<ul class="list-disc list-inside space-y-3">
-<li>
-<strong>
-          Wi-Fi:
-         </strong>
-         Network: `WelcomeToCascade 5G` / Password: `EnjoyYourStay@CH`
-        </li>
-<li>
-<strong>
-          A/C:
-         </strong>
-         The A/C remote is on the wooden tray on top of the TV cabinet, below the TV. Please use it to set your desired temperature. We recommend 'Cool' mode.
-        </li>
-<li>
-<strong>
-          Laundry (Panasonic NA-F80A5):
-         </strong>
-         Load clothes, add powder detergent to the tub OR liquid detergent to the designated slot. Close the lid and select your cycle.
-        </li>
-<li>
-<strong>
-          Kitchen:
-         </strong>
-         An induction stove, microwave, and fridge are available. Please clean up after cooking.
-        </li>
-</ul>
-<div class="luxury-divider my-8">
-</div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-        Exploring GenSan
-       </h3>
-<ul class="list-disc list-inside space-y-3">
-<li>
-<strong>
-          Transport:
-         </strong>
-         Grab and Taxis are reliable for getting around. Tricycles are great for short trips.
-        </li>
-<li>
-<strong>
-          Food Delivery:
-         </strong>
-         Foodpanda and GrabFood both deliver directly to the unit.
-        </li>
-<li>
-<strong>
-          Nearby Malls:
-         </strong>
-         SM City GenSan, KCC Mall, and Robinsons Place are all within a 10-15 minute drive.
-        </li>
-</ul>
-<div class="luxury-divider my-8"></div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Guest-Facing Apps</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-  <a href="https://cascadereservations-del.github.io/Welcome-To-Cascades-/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Welcome Guide">
-    <span class="text-4xl">📖</span>
-    <div><div class="font-bold">Welcome Guide PWA</div><div class="text-xs instructional-note mt-1">Live · v7.8.4</div></div>
-  </a>
-  <a href="https://cascadereservations-del.github.io/Stay_At_CascadeGSC/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold">
-    <span class="text-4xl">🏡</span>
-    <div><div class="font-bold">Direct Booking Site</div><div class="text-xs instructional-note mt-1">Live · v36</div></div>
-  </a>
-  <a href="https://cascadereservations-del.github.io/Nearby-POIS/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Nearby POIs">
-    <span class="text-4xl">📍</span>
-    <div><div class="font-bold">Nearby POIs Map</div><div class="text-xs instructional-note mt-1">Live · v2.5</div></div>
-  </a>
-  <a href="https://cascadereservations-del.github.io/Cascade-Dining-Map-/" target="_blank" rel="noopener noreferrer"
-     class="p-6 quick-link-card rounded-xl flex items-center gap-4 text-dark-bronze font-semibold" data-viewer="Dining Map">
-    <span class="text-4xl">🍽️</span>
-    <div><div class="font-bold">Dining Map</div><div class="text-xs instructional-note mt-1">Live · v3.1</div></div>
-  </a>
-</div>
-</div>
-</section>
-<section class="content-section" id="cleaning">
-<div class="section-header">
-  <div>
-    <h2>Cleaning Checklist</h2>
-    <p>Standards and procedures for every turnover.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<!-- Cleaner Info Card -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-  <div class="accent-box p-5 rounded-xl">
-    <p class="text-xs tracking-wider uppercase text-soft-taupe mb-2">Current Cleaner</p>
-    <p class="font-bold text-xl text-heading">Honey Leyson</p>
-    <p class="instructional-note mt-1">Active staff · OPS Telegram member</p>
-  </div>
-  <div class="accent-box p-5 rounded-xl">
-    <p class="text-xs tracking-wider uppercase text-soft-taupe mb-2">Cleaning Rate</p>
-    <p class="font-bold text-xl text-heading">₱500 <span class="text-sm font-normal">regular turnover</span></p>
-    <p class="font-bold text-lg text-heading mt-1">₱1,000 <span class="text-sm font-normal">deep clean</span></p>
-  </div>
-</div>
-<a href="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/" target="_blank" rel="noopener noreferrer"
-   class="copy-button w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-lg mb-8 block text-center">
-  ✔️ &nbsp; Open Cleaning Checklist App — Submit Report
-</a>
-<div class="accent-box p-4 rounded-xl mb-6 text-sm" style="font-size:.82rem">
-  <p class="font-semibold mb-2" style="color:var(--bronze-ink)">📲 Digital Report System (v23+)</p>
-  <p>Every cleaning session creates a full digital record:</p>
-  <ul class="tight-list">
-    <li><strong>Photo counts:</strong> pre-clean, after-clean, meter.</li>
-    <li><strong>Checklist:</strong> completion verdict.</li>
-    <li><strong>Meter readings:</strong> with delta.</li>
-    <li><strong>Issue flags.</strong></li>
-    <li><strong>Sent to:</strong> the Finance group, and archived to email + Google Drive. All automatic.</li>
-  </ul>
-  <p>No manual WhatsApp reports needed.</p>
-  <details class="more"><summary>More detail</summary>
-  <p style="opacity:.7;font-size:.76rem">The Finance group gets a cleaning complete or incomplete card after every submission, with a fee due notice. The 24h turnover verifier checks for missed cleanings. It escalates to OPS if unresolved after 48h.</p>
-  </details>
-</div>
-<p class="text-xl mb-10 text-center dynamic-text-highlight">
-        Follow this sequence for a hotel-standard turnover.
-       </p>
-<div class="space-y-8">
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          <span class="step-no" aria-hidden="true">1</span><span class="sr-only">Phase 1: </span>Entry &amp; Reset (15 mins)
-         </h3>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Open windows to ventilate.
-           </strong>
-           A fresh-smelling space is the first sign of clean.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Inspect for damages.
-           </strong>
-           Found something? Take a photo and report it immediately, before cleaning. This protects you and helps with claims.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Strip all linens.
-           </strong>
-           Bag all used towels and sheets to prevent the spread of dirt.
-          </label>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          <span class="step-no" aria-hidden="true">2</span><span class="sr-only">Phase 2: </span>Deep Clean (45 mins)
-         </h3>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Bathroom:
-           </strong>
-           Spray cleaner. Let it sit for 5 mins to dissolve grime. Scrub the toilet, sink and shower. Rinse. Dry all surfaces. Polish the chrome.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Kitchenette:
-           </strong>
-           Wash dishes first. Degrease the stove. Sanitize the sink and counters. Clean the microwave and fridge.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Dusting:
-           </strong>
-           Always dust from top to bottom. Sanitize all high-touch points (remotes, switches, handles).
-          </label>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          <span class="step-no" aria-hidden="true">3</span><span class="sr-only">Phase 3: </span>Staging &amp; Final Touches (30 mins)
-         </h3>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Make the bed hotel-style.
-           </strong>
-           Use tight "hospital corners" for a crisp, inviting look.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Arrange pillows perfectly.
-           </strong>
-           Four pillows, fluffed and layered.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Restock everything.
-           </strong>
-           Guests should never have to ask for basics (toilet paper, coffee, etc.).
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Mop your way out.
-           </strong>
-           Vacuum first, then damp mop from the farthest corner towards the door.
-          </label>
-</div>
-<div class="checklist-item">
-<input type="checkbox"/>
-<label>
-<strong>
-            Final QC Photos.
-           </strong>
-           Non-negotiable.
-<span class="photo-rule">Take and send at least <strong>5</strong> after-clean photos for verification. <strong>12-14</strong> is ideal, with multiple angles: Bedroom, Living Room, Kitchen, Bathroom, Toilet/CR, Entrance.</span>
-          </label>
-</div>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          Important Notes
-         </h3>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p class="font-bold">
-           Odor Control (important)
-          </p>
-<ul class="list-disc list-inside space-y-1 mt-2">
-<li>The unit must have <strong>no foul smell</strong> when a guest enters.</li>
-<li>Check the sofa, even when it is closed up.</li>
-<li>Take extra care if the previous guest smoked. The smell clings to linens and fabric.</li>
-<li>Always use a quality fabric deodorizer.</li>
-<li>Sanitize the entire unit after cleaning is complete and before the next guest arrives.</li>
-</ul>
-</div>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p>
-<strong>
-            Safety Tip:
-           </strong>
-           Wear gloves, especially with cleaning chemicals. Keep windows open for ventilation.
-          </p>
-</div>
-<div class="pro-tip p-5 rounded-xl my-5">
-<p>
-<strong>
-            Pro Tip:
-           </strong>
-           Use microfiber cloths for a streak-free shine on glass and faucets. Use a separate cloth for the toilet.
-          </p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="content-section owner-only" id="costing">
+<section class="content-section owner-only" id="business" aria-labelledby="business-h">
+<header class="v-head"><h2 id="business-h">Business</h2><p class="v-sub">Costs, break-even and pricing. Owner only.</p></header>
+<div class="business-part" id="costing">
 <div class="section-header">
   <div>
     <h2>Cost & Profitability</h2>
@@ -4533,8 +3334,8 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </div>
 </div>
 </div>
-</section>
-<section class="content-section owner-only" id="pricing">
+</div>
+<div class="business-part" id="pricing">
 <div class="content-card rounded-3xl p-6 sm:p-10 space-y-10">
 <div>
 <h2 class="text-5xl font-bold mb-4 text-center">
@@ -4660,470 +3461,8 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </ol>
 </div>
 </div>
+</div>
 </section>
-<section class="content-section" id="videos">
-<div class="content-card rounded-3xl p-6 sm:p-10">
-<h2 class="text-5xl font-bold mb-6 text-center">
-        🎬 Video Resources
-       </h2>
-<p class="instructional-note text-center mb-8">
-        Short, practical training videos. Watch, then follow the 2–4 key steps listed under each video.
-       </p>
-<!-- Featured: Spotless Cleaning Guide -->
-<div class="bg-warm-cream/60 border-2 border-bronze rounded-2xl p-5 md:p-6 mb-8 shadow-lg">
-  <h3 class="text-3xl font-bold mb-3 text-bronze">⭐ SPOTLESS CLEANING GUIDE: Professional Turnover Checklist <span class="badge badge-new ml-2">NEW</span></h3>
-  <article class="bg-warm-white p-5 rounded-xl border-2 border-bronze/60 video-card">
-    <div class="video-embed">
-      <iframe loading="lazy" allowfullscreen src="https://www.youtube.com/embed/tM8793FdA0g" title="How to Clean Your Airbnb - A Walkthrough for New Airbnb Hosts"></iframe>
-    </div>
-    <h4 class="font-semibold mt-3">How to Clean Your Airbnb — A Walkthrough for New Airbnb Hosts <span class="ml-2 inline-block text-[10px] tracking-wider bg-bronze/10 text-bronze px-2 py-0.5 rounded">FEATURED</span></h4>
-    <p class="instructional-note mt-2 text-sm">Work top to bottom, dry to wet. Goal: “white &amp; spotless” 5‑star standard. Focus: kitchen and bathroom.</p>
-    <ol class="text-sm list-decimal list-inside instructional-note mt-3 space-y-2">
-      <li><strong>Prep (dry)</strong>: Open windows. Gather the caddy. Start laundry. Remove trash and linen. Pre‑treat tough spots.</li>
-      <li><strong>Kitchen — top‑to‑bottom</strong>: Clean upper cabinets, hood and lights. Wipe the backsplash. Declutter surfaces. Then <em>dry</em> dust → <em>wet</em> degrease → sanitize. Polish stainless. Clean inside the microwave. Wipe fridge handles and seals.</li>
-      <li><strong>Kitchen — sink &amp; appliances</strong>: Descale the faucet. Scrub the sink (rim and drain). Run hot water. Wipe stovetop and knobs. Wipe oven door glass. Check kettle and coffee maker.</li>
-      <li><strong>Bathroom — top‑to‑bottom</strong>: Clean vent fan, lights, shelves and mirror. Dust first. Then clean tiles and walls.</li>
-      <li><strong>Bathroom — fixtures (dry→wet)</strong>: Apply cleaner to bowl, seat hinges and under‑rim. Let it dwell. Scrub and flush. Descale the shower head. Squeegee the glass. Scrub grout and edges.</li>
-      <li><strong>Floors</strong>: Vacuum from the far corner → exit. Mop last (neutral cleaner). Check behind doors and under the vanity and appliances.</li>
-      <li><strong>Reset &amp; stage</strong>: Replace liners. Fold towels. Restock amenities. Set the AC to 24°C. Take photos for QC (“after” angles): at least 5, 12-14 ideal.</li>
-      <li><strong>Final inspection</strong>: White‑glove test on horizontal surfaces. Smell check. Run tap and toilet once more. Lights off. Test the door and lock.</li>
-    </ol>
-    <a class="text-bronze underline mt-3 inline-block" href="https://www.youtube.com/watch?v=tM8793FdA0g" target="_blank" rel="noopener noreferrer">Open on YouTube</a>
-  </article>
-</div>
-
-<!-- Bed making & Turnover -->
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-        Bed Making &amp; Turnover Service
-       </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-<!-- Video card helper class is styled in CSS we’ll inject below -->
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/ZYwXds5HrU8" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Hotel Bed Corners (fast demo)
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Pull fitted sheet tight; remove wrinkles.
-          </li>
-<li>
-           Use hospital corners on the top sheet.
-          </li>
-<li>
-           Center duvet; smooth from headboard down.
-          </li>
-<li>
-           Pillow presentation: open seam facing inside.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=ZYwXds5HrU8" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/G3dIEdDi0uM" title="Bed making #2">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Tight, Wrinkle-free Finish
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Lock sheet at corners first.
-          </li>
-<li>
-           Hand-press &amp; smooth toward the foot.
-          </li>
-<li>
-           Final polish: brush duvet edges &amp; fluff pillows.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=G3dIEdDi0uM" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/jaBkG2sIIMw" title="Turnover steps">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Turnover Flow (sequence)
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Strip linens, empty trash first.
-          </li>
-<li>
-           Ventilate (open curtains/windows).
-          </li>
-<li>
-           Pre-spray bathroom, then room surfaces.
-          </li>
-<li>
-           Make bed, restock, final QC photos (at least 5).
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=jaBkG2sIIMw" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/Bx60qK_piYU" title="Housekeeping bed-making">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Housekeeping Style Corners
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Hospital corners: fold, tuck, and lock.
-          </li>
-<li>
-           Align duvet 5–10 cm from headboard.
-          </li>
-<li>
-           Final smooth with both hands.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=Bx60qK_piYU" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card md:col-span-2">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/ggZ8QxMN8Uw" title="Hotel room cleaning sequence">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Hotel Room Cleaning Sequence
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Prep: open curtains; pre-spray bathroom.
-          </li>
-<li>
-           Strip linens &amp; rubbish, then bed-making.
-          </li>
-<li>
-           Bathroom high→low; vacuum out the door.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=ggZ8QxMN8Uw&amp;t=232s" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-</div>
-<!-- Cleaning Guides -->
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-        Cleaning Guides
-       </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/U0LSxF8Yr0E" title="Types of cleaning products">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Types of Cleaning Products &amp; When to Use
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Alkaline vs Acid vs Neutral cleaners.
-          </li>
-<li>
-           Degreasers for organic soil; acids for hard water.
-          </li>
-<li>
-           Disinfect vs sanitize; specialty products.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=U0LSxF8Yr0E" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/4T7lyhObHf0" title="Filipino toilet cleaning">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-          Toilet Cleaning Like a Pro (Filipino)
-         </h4>
-<ul class="text-sm list-disc list-inside instructional-note mt-2">
-<li>
-           Top→bottom; outside→inside workflow.
-          </li>
-<li>
-           Deep clean: bleach + antibacterial wipe pass.
-          </li>
-<li>
-           Edge areas &amp; hinge details last.
-          </li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=4T7lyhObHf0" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article>
-</div>
-</div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-       Laundry &amp; Ironing
-      </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/Nr0WusDgFDs" title="Hotel Ironing Basics — Crisp Linens Fast">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-         Hotel Ironing Basics — Crisp Linens Fast
-         <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">
-          NEW
-         </span>
-</h4>
-<p class="instructional-note mt-2 text-sm">Iron linens and shirts fast. Covers:</p>
-<ul class="tight-list text-sm instructional-note">
-<li>Heat settings</li>
-<li>Steam use</li>
-<li>Fabric care</li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=Nr0WusDgFDs" rel="noopener noreferrer" target="_blank">
-         Open on YouTube
-        </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/GCpD3jAblkw" title="Wrinkle Removal with Steam — Step‑by‑Step">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-         Wrinkle Removal with Steam — Step‑by‑Step
-         <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">
-          NEW
-         </span>
-</h4>
-<p class="instructional-note mt-2 text-sm">Use a garment steamer safely on bedding and curtains. Covers:</p>
-<ul class="tight-list text-sm instructional-note">
-<li>Timing</li>
-<li>Distance</li>
-<li>Finishing polish</li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=GCpD3jAblkw" rel="noopener noreferrer" target="_blank">
-         Open on YouTube
-        </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/0jQAr2iplP0" title="Laundry Sorting &amp; Stain Pre‑Treat 101">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-         Laundry Sorting &amp; Stain Pre‑Treat 101
-         <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">
-          NEW
-         </span>
-</h4>
-<p class="instructional-note mt-2 text-sm">Covers:</p>
-<ul class="tight-list text-sm instructional-note">
-<li>Sorting by fabric and color</li>
-<li>Pre‑treating common stains</li>
-<li>Dosing for hotel‑standard cleanliness</li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=0jQAr2iplP0" rel="noopener noreferrer" target="_blank">
-         Open on YouTube
-        </a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/5Xva5BAdRGk" title="Top 5 Hotel Cleaning Tips and Tricks — Magnify School">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">
-         Top 5 Hotel Cleaning Tips and Tricks — Magnify School
-         <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">
-          NEW
-         </span>
-</h4>
-<p class="instructional-note mt-2 text-sm">
-         Key tips to keep the cleanliness standard guests expect.
-        </p>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=5Xva5BAdRGk" rel="noopener noreferrer" target="_blank">
-         Open on YouTube
-        </a>
-</article>
-</div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Pest Control &amp; Upholstery Care</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/t9zE7RuNcq0" title="Advion Cockroach Gel — Safe Bait Placement"></iframe>
-</div>
-<h4 class="font-semibold mt-3">
-           Advion Cockroach Gel — Safe Bait Placement
-           <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">NEW</span>
-</h4>
-<ul class="tight-list text-sm instructional-note mt-2">
-<li><strong>Covers:</strong> gel bait use, placement strategy, common hotspots, key precautions.</li>
-<li><strong>Safety:</strong> Always follow the product label. Keep away from children and pets.</li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://youtu.be/t9zE7RuNcq0" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/qukZsD3Att8" title="Sofa Cover Installation — Quick Guide"></iframe>
-</div>
-<h4 class="font-semibold mt-3">
-           Sofa Cover Installation — Quick Guide
-           <span class="ml-2 inline-block text-[10px] tracking-wide uppercase bg-bronze/10 text-bronze px-2 py-0.5 rounded">NEW</span>
-</h4>
-<p class="instructional-note mt-2 text-sm">Fit a stretch cover neatly:</p>
-<ul class="tight-list text-sm instructional-note">
-<li>Align seams</li>
-<li>Tuck excess fabric</li>
-<li>Secure straps</li>
-<li>Finish smooth and wrinkle-free</li>
-</ul>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=qukZsD3Att8" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-</div>
-<!-- Hosting & Operations Essentials -->
-<h3 class="text-3xl font-bold mb-4 text-bronze">Hosting &amp; Operations Essentials</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card md:col-span-2">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/RZ2zaF4uaEk" title="Airbnb Operations Essentials"></iframe>
-</div>
-<h4 class="font-semibold mt-3">HOUSE OPERATIONS: Complete checklist of maintenance + setup tasks for Airbnbs (or any home) <span class="ml-2 inline-block text-[10px] tracking-wider bg-bronze/10 text-bronze px-2 py-0.5 rounded">UPDATED</span></h4>
-<p class="instructional-note mt-2 text-sm">Must-know practices for daily hosting work.</p>
-<ul class="text-sm list-disc list-inside instructional-note mt-3">
-  <li><strong>Quarterly maintenance:</strong> Deep-clean AC filters. Test smoke/CO alarms. Check fire extinguisher gauges. Inspect for leaks and mold. Schedule pest control.</li>
-  <li><strong>Monthly quick checks:</strong> Verify TV and Wi‑Fi. Test major appliances. Run hot water for 2–3 minutes per faucet. Confirm spare bulbs and batteries are stocked.</li>
-  <li><strong>Supply tracking:</strong> Keep a par-level sheet (linens, towels, toiletries, coffee/tea, cleaning chemicals). Reorder when stock &lt; 2× turnover sets.</li>
-  </ul>
-<details class="more"><summary>More detail: closet and system</summary>
-<ul class="tight-list text-sm instructional-note">
-<li><strong>Owner closet setup:</strong> Lockable cabinet with labeled bins. Bins hold: backup linens, towel sets, paper goods, guest amenities, light bulbs, batteries, filters, tool kit. Post the QR to the inventory log.</li>
-<li><strong>System:</strong> One Google Sheet + QR code. Cleaners log usage after each turnover. Weekly review + monthly restock run.</li>
-</ul>
-</details>
-
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=RZ2zaF4uaEk" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card md:col-span-2">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/gvwsbXzkXuU" title="Guest Communication &amp; Service Basics"></iframe>
-</div>
-<h4 class="font-semibold mt-3">We send these 5 message templates to every Airbnb guest (and you can copy + paste) <span class="ml-2 inline-block text-[10px] tracking-wider bg-bronze/10 text-bronze px-2 py-0.5 rounded">UPDATED</span></h4>
-<p class="instructional-note mt-2 text-sm">Protect reviews. Resolve issues fast.</p>
-<ol class="text-sm list-decimal list-inside instructional-note mt-3 space-y-2">
-  <li><strong>Booking confirmation</strong> — <em>send immediately</em>. Include: warm thanks, dates and guest count, house rules link, ID check note, next steps.</li>
-  <li><strong>Pre‑check‑in (T‑72h)</strong> — <em>send 72 hours prior</em>. Include: address + map pin, parking notes, what to bring, ETA request, house rules reminder.
-<ul class="tight-list">
-<li><strong>Direct bookings only:</strong> say plainly that the remaining balance and the PHP 1,000 refundable security deposit are due at least a day before check-in. Nobody should arrive surprised.</li>
-<li><strong>Airbnb guests:</strong> they pay through the platform and owe no deposit on arrival.</li>
-</ul></li>
-  <li><strong>Check‑in (T‑24h)</strong> — <em>send 24 hours prior</em>. Include: smart‑lock code + photos, Wi‑Fi, arrival window, AC/TV tips, emergency contact.</li>
-  <li><strong>Mid‑stay check‑in</strong> — <em>send morning after first night</em>. Ask if sleeping, AC and Wi‑Fi are OK. Offer extra towels or local tips. Invite issues early.</li>
-  <li><strong>Check‑out</strong> — <em>send at T‑18h before checkout</em>. Include: checkout time, simple tasks (trash, dishes, keys), ride‑out tip, gentle review request.</li>
-</ol>
-
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/watch?v=gvwsbXzkXuU" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/dkfBp4TIfM4" title="Quick Tip (YouTube Shorts)"></iframe>
-</div>
-<h4 class="font-semibold mt-3">Quick Tip (YouTube Shorts) <span class="badge badge-new">NEW</span></h4>
-
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/shorts/dkfBp4TIfM4" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/4OFvH9bomeA" title="Quick Tip (YouTube Shorts)"></iframe>
-</div>
-<h4 class="font-semibold mt-3">Quick Tip (YouTube Shorts) <span class="badge badge-new">NEW</span></h4>
-
-<a class="text-bronze underline mt-2 inline-block" href="https://www.youtube.com/shorts/4OFvH9bomeA" rel="noopener noreferrer" target="_blank">Open on YouTube</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.tiktok.com/embed/v2/7526471653920902418" title="Haier Air Purifier Tip — @teacherjamaicaa"></iframe>
-</div>
-<h4 class="font-semibold mt-3">Haier Air Purifier Tip — @teacherjamaicaa <span class="badge badge-new">NEW</span></h4>
-<p class="instructional-note mt-2 text-sm">Quick how-to using the Haier Air Purifier for guests and turnovers.</p>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.tiktok.com/@teacherjamaicaa/video/7526471653920902418?lang=en" rel="noopener noreferrer" target="_blank">Open on TikTok</a>
-</article>
-<article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.tiktok.com/embed/v2/7532454634305178887" title="Haier Air Purifier Tip — @hannah_yanah"></iframe>
-</div>
-<h4 class="font-semibold mt-3">Haier Air Purifier Tip — @hannah_yanah <span class="badge badge-new">NEW</span></h4>
-<p class="instructional-note mt-2 text-sm">Quick demo on proper Haier Air Purifier operation for guests.</p>
-<a class="text-bronze underline mt-2 inline-block" href="https://www.tiktok.com/@hannah_yanah/video/7532454634305178887" rel="noopener noreferrer" target="_blank">Open on TikTok</a>
-</article>
-</div>
-<div><h2 class="text-5xl font-bold mb-6 text-center">For Tough, Burnt-On Stains (Stainless Steel &amp; General Pans)</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10"><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/S21NuLW8O4E?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">How to clean a burnt stainless steel pans | WORKS EVERY SINGLE TIME!</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=S21NuLW8O4E" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/53WTKUvL-Wk?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">Is your pot or pan badly burnt? Don’t panic! Here is a quick fix</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=53WTKUvL-Wk" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/jipPbz1vzPY?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">Pots and pans Cleaning Hack by Ramdeep Osahan</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=jipPbz1vzPY" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article></div></div><div><h2 class="text-5xl font-bold mb-6 text-center">For Coated Pans (Avoiding Scratches)</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10"><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/KwKKJrsp5KY?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">How to Easily Remove Burns from Nonstick Pans with Stuff You Already Have! Fast, Easy, and Cheap!</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=KwKKJrsp5KY" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/NU3AGRbFd38?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">Easy way to clean burnt pan quickly!</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=NU3AGRbFd38" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article><article class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe video-card">
-<div class="video-embed">
-<iframe allowfullscreen="" loading="lazy" src="https://www.youtube.com/embed/rH_9c880Zx4?rel=0" title="Bed making hotel style #1">
-</iframe>
-</div>
-<h4 class="font-semibold mt-3">How Grandma taught me to remove burn stains from a pan! #shorts</h4>
-<a class="text-bronze underline mt-2 inline-block" href="http://www.youtube.com/watch?v=rH_9c880Zx4" rel="noopener noreferrer" target="_blank">
-          Open on YouTube
-         </a>
-</article></div></div></section>
 <section class="content-section" id="haier-air-purifier">
 <h2 class="section-title text-4xl font-extrabold text-bronze mb-6">Haier Air Purifier: Guides &amp; Videos</h2>
 <p class="instructional-note mb-6">Centralized resources for the Haier air purifier used in our listings.</p>
@@ -5188,197 +3527,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </article>
 </div>
 </section>
-<section class="content-section" id="playbook">
-<div class="section-header">
-  <div>
-    <h2>Crisis Playbook</h2>
-    <p>Step-by-step responses for every operational emergency.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="border-b-2 border-soft-taupe mb-6">
-<nav class="flex space-x-2 sm:space-x-4 -mb-px" id="playbook-tabs">
-<button class="playbook-tab active shrink-0" data-tab="common">
-          Common Issues
-         </button>
-<button class="playbook-tab shrink-0" data-tab="guest-conduct">
-          Guest Conduct
-         </button>
-<button class="playbook-tab shrink-0" data-tab="property">
-          Property Issues
-         </button>
-</nav>
-</div>
-<div>
-<div class="playbook-content active space-y-6" id="common">
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 A/C or Water Failure
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Assess:
-           </strong>
-           Unit issue or area outage? Confirm immediately.
-          </p>
-<p class="mt-2">
-<strong>
-            2. Communicate (in 15 mins):
-           </strong>
-           "Hi [Guest Name], I am so sorry for the inconvenience. Our technician is on the way (ETA [Time]) to fix the [A/C/Water]. We've provided [a fan/bottled water] for you in the meantime. I will personally monitor this and keep you updated."
-          </p>
-<p class="mt-2">
-<strong>
-            3. Act &amp; Follow-Up:
-           </strong>
-           Dispatch the technician. If not resolved in 3-4 hours, offer a 50% refund for the night and/or relocation assistance. Offer it before the guest asks.
-          </p>
-</div>
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 Wi-Fi Down
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Assess:
-           </strong>
-           Ask guest to power cycle router (unplug for 60s). Check ISP app for outages.
-          </p>
-<p class="mt-2">
-<strong>
-            2. Communicate:
-           </strong>
-           "So sorry about the Wi-Fi! Could you please try unplugging the router for one minute? I'm also checking with the provider for any area issues. Will update you in 15 mins."
-          </p>
-<p class="mt-2">
-<strong>
-            3. Act:
-           </strong>
-           If it persists, offer a mobile hotspot or a refund for a co-working space pass.
-          </p>
-</div>
-</div>
-<div class="playbook-content space-y-6" id="guest-conduct">
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 Noise Complaint / Party
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Communicate Gently:
-           </strong>
-           "Hi [Guest Name], just a friendly reminder about our no-party policy and quiet hours after 10 PM to respect our neighbors. Thank you for your cooperation!"
-          </p>
-<p class="mt-2">
-<strong>
-            2. Act &amp; Follow-Up:
-           </strong>
-</p>
-<ul class="tight-list">
-<li>If it persists: give one formal warning.</li>
-<li>If it continues: terminate the reservation without refund. Involve platform support/security.</li>
-<li>Document all communication with timestamps.</li>
-</ul>
-</div>
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 Smoking Inside
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Communicate:
-           </strong>
-           "Hi [Guest Name], a friendly reminder that our home is strictly smoke-free. The designated smoking area is outside. Thank you for helping us keep the air fresh for all guests."
-          </p>
-<p class="mt-2">
-<strong>
-            2. Act:
-           </strong>
-           Document evidence. After checkout, charge the disclosed deep-cleaning fee via the Resolution Center.
-          </p>
-</div>
-</div>
-<div class="playbook-content space-y-6" id="property">
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 Pest Sighting
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Communicate with Urgency:
-           </strong>
-           "Hi [Guest Name], I am mortified to hear this and I sincerely apologize. This is not our standard. I am arranging an immediate professional treatment. Please let me know if you would be comfortable with a deep clean now, or if you would prefer we assist you in finding alternative accommodation with a full refund."
-          </p>
-<p class="mt-2">
-<strong>
-            2. Act:
-           </strong>
-           Do what the guest chooses. Schedule emergency pest control in every case.
-          </p>
-</div>
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe">
-<h3 class="font-bold text-danger-red text-3xl">
-           🚨 Damage Discovered
-          </h3>
-<p class="mt-3">
-<strong>
-            1. Act Fast:
-           </strong>
-           Take clear photos/videos immediately. Get a quote for repair.
-          </p>
-<p class="mt-2">
-<strong>
-            2. Communicate Politely:
-           </strong>
-           "Hi [Guest Name], hope you had a safe trip. During cleaning, we noticed the [item] was damaged. I've attached a photo. We can resolve this through the Resolution Center for [cost]. Please let me know if you have any questions."
-          </p>
-<p class="mt-2">
-<strong>
-            3. Follow-Up:
-           </strong>
-           File the claim via the Resolution Center with all evidence.
-          </p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="content-section" id="maintenance">
-<div class="section-header">
-  <div>
-    <h2>Maintenance Log</h2>
-    <p>Scheduled maintenance tracker and reminder system.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="space-y-10">
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          Recurring Maintenance Checklist
-         </h3>
-<div class="space-y-4" id="maintenance-checklist">
-</div>
-<button class="copy-button w-full mt-6 px-4 py-3 rounded-lg font-semibold text-lg" id="createAllRemindersBtn">
-          Create All Calendar Reminders (.ics)
-         </button>
-</div>
-<div class="luxury-divider">
-</div>
-<div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">
-          Add Custom Maintenance Task
-         </h3>
-<div class="bg-warm-white p-6 rounded-xl border-2 border-soft-taupe space-y-4" id="add-task-form">
-<input class="w-full p-3 border-2 border-soft-taupe rounded-lg" id="newTaskName" placeholder="Task Name" type="text"/>
-<input class="w-full p-3 border-2 border-soft-taupe rounded-lg" id="newTaskInterval" placeholder="Interval in Days (e.g., 30)" type="number"/>
-<button class="copy-button w-full px-4 py-3 rounded-lg font-semibold text-lg" id="addTaskBtn">
-           Add Task
-          </button>
-</div>
-</div>
-</div>
-</div>
-</section>
 <section class="content-section owner-only" id="info">
 <div class="section-header">
   <div>
@@ -5394,15 +3542,13 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 <div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe space-y-3 text-lg">
   <p><strong>Address:</strong> Block 47 Lot 39, Bria Homes, Conel Road, Brgy. San Isidro, General Santos City, 9500, Philippines</p>
   <p><strong>Contact Email:</strong> <a class="text-bronze underline" href="mailto:cascadereservations@gmail.com">cascadereservations@gmail.com</a></p>
-  <p><strong>Wi-Fi Network:</strong> <code>WelcomeToCascade 5G</code> &nbsp;|&nbsp; <strong>Password:</strong> <code>EnjoyYourStay@CH</code></p>
+  <p><strong>Wi-Fi:</strong> the network name and password are in the password manager.</p>
   <p><strong>Smart Lock:</strong> TTLock — enter PIN + # to unlock. Key card (on its Cascade Hideaway keychain) is kept with the TV and AC remotes on the wooden tray on top of the TV cabinet, below the TV, beside the flower vase.</p>
   <p><strong>Key Card Replacement Fee:</strong> ₱1,000</p>
   <p><strong>Airbnb Listing:</strong> <a class="text-bronze underline" href="https://www.airbnb.com/rooms/1082624424" target="_blank" rel="noopener noreferrer">airbnb.com/rooms/1082624424</a></p>
-  <p class="admin-only"><strong>Supabase Project:</strong> <code>qkgfhsdppslwunarczeq</code> (ap-southeast-1)</p>
 </div>
 </div>
 <div class="luxury-divider"></div>
-</div>
 <div id="operations-contacts-section">
 <h3 class="text-3xl font-bold mb-4 text-bronze">
           Operations Contacts
@@ -5528,79 +3674,6 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 </div>
 </div>
 </section>
-<section class="content-section admin-only" id="access-log">
-<div class="section-header">
-  <div>
-    <h2>Access Log</h2>
-    <p>Record of every manual access by staff members.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<p class="instructional-note mb-6 text-center">
-        This log automatically records every time the operations manual is accessed.
-       </p>
-<div class="bg-warm-white p-5 rounded-xl border-2 border-soft-taupe">
-<div class="grid grid-cols-2 gap-4 font-semibold text-dark-bronze pb-3 border-b-2 border-soft-taupe">
-<div>
-          Name
-         </div>
-<div>
-          Timestamp
-         </div>
-</div>
-<div class="space-y-2 mt-3 max-h-[600px] overflow-y-auto" id="access-log-table">
-</div>
-</div>
-</div>
-</section>
-<!-- ── Finance Section (Phase 7 stub) ─────────────────────── -->
-<section class="content-section owner-only" id="finance">
-<div class="section-header">
-  <div>
-    <h2>Finance</h2>
-    <p>Revenue, expenses, and BIR-ready records for Cascade Hideaway.</p>
-  </div>
-</div>
-<div class="content-card" style="padding: 28px;">
-<div class="promise-card my-0 mb-8">
-<h3>Phase 7 — Coming Soon</h3>
-<p>The Finance module is being built. It will include:</p>
-<ul class="tight-list">
-<li>Monthly P&amp;L</li>
-<li>Expense tracking</li>
-<li>Airbnb payout reconciliation</li>
-<li>BIR-ready export</li>
-</ul>
-<p>All transaction data is already being captured in Supabase.</p>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-  <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coins"/></svg>
-    <div class="font-semibold">Airbnb Payouts</div>
-    <div class="instructional-note mt-1">62 reservations synced</div>
-  </div>
-  <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>
-    <div class="font-semibold">Monthly P&amp;L</div>
-    <div class="instructional-note mt-1">In development</div>
-  </div>
-  <div class="accent-box p-5 rounded-xl text-center">
-    <svg class="ch-ico ch-tile-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sop"/></svg>
-    <div class="font-semibold">BIR Export</div>
-    <div class="instructional-note mt-1">Raw fields captured</div>
-  </div>
-</div>
-<div class="luxury-divider my-8"></div>
-<h3 class="text-3xl font-bold mb-4 text-bronze">Current Ledger</h3>
-<p class="instructional-note mb-4">Until Phase 7 is complete, use the Cascade Ledger GAS app for expense recording.</p>
-<a href="https://script.google.com/macros/s/AKfycbwBnqBnv7DCRNljJFPcTT1RHp8Fh3ZMwOGk9fZkiK2vfLUZnKsE2N0dz9kZr3hBdATq/exec"
-   target="_blank" rel="noopener noreferrer"
-   class="copy-button inline-flex items-center gap-3 px-6 py-3 rounded-lg font-semibold">
-  📒 Open Cascade Ledger
-</a>
-</div>
-</section>
-
 <!-- ── Account Settings (admin-only) ──────────────────────── -->
 <section class="content-section admin-only" id="account-settings">
 <div class="section-header">
@@ -5653,11 +3726,21 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
 
   </div><!-- /main-content -->
 
+  <!-- ── BOTTOM BAR (phone, under 1024 px). Staff see Look up where the office sees Office. ── -->
+  <nav class="bottom-bar" id="bottom-bar" aria-label="Main sections">
+    <a class="bb-link" href="#today" data-match="today lookup business info account-settings"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg><span>Today</span></a>
+    <a class="bb-link" href="#turnover" data-match="turnover standard-look"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clean"/></svg><span>Turnover</span></a>
+    <a class="bb-link office-only" href="#office" data-match="office templates"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-people"/></svg><span>Office</span></a>
+    <a class="bb-link bb-staff-only" href="#lookup" data-match="lookup"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-guide"/></svg><span>Look up</span></a>
+    <a class="bb-link" href="#telegram" data-match="telegram" aria-label="Telegram and Cassy"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-message"/></svg><span>Cassy</span></a>
+    <a class="bb-link" href="#help" data-match="help maps"><svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-crisis"/></svg><span>Help</span></a>
+  </nav>
+
 </div><!-- /app-container -->
 
 <!-- ── FOOTER ── -->
 <footer style="position:fixed;bottom:0;left:var(--sidebar-w);right:0;background:rgba(28,16,6,.97);color:rgba(247,242,232,.6);font-family:var(--font-b);font-size:.68rem;text-align:center;padding:8px 16px;backdrop-filter:blur(8px);z-index:40;letter-spacing:.04em;" id="app-footer">
-  Cascade Hideaway · Operations Manual · v24.2
+  Cascade Hideaway · Operations Manual · v25.0
 </footer>
 
 <!-- ── EQUIPMENT MODAL ── -->
@@ -5707,6 +3790,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
             }
             const app = {
                 async init() {
+                    this.navigation.applyGates();
                     await this.auth.init();
                     this.navigation.init();
                     this.ui.init();
@@ -5898,6 +3982,32 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     const greetEl = document.getElementById('topbar-greeting-text');
                     if (greetEl) greetEl.textContent = `${greeting}, ${name}`;
 
+                    // Today: one greeting line for this person, under the page title.
+                    const today = document.getElementById('today');
+                    if (today) {
+                        let line = document.getElementById('today-greet');
+                        if (!line) {
+                            line = document.createElement('p');
+                            line.id = 'today-greet';
+                            line.className = 'v-greet';
+                            const head = today.querySelector('.v-head');
+                            if (head) head.after(line); else today.prepend(line);
+                        }
+                        const ROLE_LINE = {
+                            staff: 'Here is what you need for the turnover.',
+                            admin: 'Here is what you need for the office today.',
+                            owner: 'Everything is here, including Business.',
+                        };
+                        line.textContent = `${greeting}, ${name}. ${ROLE_LINE[role] || ''}`.trim();
+                    }
+
+                    // A page this person cannot open (left open by another sign-in) goes back to Today.
+                    const nav = app.navigation;
+                    if (nav && nav._current) {
+                        if (!nav.canSee(nav._current)) nav.activateSection(nav.HOME, 'replace');
+                        else nav.markNav();
+                    }
+
                     const footer = document.getElementById('app-footer');
                     if (footer && window.innerWidth < 1024) {
                         footer.style.left = '0';
@@ -5967,7 +4077,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     if (this.index) return this.index;
                     const idx = [];
                     document.querySelectorAll('.content-section').forEach((sec) => {
-                        const secName = (sec.querySelector('.section-header h2') || sec.querySelector('h2'));
+                        const secName = (sec.querySelector('.v-head h2, .section-header h2') || sec.querySelector('h2'));
                         const label = secName ? secName.textContent.trim() : sec.id;
                         sec.querySelectorAll('h2, h3, h4').forEach((h) => {
                             const title = h.textContent.replace(/\s+/g, ' ').trim();
@@ -6002,11 +4112,7 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                 // Mirror the role CSS: never surface a section the reader cannot open.
                 visible(entry) {
                     const sec = document.getElementById(entry.id);
-                    if (!sec) return false;
-                    const body = document.body;
-                    if (sec.matches('.owner-only') && body.classList.contains('staff-user')) return false;
-                    if (sec.matches('.admin-only') && !body.classList.contains('admin-user')) return false;
-                    return true;
+                    return !!sec && app.navigation.canSee(sec);
                 },
 
                 open() {
@@ -6100,38 +4206,89 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
             };
 
             app.navigation = {
+                // v25: a retired page opens the page that replaced it (old links, bookmarks, the remembered last page).
+                ALIASES: {
+                    dashboard: 'today', cleaning: 'turnover', sops: 'office', messages: 'templates',
+                    playbook: 'help', videos: 'lookup', 'guest-guide': 'office', concierge: 'telegram',
+                    finance: 'business', costing: 'business', pricing: 'business',
+                    maintenance: 'help', 'access-log': 'account-settings',
+                },
+                // Who may open a page, set on the section itself so the CSS, search and links all agree.
+                GATES: {
+                    office: 'office-only', templates: 'office-only',
+                    business: 'owner-only', info: 'owner-only', 'account-settings': 'admin-only',
+                },
+                HOME: '#today',
+                LAST_KEY: 'ch_manual_last_section',
+
+                applyGates() {
+                    Object.keys(this.GATES).forEach((id) => {
+                        const sec = document.getElementById(id);
+                        if (sec) sec.classList.add(this.GATES[id]);
+                    });
+                },
+
                 init() {
                     const allLinks = document.querySelectorAll('a[href^="#"]');
                     allLinks.forEach(link => {
                         link.setAttribute('aria-current', 'false');
                         link.addEventListener('click', (e) => {
+                            const href = link.getAttribute('href');
+                            if (!this.resolve(href)) return; // not a page (the skip link): the browser handles it
                             e.preventDefault();
-                            this.activateSection(link.getAttribute('href'));
+                            this.activateSection(href);
                         });
                     });
-                    this.activateSection(window.location.hash || this.lastSection() || '#dashboard', 'replace');
+                    this.activateSection(window.location.hash || this.lastSection() || this.HOME, 'replace');
                     // Back / Forward: show the section the address names, without adding a history entry.
                     window.addEventListener('popstate', () => {
-                        this.activateSection(window.location.hash || '#dashboard', 'none');
+                        this.activateSection(window.location.hash || this.HOME, 'none');
                     });
                 },
-                LAST_KEY: 'ch_manual_last_section',
+
+                // '#id' -> { sec, el }: the page to show, and the element to scroll to when the id is inside a page.
+                resolve(hash) {
+                    let id = String(hash || '').replace(/^#/, '');
+                    if (!id) return null;
+                    id = this.ALIASES[id] || id;
+                    const el = document.getElementById(id);
+                    if (!el) return null;
+                    const sec = el.classList.contains('content-section') ? el : (el.closest ? el.closest('.content-section') : null);
+                    return sec ? { sec, el } : null;
+                },
+
+                // Mirrors the role CSS: staff never see owner-only, admin-only or office-only; the owner never sees admin-only.
+                canSee(el) {
+                    const b = document.body && document.body.classList;
+                    if (!b || !el || !el.matches) return true;
+                    if (b.contains('staff-user') && el.matches('.owner-only, .admin-only, .office-only')) return false;
+                    if (b.contains('owner-user') && el.matches('.admin-only')) return false;
+                    return true;
+                },
 
                 lastSection() {
                     try {
                         const hash = localStorage.getItem(this.LAST_KEY);
-                        return hash && document.getElementById(hash.replace('#', '')) ? hash : null;
+                        return hash && this.resolve(hash) ? hash : null;
                     } catch (e) { return null; }
                 },
 
                 activateSection(hash, mode) {
-                    const targetHash = hash || '#dashboard';
+                    let r = this.resolve(hash || this.HOME);
+                    if (!r) {
+                        if (this._current) return;        // unknown link: stay on this page
+                        r = this.resolve(this.HOME);       // first load with an unknown address
+                        if (!r) return;
+                    }
+                    if (!this.canSee(r.sec)) r = this.resolve(this.HOME) || r; // a page this person cannot open
+                    const next = r.sec;
+                    const sub = r.el !== next ? r.el : null;
+                    const targetHash = '#' + (sub ? sub.id : next.id);
                     try { localStorage.setItem(this.LAST_KEY, targetHash); } catch (e) {}
-                    const next = document.getElementById(targetHash.replace('#', ''));
-                    if (!next) return;
 
-                    // Already showing and settled: nothing to do.
-                    if (this._current === next && next.classList.contains('active') && !next.classList.contains('exiting')) return;
+                    // Already showing and settled at this address: nothing to do.
+                    const settled = this._current === next && next.classList.contains('active') && !next.classList.contains('exiting');
+                    if (settled && window.location.hash === targetHash && !sub) return;
                     this._current = next;
 
                     // Keep the address in step so Back works and a page can be linked.
@@ -6142,26 +4299,11 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                         try { window.history[mode === 'replace' ? 'replaceState' : 'pushState']({ d: mode === 'replace' ? d : d + 1 }, '', targetHash); } catch (e) {}
                     }
                     document.documentElement.dataset.page = next.id;
+                    this.markNav();
 
-                    // Update nav links + aria-current
-                    document.querySelectorAll('a[href^="#"]').forEach(link => {
-                        const isActive = link.getAttribute('href') === targetHash;
-                        const isPill = link.classList.contains('pill-link');
-                        link.classList.toggle(isPill ? 'pill-active' : 'nav-active', isActive);
-                        link.setAttribute('aria-current', isActive ? 'page' : 'false');
-                    });
-
-                    // Centre the active pill inside the pill bar only. scrollIntoView also scrolls
-                    // the window sideways, which shifted the whole page left on phones.
-                    const activePill = document.querySelector('.pill-link[href="' + targetHash + '"]');
-                    const pillBar = document.getElementById('pill-nav');
-                    if (activePill && pillBar && pillBar.scrollTo) {
-                        const barBox = pillBar.getBoundingClientRect();
-                        const pillBox = activePill.getBoundingClientRect();
-                        pillBar.scrollTo({
-                            left: pillBar.scrollLeft + (pillBox.left - barBox.left) - (pillBar.clientWidth - pillBox.width) / 2,
-                            behavior: 'smooth'
-                        });
+                    if (settled) { // same page: only move to the spot
+                        if (sub) sub.scrollIntoView({ block: 'start' }); else window.scrollTo({ top: 0, behavior: 'instant' });
+                        return;
                     }
 
                     // Every other visible section fades out, then is removed, but only if the user
@@ -6179,7 +4321,32 @@ It was truly a pleasure hosting you, and your feedback is incredibly valuable to
                     requestAnimationFrame(() => {
                         if (this._current !== next) return; // a newer call owns the page
                         next.classList.add('active');
-                        window.scrollTo({ top: 0, behavior: 'instant' });
+                        if (sub) sub.scrollIntoView({ block: 'start' }); else window.scrollTo({ top: 0, behavior: 'instant' });
+                    });
+                },
+
+                // Sidebar and in-page links: the link to this page is current. Bottom bar: the slot of this page's group.
+                markNav() {
+                    const cur = this._current;
+                    if (!cur) return;
+                    const here = '#' + cur.id;
+                    document.querySelectorAll('a[href^="#"]').forEach(link => {
+                        if (link.classList.contains('bb-link')) return;
+                        const isActive = link.getAttribute('href') === here;
+                        link.classList.toggle('nav-active', isActive);
+                        link.setAttribute('aria-current', isActive ? 'page' : 'false');
+                    });
+                    // The last visible slot that lists this page wins (Look up beats Today for staff).
+                    const staff = !!document.body && document.body.classList.contains('staff-user');
+                    const slots = Array.from(document.querySelectorAll('.bb-link'));
+                    let on = null;
+                    slots.forEach(slot => {
+                        if (!this.canSee(slot) || (slot.classList.contains('bb-staff-only') && !staff)) return;
+                        if ((slot.dataset.match || '').split(' ').includes(cur.id)) on = slot;
+                    });
+                    slots.forEach(slot => {
+                        slot.classList.toggle('bb-active', slot === on);
+                        if (slot === on) slot.setAttribute('aria-current', 'page'); else slot.removeAttribute('aria-current');
                     });
                 }
             };
@@ -7934,19 +6101,19 @@ Date: ${new Date().toLocaleDateString()}`;
   });
 
   // ── Home and Back ──
-  function goHome() { if (window.chNav) window.chNav.activateSection('#dashboard'); }
+  function goHome() { if (window.chNav) window.chNav.activateSection('#today'); }
   function goBack() {
     // history.state.d counts in-app steps: Back stays inside the Manual only when there is one.
     if (history.state && history.state.d > 0) history.back();
     else goHome();
   }
   document.querySelectorAll('.content-section').forEach((sec) => {
-    if (sec.id === 'dashboard') return;
+    if (sec.id === 'today') return;
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ch-btn ch-btn-ghost sec-back';
     btn.innerHTML = '<svg class="ch-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg><span>Back</span>';
-    const head = sec.querySelector(':scope > .section-header');
+    const head = sec.querySelector(':scope > .section-header, :scope > .v-head');
     if (head) {
       head.classList.add('has-back');
       head.prepend(btn);
@@ -7960,6 +6127,57 @@ Date: ${new Date().toLocaleDateString()}`;
   document.addEventListener('click', (e) => {
     if (e.target.closest('.sec-back')) goBack();
     else if (e.target.closest('.home-btn')) goHome();
+  });
+
+  // ── v25 components: tap to copy, ticks saved on this device, icon size ──
+  function copyText(text, el) {
+    if (!text) return;
+    const done = (ok) => {
+      toast(ok ? 'Copied.' : 'Could not copy. Press and hold the text to copy it.');
+      if (ok && el) { el.classList.add('copied'); setTimeout(() => el.classList.remove('copied'), 2000); }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => done(true), () => done(legacyCopy(text)));
+    } else {
+      done(legacyCopy(text));
+    }
+  }
+  document.querySelectorAll('.v-copy').forEach((el) => {
+    el.setAttribute('role', 'button');
+    el.tabIndex = 0;
+  });
+  function vCopy(el) { copyText(el.dataset.copy || (el.querySelector('code') || el).textContent.trim(), el); }
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('.v-copy');
+    if (el) vCopy(el);
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('v-copy')) {
+      e.preventDefault();
+      vCopy(e.target);
+    }
+  });
+
+  // Checklists: each list keeps its ticks on this device, under its own id.
+  document.querySelectorAll('ul.v-check[id]').forEach((ul) => {
+    const key = 'ch_v25_check_' + ul.id;
+    const boxes = Array.from(ul.querySelectorAll('input[type="checkbox"]'));
+    try {
+      const saved = JSON.parse(localStorage.getItem(key) || '[]');
+      boxes.forEach((b, i) => { b.checked = saved.indexOf(i) !== -1; });
+    } catch (e) { /* no storage: ticks just are not kept */ }
+    ul.addEventListener('change', () => {
+      try {
+        localStorage.setItem(key, JSON.stringify(boxes.map((b, i) => (b.checked ? i : -1)).filter((i) => i >= 0)));
+      } catch (e) { /* private mode: nothing to save */ }
+    });
+  });
+
+  // Content icons draw from the 24-unit sprite: give each one the viewBox so it scales instead of cropping.
+  document.querySelectorAll('svg.ic').forEach((svg) => {
+    if (!svg.hasAttribute('viewBox')) svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
   });
 })();
 </script>
