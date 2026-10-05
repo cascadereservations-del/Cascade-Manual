@@ -3074,7 +3074,7 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentC
 <tr><td data-label="Rule">Cancel 5 or more days before</td><td data-label="What guests are told">Reservation fee refunded in full.</td></tr>
 <tr><td data-label="Rule">Cancel under 5 days before</td><td data-label="What guests are told">Reservation fee kept.</td></tr>
 <tr><td data-label="Rule">Check-in</td><td data-label="What guests are told"><span class="v-chip time">2:00 PM</span> Before noon: PHP 100 an hour if the calendar allows.</td></tr>
-<tr><td data-label="Rule">Check-out</td><td data-label="What guests are told"><span class="v-chip time">12:00 noon</span> A late check-out may be possible. The guest must ask.</td></tr>
+<tr><td data-label="Rule">Check-out</td><td data-label="What guests are told"><span class="v-chip time">12:00 noon</span> A late check-out may be possible. The guest must ask. Before leaving: lights and aircon off, trash in the big trash bin, the key card with the remotes on the wooden tray.</td></tr>
 <tr><td data-label="Rule">Stay</td><td data-label="What guests are told">1 night minimum. Up to 3 guests. Cleaning included.</td></tr>
 <tr><td data-label="Rule">Airbnb bookings</td><td data-label="What guests are told">Airbnb's own cancellation policy. No cash deposit.</td></tr>
 </tbody>
@@ -3209,7 +3209,7 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentC
 <tr><td data-label="Stage">Payment</td><td data-label="Automatic message">Message 1, Confirmation: right after you confirm. A dashboard confirm goes at the next hourly run.</td><td data-label="You">A hold-expired card offers <strong>Show as text</strong> and <strong>Revise</strong>. Nothing is sent.</td></tr>
 <tr><td data-label="Stage">Pre-arrival</td><td data-label="Automatic message">Message 2: 2 days before check-in, 15:00 to 21:00. Skipped if you confirmed less than 2 days before. Message 3, the door code, is never sent by the system.</td><td data-label="You">On the <strong>DOOR CODE READY TO SEND</strong> card, check the balance and deposit. Set a new code in the lock app. Tap <strong>Show as text</strong>, type the code in, send it yourself.</td></tr>
 <tr><td data-label="Stage">Stay</td><td data-label="Automatic message">Message 4, mid-stay refresh: stays of 5 nights or more, day 4 (day 3 for 5 or 6 nights), 15:00 to 21:00.</td><td data-label="You">Answer handoff cards (below).</td></tr>
-<tr><td data-label="Stage">Check-out</td><td data-label="Automatic message">Message 5.1: 09:00 to 12:00 on check-out day.</td><td data-label="You">Read the cleaning report (task 5). The deposit goes back when the inspection finds no problem. Ask Lloyd before holding any back.</td></tr>
+<tr><td data-label="Stage">Check-out</td><td data-label="Automatic message">Message 5.1: 09:00 to 12:00 on check-out day. It asks the guest to leave the key card with the remotes on the tray.</td><td data-label="You">Read the cleaning report (task 5). The deposit goes back when the inspection finds no problem. Ask Lloyd before holding any back.</td></tr>
 <tr><td data-label="Stage">Review</td><td data-label="Automatic message">Message 5.2: 16:00 to 22:00 on check-out day. Held back if a complaint, a safety report or an open work order exists. The card then says to write personally.</td><td data-label="You">Reply to a good review with the <a href="#templates">Thank You</a> template.</td></tr>
 </tbody>
 </table>
@@ -3341,6 +3341,20 @@ If you booked with us directly: your reservation fee is refunded in full when yo
 If you booked through Airbnb or another platform: please start the cancellation there, and the refund will follow the policy shown on that listing.
 
 We hope to have the opportunity to host you in the future.</code></div>
+</div>
+
+<div class="v-card" id="templates-checkout">
+<h3 class="v-card-title">Check-out Reminder</h3>
+<p><strong>When to use:</strong> The morning of an Airbnb check-out. Direct guests get message 5.1 by themselves. Never say a next guest is arriving unless the Today view shows a check-in that day.</p>
+<div class="v-copy" data-copy="Good morning, [Guest Name] 🌿&#10;&#10;A gentle reminder that check-out is at 12:00 noon today, so there's no rush. Before you head out, we'd appreciate it if you could switch off the lights and AC, bring any trash to the big trash bin, and leave the key card with the remotes on the wooden tray.&#10;&#10;If you'd like a little more time, just message us and we'll gladly check if our schedule allows. And please send us a quick message as you set off.&#10;&#10;It has been a privilege to host you!&#10;Marifel &amp; The Cascade Team&#10;Hotel Comfort. Home Warmth."><span>Copy message</span><code>Good morning, [Guest Name] 🌿
+
+A gentle reminder that check-out is at 12:00 noon today, so there's no rush. Before you head out, we'd appreciate it if you could switch off the lights and AC, bring any trash to the big trash bin, and leave the key card with the remotes on the wooden tray.
+
+If you'd like a little more time, just message us and we'll gladly check if our schedule allows. And please send us a quick message as you set off.
+
+It has been a privilege to host you!
+Marifel &amp; The Cascade Team
+Hotel Comfort. Home Warmth.</code></div>
 </div>
 
 <div class="v-card" id="templates-post1">
@@ -6682,7 +6696,7 @@ Date: ${new Date().toLocaleDateString()}`;
     "ecoflow-river": "EcoFlow RIVER 3 (backup power)\nIt sits near the TV unit and is already set up, so you may plug in whenever you need it.\n1. Check the display for charge.\n2. Hold the main button to power it on.\n3. Press the AC button for the wall sockets, then plug in.\nIt runs the router (about 26 hours), phones (around 15 charges), an LED lamp, a thin laptop (about 4.5 hours), a stand fan (about 3 hours) or a small TV.\nPlease do not use it for the aircon, water heater, microwave, kettle or induction cooker; its output is 300 W in total.\nWhen power returns, plug it into the wall and it recharges in one to two hours.",
     "water-heater": "Water heater (Panasonic)\n1. Flip the heater's wall switch on before your shower.\n2. Allow three to five minutes for the hot water to reach the shower head.\n3. The red light means it is heating. Once it turns off or green, the water is ready.\nThe dial turns clockwise for hotter and anticlockwise for cooler.\nSwitching it off after your shower saves power. Please keep it off whenever the water supply itself is off.",
     "induction-cooker": "Induction cooker (Dowell)\n1. Place a pan on the centre of the glass.\n2. Press POWER, then use + and - for the power level. Four or five suits everyday cooking.\n3. TIMER switches it off after a set time.\nThe pans provided all work on it. A pan of your own needs a magnetic base or the coil symbol underneath.\nIt beeps and shuts off on its own after sixty seconds without a pan.\nThe glass stays cool around the pan, and a damp cloth cleans it once it has cooled.",
-    "smart-lock": "Door lock and key card\n- Tap the keypad to wake it, enter your code and press #.\n- The door locks itself when it closes, so pull it firmly shut whenever you leave.\n- Your key card, on its Cascade Hideaway keychain, also opens the door with a tap on the keypad. It is kept with the remotes on the wooden tray on the TV cabinet.\n- Your personal code reaches you at least a day before arrival, once your IDs and the balance are in.\n- A lost key card carries a PHP 1,000 replacement fee.\nIf the keypad does not respond, message us and we will get you in.",
+    "smart-lock": "Door lock and key card\n- Tap the keypad to wake it, enter your code and press #.\n- The door locks itself when it closes, so pull it firmly shut whenever you leave.\n- Your key card, on its Cascade Hideaway keychain, also opens the door with a tap on the keypad. It is kept with the remotes on the wooden tray on the TV cabinet.\n- When you check out, please leave the key card with the remotes on the tray.\n- Your personal code reaches you at least a day before arrival, once your IDs and the balance are in.\n- A lost key card carries a PHP 1,000 replacement fee.\nIf the keypad does not respond, message us and we will get you in.",
     "air-purifier": "Air purifier (Simplus)\nThe air purifier works quietly in the corner and keeps the air turning over, which you will notice most if you are prone to allergies. It is set up to run on its own, so there is nothing for you to adjust.",
     "iron-guide": "Garment steamer\nFor pressing there is a garment steamer rather than a flat iron, stored in the wardrobe cabinet. The wardrobe also has hangers for unpacking.\n1. Fill it with water.\n2. Let it heat.\n3. Keep it moving over the fabric.\nPlease unplug it as soon as you are done.",
     "washing-machine": "Washing machine (Panasonic NA-F80A5)\nDetergent is not provided, so you may like to bring your own. Load the clothes, then add powder detergent straight into the tub or liquid detergent into its slot. Close the lid and choose your cycle; the machine runs on its own from there. It is a washer only, and a portable drying rack is provided for drying.\nPlease check that the faucet valve is open before you start."
