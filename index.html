@@ -4673,6 +4673,13 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
             }
             const app = {
                 async init() {
+                    if (this.auth.FOLDED) {
+                        document.querySelectorAll('a[href^="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/"]').forEach(a => {
+                            a.setAttribute('href', '../checklist/'); a.removeAttribute('target');
+                        });
+                        const lb = document.getElementById('logout-btn');
+                        if (lb && lb.lastChild) lb.lastChild.textContent = ' Use a PIN';
+                    }
                     this.navigation.applyGates();
                     await this.auth.init();
                     this.navigation.init();
@@ -4693,6 +4700,10 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                     '1871': { name: 'Lloyd',   role: 'owner' },
                 },
                 REMEMBER_KEY: 'ch_manual_session_v1',
+                // D-324: inside Cascade Staff (/Cascade-Staff/manual/ or ?shell=1) a signed-in shell session
+                // unlocks the staff tier only. Higher tiers still need their own PIN (Sign Out -> "Use a PIN").
+                // The PIN gate is client-side and the HTML is public, so this is convenience, not a boundary.
+                FOLDED: location.pathname.indexOf('/Cascade-Staff/') !== -1 || /[?&]shell=1/.test(location.search),
                 REMEMBER_DAYS: 30,
                 person: null,
                 entry: '',
@@ -4789,9 +4800,22 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                     } catch (e) { return null; }
                 },
 
+                shellSession() {
+                    if (!this.FOLDED) return false;
+                    const k = 'sb-qkgfhsdppslwunarczeq-auth-token';
+                    for (const st of ['sessionStorage', 'localStorage']) {
+                        try {
+                            const j = JSON.parse(window[st].getItem(k) || 'null');
+                            if (j && j.access_token && j.user) return true;
+                        } catch (e) {}
+                    }
+                    return false;
+                },
+
                 checkAuth() {
                     const remembered = this.recall();
                     if (remembered) { this.signIn(remembered, true); return; }
+                    if (this.shellSession() && !this.pinRequested) { this.signIn(this.PEOPLE['0000'], true); return; }
                     this.elements.loginOverlay.style.display = 'flex';
                     this.elements.appContainer.style.display = 'none';
                     this.entry = '';
@@ -4821,6 +4845,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                 },
 
                 logout() {
+                    this.pinRequested = true; // folded: stay on the PIN pad until reload
                     try { localStorage.removeItem(this.REMEMBER_KEY); } catch (e) {}
                     try { sessionStorage.removeItem('currentUser'); } catch (e) {}
                     this.person = null;
