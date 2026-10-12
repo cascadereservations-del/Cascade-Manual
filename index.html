@@ -4676,6 +4676,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                     if (this.auth.FOLDED) {
                         document.querySelectorAll('a[href^="https://cascadereservations-del.github.io/CH-Cleaners-Checklist/"]').forEach(a => {
                             a.setAttribute('href', '../checklist/'); a.removeAttribute('target');
+                            const al = a.getAttribute('aria-label'); if (al) a.setAttribute('aria-label', al.replace(/, opens in a new tab\s*$/, ''));
                         });
                         const lb = document.getElementById('logout-btn');
                         if (lb && lb.lastChild) lb.lastChild.textContent = ' Use a PIN';
@@ -4703,7 +4704,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                 // D-324: inside Cascade Staff (/Cascade-Staff/manual/ or ?shell=1) a signed-in shell session
                 // unlocks the staff tier only. Higher tiers still need their own PIN (Sign Out -> "Use a PIN").
                 // The PIN gate is client-side and the HTML is public, so this is convenience, not a boundary.
-                FOLDED: location.pathname.indexOf('/Cascade-Staff/') !== -1 || /[?&]shell=1\b/.test(location.search),
+                FOLDED: location.pathname.indexOf('/Cascade-Staff/') !== -1 || (/[?&]shell=1\b/.test(location.search) && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')),
                 REMEMBER_DAYS: 30,
                 person: null,
                 entry: '',
@@ -4815,7 +4816,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                 checkAuth() {
                     const remembered = this.recall();
                     if (remembered) { this.signIn(remembered, true); return; }
-                    if (this.shellSession() && !this.pinRequested) { this.signIn(this.PEOPLE['0000'], true); return; }
+                    if (this.shellSession()) { this.signIn({ name: 'Staff', role: 'staff' }, true); return; }
                     this.elements.loginOverlay.style.display = 'flex';
                     this.elements.appContainer.style.display = 'none';
                     this.entry = '';
@@ -4845,7 +4846,6 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                 },
 
                 logout() {
-                    this.pinRequested = true; // folded: stay on the PIN pad until reload
                     try { localStorage.removeItem(this.REMEMBER_KEY); } catch (e) {}
                     try { sessionStorage.removeItem('currentUser'); } catch (e) {}
                     this.person = null;
