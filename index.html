@@ -4703,7 +4703,7 @@ body.staff-user .manual-map-manual{aspect-ratio:360/738}
                 // D-324: inside Cascade Staff (/Cascade-Staff/manual/ or ?shell=1) a signed-in shell session
                 // unlocks the staff tier only. Higher tiers still need their own PIN (Sign Out -> "Use a PIN").
                 // The PIN gate is client-side and the HTML is public, so this is convenience, not a boundary.
-                FOLDED: location.pathname.indexOf('/Cascade-Staff/') !== -1 || /[?&]shell=1/.test(location.search),
+                FOLDED: location.pathname.indexOf('/Cascade-Staff/') !== -1 || /[?&]shell=1\b/.test(location.search),
                 REMEMBER_DAYS: 30,
                 person: null,
                 entry: '',
